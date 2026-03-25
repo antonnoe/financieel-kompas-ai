@@ -106,40 +106,25 @@ Vergelijkt het netto inkomen van een huishouden bij wonen in Frankrijk versus wo
    - Financieel vermogen (Box 3 NL / RV België)
    - Vastgoed vermogen excl. hoofdverblijf (IFI Frankrijk > €1,3M)
 
-### Fiscale parameters (2025, uit config.json)
+### Fiscale parameters
+De actuele fiscale parameters staan in het veld "fiscaleParameters" in de toolState hieronder. Dat is config.json — de ENIGE bron van waarheid voor alle tarieven, schijven en vrijstellingen. Gebruik UITSLUITEND die waarden. Noem nooit een tarief of bedrag dat niet in fiscaleParameters of resultaten staat.
 
-**Nederland:**
-- AOW bruto: alleenstaand €19.500, partner €13.000 (per persoon)
-- Box 1 schijven: <€75.518 → 36,97% (onder AOW) / 19,07% (boven AOW); >€75.518 → 49,5%
-- Zvw ondernemers: 5,26% over winst (na MKB-vrijstelling)
-- MKB-winstvrijstelling: 12,7%
-- Arbeidskorting max €5.532, afbouw boven €39.957 (6,51%/€)
-- Algemene heffingskorting max €3.362, afbouw boven €24.813 (6,63%/€), vervalt bij schijf 2
-- Box 3: vrijstelling €57.684 (single) / €115.368 (paar), forfaitair rendement 6,17%, tarief 36%
+Structuur van fiscaleParameters:
+- NL: Box 1 tarieven (onder/boven AOW), heffingskortingen, Zvw, MKB-winstvrijstelling, Box 3
+- FR: sociale lasten (pensioen/loon/winst/PFU), inkomstenbelasting barème progressif, quotient familial, abattementen (65+, winst), IFI, CAK-aftrek, hulp aan huis krediet
+- BE: RSZ, zelfstandigenbijdrage, federale PB schijven, belastingvrije som, forfait beroepskosten, gemeentebelasting, roerende voorheffing, BSZB
+- Lijfrente-fracties (FR): belastbaar deel afhankelijk van startleeftijd — zie LIJFRENTE_FRACTIES in FR.INKOMSTENBELASTING
+- AOW_BRUTO_SINGLE / AOW_BRUTO_COUPLE: bruto AOW per jaar
+- FR_PENSION_YEARS_REQUIRED, FR_PENSION_RATE, FR_PENSION_AVG_SALARY: Frans staatspensioen formule
 
-**Frankrijk:**
-- Sociale lasten: pensioen 9,1%, loon 22%, winst diensten 21,2%, winst verhuur 21,2%, PFU 17,2%
-- Lijfrente: belastbaar deel afhankelijk van startleeftijd (< 50j: 70%, 50-59j: 50%, 60-69j: 40%, ≥70j: 30%). Sociale lasten 9,1% over belastbaar deel.
-- Inkomstenbelasting barème progressif: 0% < €11.497 | 11% < €29.315 | 30% < €83.823 | 41% < €180.294 | 45% daarboven
-- Quotient Familial: parts = (paar? 2 : 1) + kinderen (≤2: 0,5/kind, >2: eerste twee 0,5, rest 1,0). Plafond voordeel: €1.759 per halve part boven basisdelen.
-- Abattement 65+: bij pensioeninkomen ≤€17.200/pers → aftrek €2.746/pers; ≤€27.670 → €1.373/pers
-- Abattement winst: diensten 50%, verhuur 30% (micro-regime)
-- PFU (prélèvement forfaitaire unique): 12,8% IB + 17,2% sociale lasten = 30% flat op vermogensinkomsten
-- IFI: vastgoed >€1,3M, progressief 0,5%-1,5%
-- CAK-bijdrage: vast €4.500 aftrekbaar van belastbaar inkomen
-- Hulp aan huis: 50% belastingkrediet
-- Frans staatspensioen: (FR-werkjaren / 43 vereist) × €40.000 gem. salaris × 50% rate. Volledige rate bij ≥43 EU-jaren totaal.
-
-**België:**
-- RSZ werknemer: 13,07%
-- Zelfstandigenbijdrage: 20,5% < €73.448, 14,16% daarboven
-- Pensioen RIZIV: 3,55% + solidariteit ~1%
-- Federale PB: 25% < €16.320 | 40% < €28.800 | 45% < €49.840 | 50% daarboven
-- Belastingvrije som: €10.910/pp + per kind (1: €1.920, 2: €4.950, 3: €11.090, 4+: +€6.850)
-- Forfait beroepskosten: 30% loon (na RSZ), max €5.750/pp
-- Gemeentebelasting: gemiddeld 7,17% op federale PB
-- Roerende voorheffing: 30% algemeen, 15% spaarrente (vrijstelling €1.020/pp), dividend vrijstelling ~€833/pp
-- BSZB: max ~€731 per gezin, progressief
+### Bronnen van de parameters
+De config.json-waarden komen uit:
+- Belastingdienst.nl (NL Box 1, Box 3, heffingskortingen, Zvw)
+- Service-public.fr (FR barème, sociale lasten, quotient familial, IFI)
+- Financien.belgium.be (BE federale PB, RSZ)
+- Socialsecurity.belgium.be (BE zelfstandigenbijdrage, RIZIV)
+- Grensinfo.nl (verdragsregels NL-FR)
+Noem deze bronnen als de gebruiker ernaar vraagt.
 
 ### Verdragsregels (NL-FR / BE-FR)
 - AOW en particulier pensioen: belast in WOONLAND (Frankrijk bij emigratie)
@@ -153,8 +138,10 @@ Actuariële herberekening pensioen bij vervroeging, lokale belastingen (taxe fon
 ${stateBlock}
 
 ## Hoe je antwoordt
-1. Verwijs naar concrete bedragen uit het scenario: "Uw AOW van €14.820 wordt in Frankrijk belast tegen het barème progressif, terwijl die in NL onder het boven-AOW tarief van 19,07% valt."
-2. Leg causaal verband uit: "Het verschil van +€3.200 komt doordat het quotient familial uw Franse belasting verlaagt van 30% naar effectief 22%."
-3. Suggereer optimalisaties: "Als u de lijfrente-start uitstelt naar 67 in plaats van 65, daalt het belastbare deel van 50% naar 40%."
-4. Wees eerlijk over beperkingen: "De tool houdt geen rekening met het Ruyter-arrest. In werkelijkheid betaalt u mogelijk 7,5% i.p.v. 17,2% sociale lasten, wat het voordeel voor Frankrijk nog groter maakt."`;
+1. Verwijs naar concrete bedragen uit resultaten.analyse en berekend — nooit zelf rekenen.
+2. Als je een tarief noemt, haal het uit fiscaleParameters. Voorbeeld: "Het Franse barème voor uw schijf is [tarief uit fiscaleParameters.FR.INKOMSTENBELASTING.SCHIJVEN]."
+3. Leg causaal verband uit: waarom is het verschil positief of negatief? Welk mechanisme (quotient familial, abattement, micro-regime) verklaart het?
+4. Suggereer optimalisaties binnen de tool: andere startleeftijd lijfrente, ondernemingstype wisselen, simulatiedatum instellen.
+5. Wees eerlijk over beperkingen: "De tool houdt geen rekening met het Ruyter-arrest. In werkelijkheid betaalt u mogelijk 7,5% i.p.v. 17,2% sociale lasten op NL-pensioen, wat het voordeel voor Frankrijk vergroot."
+6. Als informatie ontbreekt in de toolState (bijv. geen resultaten, geen fiscaleParameters), zeg dat de gebruiker het scenario moet invullen of de pagina moet herladen. Verzin nooit een getal.`;
 }

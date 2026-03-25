@@ -73,6 +73,7 @@ document.addEventListener('DOMContentLoaded', () => {
             // Lijfrente fracties en tarief (FR)
             PARAMS.FR.INKOMSTENBELASTING.LIJFRENTE_FRACTIES = [ { age: 50, fraction: 0.7 }, { age: 60, fraction: 0.5 }, { age: 70, fraction: 0.4 }, { age: Infinity, fraction: 0.3 } ];
             PARAMS.FR.SOCIALE_LASTEN.LIJFRENTE_TARIEF = 0.091; // Aanname
+            window._fkParams = PARAMS; // Beschikbaar voor AI-assistent
         } catch (error) { displayError(`Fout laden config: ${error.message}.`); return; }
 
         // 2. Select DOM Elements
@@ -643,6 +644,7 @@ window.getToolState = function () {
         analyse: document.getElementById('calculation-breakdown')?.textContent || '',
       },
       berekend: window._fkComputedState || null,
+      fiscaleParameters: window._fkParams || null,
     };
   } catch (e) {
     console.error('getToolState error:', e);
