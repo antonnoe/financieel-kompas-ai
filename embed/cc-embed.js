@@ -1,7 +1,6 @@
 /**
- * cc-embed.js v2 — Café Claude Expert-Comptable Widget
- * Slide-out AI assistant for Infofrankrijk tools
- * Includes: Poppins/Mulish fonts, save-to-DossierFrankrijk, conversation export
+ * cc-embed.js v3 — AI-Toelichter Widget
+ * Sticky pill top-right, floats with scroll, panel opens underneath
  */
 ;(function () {
   'use strict';
@@ -10,34 +9,45 @@
   var CFG = {
     toolId: script?.getAttribute('data-tool-id') || 'unknown',
     toolName: script?.getAttribute('data-tool-name') || 'Tool',
-    emoji: script?.getAttribute('data-expert-emoji') || '📊',
-    label: script?.getAttribute('data-expert-label') || 'AI Assistent',
+    emoji: script?.getAttribute('data-expert-emoji') || '💡',
+    label: script?.getAttribute('data-expert-label') || 'AI-Toelichter',
     color: script?.getAttribute('data-color') || '#800000',
     apiUrl: script?.getAttribute('data-api-url') || '/api/chat',
   };
 
   var C = CFG.color;
 
-  /* ── Load Poppins + Mulish fonts ── */
-  var fontLink = document.createElement('link');
-  fontLink.rel = 'stylesheet';
-  fontLink.href = 'https://fonts.googleapis.com/css2?family=Mulish:wght@400;500;600&family=Poppins:wght@500;600&display=swap';
-  document.head.appendChild(fontLink);
+  /* ── Fonts ── */
+  var fl = document.createElement('link');
+  fl.rel = 'stylesheet';
+  fl.href = 'https://fonts.googleapis.com/css2?family=Mulish:wght@400;500;600&family=Poppins:wght@500;600&display=swap';
+  document.head.appendChild(fl);
 
   /* ── Styles ── */
   var css = document.createElement('style');
   css.textContent = [
-    '#cc-fab{position:fixed;bottom:24px;right:24px;z-index:99998;',
-    'width:56px;height:56px;border-radius:50%;background:' + C + ';',
-    'color:#fff;border:none;cursor:pointer;font-size:24px;',
-    'display:flex;align-items:center;justify-content:center;',
-    'box-shadow:0 4px 16px rgba(128,0,0,0.35);transition:transform .2s,box-shadow .2s}',
-    '#cc-fab:hover{transform:scale(1.08);box-shadow:0 6px 24px rgba(128,0,0,0.45)}',
-    '#cc-fab.open{display:none}',
+    /* Sticky pill — always visible top-right */
+    '#cc-fab{position:fixed;top:12px;right:12px;z-index:99998;',
+    'display:flex;align-items:center;gap:6px;',
+    'padding:8px 16px 8px 12px;border-radius:24px;',
+    'background:' + C + ';color:#fff;border:none;cursor:pointer;',
+    'font-family:"Mulish",sans-serif;font-size:13px;font-weight:600;',
+    'box-shadow:0 2px 12px rgba(128,0,0,0.35);',
+    'transition:transform .15s,box-shadow .15s,opacity .15s;',
+    'white-space:nowrap}',
+    '#cc-fab:hover{transform:scale(1.03);box-shadow:0 4px 20px rgba(128,0,0,0.45)}',
+    '#cc-fab.open{opacity:0;pointer-events:none;transform:scale(0.9)}',
+    '#cc-fab-icon{font-size:16px;line-height:1}',
+    '#cc-fab-label{line-height:1}',
 
-    '#cc-panel{position:fixed;bottom:24px;right:24px;z-index:99999;',
-    'width:400px;max-width:calc(100vw - 32px);',
-    'height:560px;max-height:calc(100vh - 48px);',
+    /* Pulse animation on load */
+    '#cc-fab{animation:ccPulse 2s ease-in-out 1s 2}',
+    '@keyframes ccPulse{0%,100%{box-shadow:0 2px 12px rgba(128,0,0,0.35)}50%{box-shadow:0 2px 24px rgba(128,0,0,0.6)}}',
+
+    /* Panel — opens from top-right */
+    '#cc-panel{position:fixed;top:12px;right:12px;z-index:99999;',
+    'width:400px;max-width:calc(100vw - 24px);',
+    'height:min(560px, calc(100vh - 24px));',
     'background:#faf9f7;border-radius:16px;',
     'box-shadow:0 8px 40px rgba(0,0,0,0.18);',
     'display:none;flex-direction:column;',
@@ -45,17 +55,17 @@
     'border:1px solid rgba(128,0,0,0.12)}',
     '#cc-panel.open{display:flex}',
 
-    '#cc-head{background:' + C + ';color:#fff;padding:14px 16px;',
+    '#cc-head{background:' + C + ';color:#fff;padding:12px 16px;',
     'display:flex;align-items:center;gap:10px;flex-shrink:0}',
-    '#cc-head-icon{font-size:20px;width:36px;height:36px;background:rgba(255,255,255,0.15);',
-    'border-radius:10px;display:flex;align-items:center;justify-content:center}',
+    '#cc-head-icon{font-size:18px;width:32px;height:32px;background:rgba(255,255,255,0.15);',
+    'border-radius:8px;display:flex;align-items:center;justify-content:center}',
     '#cc-head-text{flex:1}',
-    '#cc-head-title{font-family:"Poppins",sans-serif;font-size:14px;font-weight:600;line-height:1.3}',
-    '#cc-head-sub{font-size:11px;opacity:0.75;line-height:1.3;font-weight:400}',
+    '#cc-head-title{font-family:"Poppins",sans-serif;font-size:13px;font-weight:600;line-height:1.3}',
+    '#cc-head-sub{font-size:10px;opacity:0.75;line-height:1.3}',
     '.cc-hb{background:none;border:none;color:#fff;cursor:pointer;padding:4px;opacity:0.7;font-size:16px;line-height:1}',
     '.cc-hb:hover{opacity:1}',
 
-    '#cc-msgs{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:10px}',
+    '#cc-msgs{flex:1;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:10px}',
     '#cc-msgs::-webkit-scrollbar{width:4px}',
     '#cc-msgs::-webkit-scrollbar-thumb{background:rgba(128,0,0,0.2);border-radius:2px}',
 
@@ -72,9 +82,9 @@
     '.cc-dots i:nth-child(3){animation-delay:.3s}',
     '@keyframes ccB{0%,60%,100%{transform:translateY(0);opacity:.3}30%{transform:translateY(-4px);opacity:1}}',
 
-    '#cc-suggest{padding:0 16px 8px;display:flex;flex-wrap:wrap;gap:6px;flex-shrink:0}',
+    '#cc-suggest{padding:0 14px 6px;display:flex;flex-wrap:wrap;gap:5px;flex-shrink:0}',
     '.cc-sg{background:#fff;color:' + C + ';border:1px solid rgba(128,0,0,0.2);',
-    'border-radius:16px;padding:5px 12px;font-size:11px;cursor:pointer;',
+    'border-radius:16px;padding:4px 10px;font-size:11px;cursor:pointer;',
     'font-family:"Mulish",sans-serif;transition:all .15s}',
     '.cc-sg:hover{background:' + C + ';color:#fff}',
 
@@ -90,23 +100,27 @@
     '#cc-go:disabled{opacity:0.35;cursor:not-allowed}',
     '#cc-go:hover:not(:disabled){opacity:0.85}',
 
-    '#cc-actions{display:flex;gap:6px;margin-top:8px}',
-    '.cc-act{flex:1;padding:7px 0;border:1px solid rgba(128,0,0,0.2);border-radius:6px;',
-    'font-size:11px;font-family:"Mulish",sans-serif;font-weight:500;',
+    '#cc-actions{display:flex;gap:5px;margin-top:7px}',
+    '.cc-act{flex:1;padding:6px 0;border:1px solid rgba(128,0,0,0.2);border-radius:6px;',
+    'font-size:10px;font-family:"Mulish",sans-serif;font-weight:500;',
     'cursor:pointer;text-align:center;transition:all .15s;background:#fff;color:' + C + '}',
     '.cc-act:hover{background:' + C + ';color:#fff}',
     '.cc-act.ok{background:#28a745;color:#fff;border-color:#28a745}',
 
     '@media(max-width:440px){',
-    '#cc-panel{width:calc(100vw - 16px);right:8px;bottom:8px;height:calc(100vh - 72px)}',
-    '#cc-fab{bottom:16px;right:16px}}',
+    '#cc-panel{width:calc(100vw - 16px);right:8px;top:8px;height:calc(100vh - 16px)}',
+    '#cc-fab{top:8px;right:8px;padding:6px 12px 6px 10px;font-size:12px}}',
+
+    /* In iframe: tighter positioning */
+    '@media(max-height:850px){',
+    '#cc-panel{height:calc(100vh - 24px)}}',
   ].join('');
   document.head.appendChild(css);
 
   /* ── DOM ── */
   var fab = document.createElement('button');
   fab.id = 'cc-fab';
-  fab.innerHTML = CFG.emoji;
+  fab.innerHTML = '<span id="cc-fab-icon">' + CFG.emoji + '</span><span id="cc-fab-label">' + CFG.label + '</span>';
   fab.title = CFG.label;
   document.body.appendChild(fab);
 
@@ -222,16 +236,18 @@
     var s = state();
     var now = new Date().toLocaleDateString('nl-NL', { year:'numeric', month:'long', day:'numeric' });
     var L = [];
+    var sep = '\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550';
+    var line = '\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500';
 
-    L.push('\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550');
+    L.push(sep);
     L.push('FINANCIEEL KOMPAS \u2014 VOLLEDIGE ANALYSE + AI-ADVIES');
     L.push('Datum: ' + now);
-    L.push('\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550');
+    L.push(sep);
     L.push('');
 
     if (s && s.resultaten && s.resultaten.analyse) {
       L.push('DEEL 1: BEREKENING');
-      L.push('\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500');
+      L.push(line);
       L.push(s.resultaten.analyse);
       L.push('');
     }
@@ -239,7 +255,7 @@
     if (s && s.resultaten) {
       var r = s.resultaten;
       L.push('SAMENVATTING');
-      L.push('\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500');
+      L.push(line);
       if (r.vergelijkingsland) L.push(r.vergelijkingsland.label + ': Bruto ' + r.vergelijkingsland.bruto + ' | Netto ' + r.vergelijkingsland.netto);
       if (r.frankrijk) L.push('Frankrijk: Bruto ' + r.frankrijk.bruto + ' | Netto ' + r.frankrijk.netto);
       if (r.conclusie) L.push('Verschil: ' + r.conclusie.verschil + ' (' + r.conclusie.toelichting + ')');
@@ -247,8 +263,8 @@
     }
 
     if (hist.length > 0) {
-      L.push('DEEL 2: AI-ADVIES (L\'Expert-Comptable)');
-      L.push('\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500');
+      L.push('DEEL 2: AI-ADVIES (' + CFG.label + ')');
+      L.push(line);
       hist.forEach(function (m) {
         if (m.role === 'user') { L.push(''); L.push('VRAAG: ' + m.content); }
         else if (m.role === 'assistant') { L.push('ADVIES: ' + m.content); }
@@ -256,7 +272,7 @@
       L.push('');
     }
 
-    L.push('\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550');
+    L.push(sep);
     L.push('Indicatieve analyse, geen financieel advies.');
     L.push('Bron: Financieel Kompas \u2014 Infofrankrijk.com');
     return L.join('\n');
@@ -308,14 +324,19 @@
   fab.onclick = function () {
     panel.classList.add('open'); fab.classList.add('open');
     if (hist.length === 0) {
-      msg('a', 'Welkom. Ik kan uw ' + CFG.toolName + '-berekening interpreteren, het verschil tussen de landen uitleggen, en optimalisatietips geven.\n\nWat wilt u weten?');
+      msg('a', 'Welkom bij de ' + CFG.label + '. Vul eerst uw scenario in en ik kan het verschil tussen de landen uitleggen, de berekening toelichten en optimalisatietips geven.\n\nWat wilt u weten?');
       showSg();
     }
     setTimeout(function () { $in.focus(); }, 100);
   };
 
-  panel.querySelector('#cc-cls').onclick = function () { panel.classList.remove('open'); fab.classList.remove('open'); };
-  panel.querySelector('#cc-min').onclick = function () { panel.classList.remove('open'); fab.classList.remove('open'); };
+  function close() {
+    panel.classList.remove('open');
+    fab.classList.remove('open');
+  }
+
+  panel.querySelector('#cc-cls').onclick = close;
+  panel.querySelector('#cc-min').onclick = close;
 
   $in.oninput = function () {
     $go.disabled = !$in.value.trim() || busy;
