@@ -534,6 +534,95 @@ Frankrijk 🇫🇷 ${simDatumStr}
     initializeApp();
 
 }); // Einde DOMContentLoaded listener
+// === AI ASSISTENT: TOOL STATE SERIALIZER ===
+window.getToolState = function () {
+  try {
+    var comparison = document.getElementById('btn-nl')?.classList.contains('active') ? 'NL' : 'BE';
+    var household = document.getElementById('btn-single')?.classList.contains('active') ? 'alleenstaand' : 'partners';
+    var getVal = function (id) { var el = document.getElementById(id); return el ? el.value : null; };
+    var getNum = function (id) { var el = document.getElementById(id); return el ? Number(el.value) || 0 : 0; };
+    var getTxt = function (id) { var el = document.getElementById(id); return el ? el.textContent : ''; };
+    var getChk = function (id) { var el = document.getElementById(id); return el ? el.checked : false; };
+
+    var partner1 = {
+      geboortejaar: getNum('birth-year-1'),
+      geboortemaand: getNum('birth-month-1'),
+      aowOpbouwjaren: getNum('aow-years-1'),
+      werkjarenBelgie: getNum('be-work-years-1'),
+      werkjarenFrankrijk: getNum('fr-work-years-1'),
+      bePensioen: getNum('slider-be-pension-1'),
+      overheidsPensioen: getNum('slider-pension-public-1'),
+      particulierPensioen: getNum('slider-pension-private-1'),
+      lijfrente: getNum('slider-lijfrente-1'),
+      lijfrenteDuur: getVal('lijfrente-duration-1'),
+      lijfrenteStartleeftijd: getVal('lijfrente-start-1'),
+      inkomenUitVermogen: getNum('slider-income-wealth-1'),
+      loon: getNum('slider-salary-1'),
+      winstOnderneming: getNum('slider-business-1'),
+      ondernemingstype: getVal('business-type-1'),
+    };
+
+    var partner2 = null;
+    if (household === 'partners') {
+      partner2 = {
+        geboortejaar: getNum('birth-year-2'),
+        geboortemaand: getNum('birth-month-2'),
+        aowOpbouwjaren: getNum('aow-years-2'),
+        werkjarenBelgie: getNum('be-work-years-2'),
+        werkjarenFrankrijk: getNum('fr-work-years-2'),
+        bePensioen: getNum('slider-be-pension-2'),
+        overheidsPensioen: getNum('slider-pension-public-2'),
+        particulierPensioen: getNum('slider-pension-private-2'),
+        lijfrente: getNum('slider-lijfrente-2'),
+        lijfrenteDuur: getVal('lijfrente-duration-2'),
+        lijfrenteStartleeftijd: getVal('lijfrente-start-2'),
+        inkomenUitVermogen: getNum('slider-income-wealth-2'),
+        loon: getNum('slider-salary-2'),
+        winstOnderneming: getNum('slider-business-2'),
+        ondernemingstype: getVal('business-type-2'),
+      };
+    }
+
+    return {
+      vergelijking: comparison,
+      huishoudtype: household,
+      simulatiejaar: getVal('sim-year') || null,
+      simulatiemaand: getVal('sim-month') || null,
+      stopLoonNaAOW: getChk('stop-salary-after-aow'),
+      kinderen: getNum('slider-children'),
+      cakBijdrage: getChk('cak-contribution'),
+      hulpAanHuis: getNum('home-help'),
+      financieelVermogen: getNum('slider-wealth-financial'),
+      vastgoedVermogen: getNum('slider-wealth-property'),
+      partner1: partner1,
+      partner2: partner2,
+      resultaten: {
+        vergelijkingsland: {
+          label: getTxt('compare-country-label'),
+          bruto: getTxt('compare-bruto'),
+          lasten: getTxt('compare-tax'),
+          netto: getTxt('compare-netto'),
+          vermogensbelasting: getTxt('wealth-tax-compare'),
+        },
+        frankrijk: {
+          bruto: getTxt('fr-bruto'),
+          lasten: getTxt('fr-tax'),
+          netto: getTxt('fr-netto'),
+          vermogensbelasting: getTxt('wealth-tax-fr'),
+        },
+        conclusie: {
+          verschil: getTxt('conclusion-value'),
+          toelichting: getTxt('conclusion-expl'),
+        },
+        analyse: document.getElementById('calculation-breakdown')?.textContent || '',
+      },
+    };
+  } catch (e) {
+    console.error('getToolState error:', e);
+    return null;
+  }
+};
+
 // === DOSSIER FRANKIJK INTEGRATIE ===
 document.getElementById('save-dossier-btn')?.addEventListener('click', function() {
     var compareCountry = document.getElementById('compare-country-label')?.textContent || 'Nederland';
