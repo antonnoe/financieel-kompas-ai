@@ -112,35 +112,40 @@ function calculateNLNettoPure({ baseIncome = 0, salary = 0, business = 0, params
   if (bruto <= 0 && z <= 0) return { bruto: 0, tax: 0, netto: 0 };
   if (bruto <= 0 && z > 0) return { bruto: 0, tax: z, netto: -z };
 
+  // 3-schijven berekening (2026: Belastingdienst.nl)
   const T = isAboveAOW ? (box1.TARIEVEN_BOVEN_AOW || []) : (box1.TARIEVEN_ONDER_AOW || []);
-  const gS1 = ensureNumber(box1.GRENS_SCHIJF_1 || Infinity);
+  const gS1 = ensureNumber(box1.GRENS_SCHIJF_1 || 38883);
+  const gS2 = ensureNumber(box1.GRENS_SCHIJF_2 || 78426);
+  const r1 = (T && T[0]) ? ensureNumber(T[0]) : 0;
+  const r2 = (T && T[1]) ? ensureNumber(T[1]) : r1;
+  const r3 = (T && T[2]) ? ensureNumber(T[2]) : r2;
 
   let t = 0;
-  const firstRate = (T && T[0]) ? ensureNumber(T[0]) : 0;
-  const secondRate = (T && T[1]) ? ensureNumber(T[1]) : firstRate;
   if (bruto <= gS1) {
-    t = bruto * firstRate;
+    t = bruto * r1;
+  } else if (bruto <= gS2) {
+    t = (gS1 * r1) + ((bruto - gS1) * r2);
   } else {
-    t = (gS1 * firstRate) + ((bruto - gS1) * secondRate);
+    t = (gS1 * r1) + ((gS2 - gS1) * r2) + ((bruto - gS2) * r3);
   }
 
-  let arbeidKorting = (salary > 0 || business > 0) ? ensureNumber(box1.ARBEIDSKORTING_MAX || 0) : 0;
+  // Algemene heffingskorting (Rijksoverheid.nl 2026)
   let algemeneKorting = ensureNumber(box1.ALGEMENE_HEFFINGSKORTING_MAX || 0);
-  const hAS = ensureNumber(box1.HK_AFBOUW_START || 0);
+  const hAS = ensureNumber(box1.HK_AFBOUW_START || 29736);
+  const hAF = ensureNumber(box1.HK_AFBOUW_FACTOR || 0.06398);
   if (bruto > hAS) {
-    algemeneKorting = Math.max(0, algemeneKorting - ((bruto - hAS) * ensureNumber(box1.HK_AFBOUW_FACTOR || 0)));
-  }
-  if (bruto >= gS1) {
-    algemeneKorting = 0;
-  }
-  // akAS magic number used in original code for arbeidskorting reduction
-  const akAS = 39957;
-  if (bruto > akAS) {
-    arbeidKorting = Math.max(0, arbeidKorting - ((bruto - akAS) * 0.0651));
+    algemeneKorting = Math.max(0, algemeneKorting - ((bruto - hAS) * hAF));
   }
 
-  t = t - algemeneKorting - arbeidKorting;
-  t = Math.max(0, t);
+  // Arbeidskorting (Rijksoverheid.nl 2026)
+  let arbeidKorting = (salary > 0 || business > 0) ? ensureNumber(box1.ARBEIDSKORTING_MAX || 0) : 0;
+  const akAS = ensureNumber(box1.AK_AFBOUW_START || 45592);
+  const akAF = ensureNumber(box1.AK_AFBOUW_FACTOR || 0.0651);
+  if (bruto > akAS) {
+    arbeidKorting = Math.max(0, arbeidKorting - ((bruto - akAS) * akAF));
+  }
+
+  t = Math.max(0, t - algemeneKorting - arbeidKorting);
   const totalTax = t + z;
   const netto = bruto - totalTax;
   return { bruto, tax: totalTax, netto };

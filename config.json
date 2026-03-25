@@ -1,53 +1,98 @@
 {
-    "AOW_BRUTO_SINGLE": 19500,
-    "AOW_BRUTO_COUPLE": 13000,
+    "EDITIE": "2026",
+    "BRONNEN": {
+        "NL": "Belastingdienst.nl, Rijksoverheid.nl, Deloitte Belastingplan 2026, KVK.nl",
+        "FR": "Service-public.fr, Economie.gouv.fr, Loi de finances 2026 (19 feb 2026)",
+        "BE": "FPS Finance (fin.belgium.be), VLAIO.be, Wikifin.be, Socialsecurity.belgium.be"
+    },
+    "AOW_BRUTO_SINGLE": 19956,
+    "AOW_BRUTO_COUPLE": 13296,
     "FR_PENSION_AVG_SALARY": 40000,
     "FR_PENSION_YEARS_REQUIRED": 43,
     "FR_PENSION_RATE": 0.5,
     "NL": {
         "SOCIALE_LASTEN": { "ZVW_PERCENTAGE": 0.0526 },
         "BOX1": {
-            "TARIEVEN_ONDER_AOW": [ 0.3697, 0.495 ], "TARIEVEN_BOVEN_AOW": [ 0.1907, 0.495 ],
-            "GRENS_SCHIJF_1": 75518, "ALGEMENE_HEFFINGSKORTING_MAX": 3362, "ARBEIDSKORTING_MAX": 5532,
-            "MKB_WINSTVRIJSTELLING": 0.127, "HK_AFBOUW_START": 24813, "HK_AFBOUW_FACTOR": 0.0663
+            "TARIEVEN_ONDER_AOW": [ 0.3575, 0.3756, 0.495 ],
+            "TARIEVEN_BOVEN_AOW": [ 0.1785, 0.3756, 0.495 ],
+            "GRENZEN_SCHIJVEN": [ 38883, 78426 ],
+            "GRENS_SCHIJF_1": 38883,
+            "GRENS_SCHIJF_2": 78426,
+            "ALGEMENE_HEFFINGSKORTING_MAX": 3115,
+            "ARBEIDSKORTING_MAX": 5685,
+            "MKB_WINSTVRIJSTELLING": 0.127,
+            "HK_AFBOUW_START": 29736,
+            "HK_AFBOUW_FACTOR": 0.06398,
+            "AK_AFBOUW_START": 45592,
+            "AK_AFBOUW_FACTOR": 0.0651
         },
         "BOX3": {
-            "VRIJSTELLING_SINGLE": 57684, "VRIJSTELLING_COUPLE": 115368, "TARIEF": 0.36, "FORFAITAIR_RENDEMENT": 0.0617
+            "VRIJSTELLING_SINGLE": 59357,
+            "VRIJSTELLING_COUPLE": 118714,
+            "TARIEF": 0.36,
+            "FORFAITAIR_RENDEMENT": 0.06
         }
     },
     "FR": {
         "SOCIALE_LASTEN": { "PENSIOEN": 0.091, "SALARIS": 0.22, "WINST_DIENSTEN": 0.212, "WINST_VERHUUR": 0.212, "PFU": 0.172 },
         "INKOMSTENBELASTING": {
-            "SCHIJVEN": [ { "grens": 11497, "tarief": 0.0 }, { "grens": 29315, "tarief": 0.11 }, { "grens": 83823, "tarief": 0.30 }, { "grens": 180294, "tarief": 0.41 }, { "grens": "Infinity", "tarief": 0.45 } ],
-            "ABATTEMENT_65PLUS": { "DREMPEL1": 17200, "AFTREK1": 2746, "DREMPEL2": 27670, "AFTREK2": 1373 },
-            "ABATTEMENT_WINST_DIENSTEN": 0.5, "ABATTEMENT_WINST_VERHUUR": 0.3, "PFU_TARIEF": 0.128,
-            "QUOTIENT_PLAFOND_PER_HALF_PART": 1759
+            "SCHIJVEN": [
+                { "grens": 11600, "tarief": 0.0 },
+                { "grens": 29579, "tarief": 0.11 },
+                { "grens": 84577, "tarief": 0.30 },
+                { "grens": 181917, "tarief": 0.41 },
+                { "grens": "Infinity", "tarief": 0.45 }
+            ],
+            "ABATTEMENT_65PLUS": { "DREMPEL1": 17510, "AFTREK1": 2796, "DREMPEL2": 28170, "AFTREK2": 1398 },
+            "ABATTEMENT_WINST_DIENSTEN": 0.5,
+            "ABATTEMENT_WINST_VERHUUR": 0.3,
+            "PFU_TARIEF": 0.128,
+            "QUOTIENT_PLAFOND_PER_HALF_PART": 1807
         },
         "IFI": {
             "DREMPEL_START": 1300000,
-            "SCHIJVEN": [ { "grens": 800000, "tarief": 0.0 }, { "grens": 1300000, "tarief": 0.005 }, { "grens": 2570000, "tarief": 0.007 }, { "grens": 5000000, "tarief": 0.01 }, { "grens": 10000000, "tarief": 0.0125 }, { "grens": "Infinity", "tarief": 0.015 } ]
+            "SCHIJVEN": [
+                { "grens": 800000, "tarief": 0.0 },
+                { "grens": 1300000, "tarief": 0.005 },
+                { "grens": 2570000, "tarief": 0.007 },
+                { "grens": 5000000, "tarief": 0.01 },
+                { "grens": 10000000, "tarief": 0.0125 },
+                { "grens": "Infinity", "tarief": 0.015 }
+            ]
         },
-        "HULP_AAN_HUIS_KREDIET_PERCENTAGE": 0.5, "CAK_BIJDRAGE_GEMIDDELD": 4500
+        "HULP_AAN_HUIS_KREDIET_PERCENTAGE": 0.5,
+        "CAK_BIJDRAGE_GEMIDDELD": 4500
     },
     "BE": {
         "SOCIALE_LASTEN": {
             "WERKNEMER_RSZ_PERCENTAGE": 0.1307,
-            "ZELFSTANDIGE_SCHIJVEN": [ { "grens": 73447.52, "tarief": 0.205 }, { "grens": 108238.4, "tarief": 0.1416 } ],
+            "ZELFSTANDIGE_SCHIJVEN": [ { "grens": 75108.88, "tarief": 0.205 }, { "grens": 110683.62, "tarief": 0.1416 } ],
             "PENSIOEN_RIZIV_PERCENTAGE": 0.0355,
             "PENSIOEN_SOLIDARITEIT_PERCENTAGE": 0.01,
             "BIJZONDERE_BIJDRAGE_SCHIJVEN_GEZIN_2024": [
-                { "grens": 21070.96, "bijdrage": 0 }, { "grens": 22998.08, "bijdrage": 37.08 }, { "grens": 25164.81, "bijdrage": 106.80 },
-                { "grens": 27150.84, "bijdrage": 147.24 }, { "grens": 38167.35, "bijdrage": 255.48 }, { "grens": 50005.00, "bijdrage": 393.72 },
-                { "grens": 61872.54, "bijdrage": 532.08 }, { "grens": 78936.00, "bijdrage": 650.04 }, { "grens": "Infinity", "bijdrage": 731.28 }
+                { "grens": 21070.96, "bijdrage": 0 },
+                { "grens": 22998.08, "bijdrage": 37.08 },
+                { "grens": 25164.81, "bijdrage": 106.80 },
+                { "grens": 27150.84, "bijdrage": 147.24 },
+                { "grens": 38167.35, "bijdrage": 255.48 },
+                { "grens": 50005.00, "bijdrage": 393.72 },
+                { "grens": 61872.54, "bijdrage": 532.08 },
+                { "grens": 78936.00, "bijdrage": 650.04 },
+                { "grens": "Infinity", "bijdrage": 731.28 }
             ]
         },
         "INKOMSTENBELASTING": {
-            "SCHIJVEN_2025": [ { "grens": 16320, "tarief": 0.25 }, { "grens": 28800, "tarief": 0.4 }, { "grens": 49840, "tarief": 0.45 }, { "grens": "Infinity", "tarief": 0.5 } ],
-            "BASIS_VRIJSTELLING": 10910,
-            "VRIJSTELLING_PER_KIND": [ 1920, 4950, 11090 ],
-            "EXTRA_VRIJSTELLING_KIND_MEER_DAN_3": 6850,
+            "SCHIJVEN_2025": [
+                { "grens": 16320, "tarief": 0.25 },
+                { "grens": 28800, "tarief": 0.4 },
+                { "grens": 49840, "tarief": 0.45 },
+                { "grens": "Infinity", "tarief": 0.5 }
+            ],
+            "BASIS_VRIJSTELLING": 11180,
+            "VRIJSTELLING_PER_KIND": [ 1960, 5050, 11320 ],
+            "EXTRA_VRIJSTELLING_KIND_MEER_DAN_3": 6990,
             "FORFAIT_BEROEPSKOSTEN_WERKNEMER_PERCENTAGE": 0.30,
-            "FORFAIT_BEROEPSKOSTEN_WERKNEMER_MAX": 5750,
+            "FORFAIT_BEROEPSKOSTEN_WERKNEMER_MAX": 5860,
             "GEMEENTEBELASTING_GEMIDDELD": 0.0717,
             "ROERENDE_VOORHEFFING_TARIEF_ALGEMEEN": 0.3,
             "ROERENDE_VOORHEFFING_TARIEF_SPAAR": 0.15,

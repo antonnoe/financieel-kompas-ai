@@ -277,7 +277,48 @@ document.addEventListener('DOMContentLoaded', () => {
         const v=vals.isCouple?(PARAMS.NL.BOX3.VRIJSTELLING_COUPLE||0):(PARAMS.NL.BOX3.VRIJSTELLING_SINGLE||0); const wT=Math.max(0,(vals.wealthFinancial||0)-v)*(PARAMS.NL.BOX3.FORFAITAIR_RENDEMENT||0)*(PARAMS.NL.BOX3.TARIEF||0);
         return {bruto:cB, tax:cT, netto:cN, wealthTax:wT, breakdown: { simulatieDatum: simulatieDatum }};
     }
-     function calculateNLNetto(pI, s, b, iA) { if(!PARAMS.NL)return{bruto:0,tax:0,netto:0}; const wNV=b*(1-(PARAMS.NL.BOX1.MKB_WINSTVRIJSTELLING||0)); const zB=b>0?wNV:0; const z=zB*(PARAMS.NL.SOCIALE_LASTEN.ZVW_PERCENTAGE||0); const br=pI+s+wNV; if(br<=0&&z<=0)return{bruto:0,tax:0,netto:0}; if(br<=0&&z>0)return{bruto:0,tax:z,netto:-z}; let t=0; const T=iA?PARAMS.NL.BOX1.TARIEVEN_BOVEN_AOW:PARAMS.NL.BOX1.TARIEVEN_ONDER_AOW; const gS1=PARAMS.NL.BOX1.GRENS_SCHIJF_1||Infinity; if(br<=gS1){t=br*T[0];}else{t=(gS1*T[0])+((br-gS1)*T[1]);} let aK=(s>0||b>0?(PARAMS.NL.BOX1.ARBEIDSKORTING_MAX||0):0); let alK=PARAMS.NL.BOX1.ALGEMENE_HEFFINGSKORTING_MAX||0; const hAS=PARAMS.NL.BOX1.HK_AFBOUW_START||0; if(br>hAS){alK=Math.max(0,alK-((br-hAS)*(PARAMS.NL.BOX1.HK_AFBOUW_FACTOR||0)));} if(br>=gS1){alK=0;} const akAS=39957; if(br>akAS){aK=Math.max(0,aK-((br-akAS)*0.0651));} t=t-alK-aK; t=Math.max(0,t); const tT=t+z; return {bruto:br, tax:tT, netto:br-tT}; }
+     function calculateNLNetto(pI, s, b, iA) {
+        if(!PARAMS.NL) return {bruto:0,tax:0,netto:0};
+        const wNV = b * (1 - (PARAMS.NL.BOX1.MKB_WINSTVRIJSTELLING || 0));
+        const zB = b > 0 ? wNV : 0;
+        const z = zB * (PARAMS.NL.SOCIALE_LASTEN.ZVW_PERCENTAGE || 0);
+        const br = pI + s + wNV;
+        if (br <= 0 && z <= 0) return {bruto:0, tax:0, netto:0};
+        if (br <= 0 && z > 0) return {bruto:0, tax:z, netto:-z};
+
+        // 3-schijven berekening (2026: Belastingdienst.nl)
+        const T = iA ? PARAMS.NL.BOX1.TARIEVEN_BOVEN_AOW : PARAMS.NL.BOX1.TARIEVEN_ONDER_AOW;
+        const gS1 = PARAMS.NL.BOX1.GRENS_SCHIJF_1 || 38883;
+        const gS2 = PARAMS.NL.BOX1.GRENS_SCHIJF_2 || 78426;
+        let t = 0;
+        if (br <= gS1) {
+            t = br * T[0];
+        } else if (br <= gS2) {
+            t = (gS1 * T[0]) + ((br - gS1) * T[1]);
+        } else {
+            t = (gS1 * T[0]) + ((gS2 - gS1) * T[1]) + ((br - gS2) * T[2]);
+        }
+
+        // Algemene heffingskorting (Rijksoverheid.nl 2026)
+        let alK = PARAMS.NL.BOX1.ALGEMENE_HEFFINGSKORTING_MAX || 0;
+        const hAS = PARAMS.NL.BOX1.HK_AFBOUW_START || 29736;
+        const hAF = PARAMS.NL.BOX1.HK_AFBOUW_FACTOR || 0.06398;
+        if (br > hAS) {
+            alK = Math.max(0, alK - ((br - hAS) * hAF));
+        }
+
+        // Arbeidskorting (Rijksoverheid.nl 2026)
+        const akAS = PARAMS.NL.BOX1.AK_AFBOUW_START || 45592;
+        const akAF = PARAMS.NL.BOX1.AK_AFBOUW_FACTOR || 0.0651;
+        let aK = (s > 0 || b > 0) ? (PARAMS.NL.BOX1.ARBEIDSKORTING_MAX || 0) : 0;
+        if (br > akAS) {
+            aK = Math.max(0, aK - ((br - akAS) * akAF));
+        }
+
+        t = Math.max(0, t - alK - aK);
+        const tT = t + z;
+        return {bruto: br, tax: tT, netto: br - tT};
+    }
 
     // --- FRANKRIJK ---
     function calculateFrance(vals, currentComparison) {
