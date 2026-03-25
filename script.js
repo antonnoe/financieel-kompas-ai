@@ -135,6 +135,97 @@ document.addEventListener('DOMContentLoaded', () => {
         document.querySelectorAll('.hide-for-be').forEach(el=>el.style.display=(countryCode==='BE'?'none':'block'));
         const countryName = countryCode === 'NL' ? 'NL' : 'BE';
         pensionLabels.forEach(label => { if(label) label.textContent = `uit ${countryName}`; });
+
+        // Dynamic label + tooltip swaps per country
+        const swaps = {
+            'stop-salary-after-aow': {
+                label: countryCode === 'NL'
+                    ? 'Stopt loon automatisch na AOW?'
+                    : 'Stopt loon automatisch na pensioenleeftijd?',
+                tip: countryCode === 'NL'
+                    ? 'Wanneer aan: loon wordt op/na de AOW-leeftijd automatisch op 0 gezet. Wanneer uit: loon telt ook mee na AOW-leeftijd. Bron: Belastingdienst.nl.'
+                    : 'Wanneer aan: loon wordt op/na de wettelijke pensioenleeftijd automatisch op 0 gezet. Wanneer uit: loon telt ook mee na pensioenleeftijd. Bron: Socialsecurity.belgium.be.'
+            }
+        };
+        // Pension-public labels (P1 + P2)
+        ['group-pension-public-1','group-pension-public-2'].forEach(id => {
+            swaps[id] = {
+                label: countryCode === 'NL'
+                    ? 'Overheidspensioen (NL, bv. ABP)'
+                    : 'Aanvullend pensioen (BE, 2e pijler)',
+                tip: countryCode === 'NL'
+                    ? 'NL overheidspensioen (bv. ABP). Belast in bronland NL (art. 19 NL-FR verdrag), tarief 17,85% (AOW+, 2026). Bron: Belastingdienst.nl, NL-FR verdrag.'
+                    : 'Aanvullend pensioen werkgever/sector (groepsverzekering, IBP). Bron: Socialsecurity.belgium.be.'
+            };
+        });
+        // Income wealth (P1 + P2)
+        ['group-income-wealth-1','group-income-wealth-2'].forEach(id => {
+            swaps[id] = {
+                tip: countryCode === 'NL'
+                    ? 'Werkelijk ontvangen dividend/rente. NL: Box 3 op bezit (forfaitair 6%, tarief 36%, vrijstelling €59.357 p.p.). FR: PFU 30% (12,8% IB + 17,2% soc.). Bron: Belastingdienst.nl, Service-public.fr.'
+                    : 'Werkelijk ontvangen dividend/rente. BE: Roerende voorheffing 30% (15% spaar, vrijstelling €1.020 p.p.). FR: PFU 30%. Bron: fin.belgium.be, Service-public.fr.'
+            };
+        });
+        // Business (P1 + P2)
+        ['group-business-1','group-business-2'].forEach(id => {
+            swaps[id] = {
+                tip: countryCode === 'NL'
+                    ? 'Winst telt altijd mee, ook na AOW. NL: MKB-vrijstelling 12,7%, Zvw 5,26%. FR: micro-abattement 50% (diensten) of 30% (verhuur), soc. lasten 21,2%. Bron: Belastingdienst.nl, Service-public.fr.'
+                    : 'Winst telt altijd mee, ook na pensioenleeftijd. BE: zelfstandigenbijdrage 20,5%/14,16%. FR: micro-abattement 50% (diensten) of 30% (verhuur), soc. lasten 21,2%. Bron: fin.belgium.be, Service-public.fr.'
+            };
+        });
+        // Children
+        swaps['slider-children'] = {
+            tip: countryCode === 'NL'
+                ? 'FR: Quotient Familial (+0,5 part/kind, plafond €1.807). NL: geen direct IB-effect (toeslagen niet in tool). Bron: Service-public.fr, Belastingdienst.nl.'
+                : 'FR: Quotient Familial (+0,5 part/kind, plafond €1.807). BE: verhoogde belastingvrije som per kind. Bron: Service-public.fr, fin.belgium.be.'
+        };
+        // Financial wealth
+        swaps['slider-wealth-financial'] = {
+            tip: countryCode === 'NL'
+                ? 'Spaargeld + beleggingen. NL: Box 3, forfaitair 6%, tarief 36%, vrijstelling €59.357 p.p. (2026). FR: geen vermogensbelasting op financiële activa. Bron: Belastingdienst.nl.'
+                : 'Spaargeld + beleggingen. BE: geen vermogensbelasting (wel roerende voorheffing op inkomen). FR: geen vermogensbelasting op financiële activa. Bron: fin.belgium.be.'
+        };
+        // Property wealth
+        swaps['slider-wealth-property'] = {
+            tip: countryCode === 'NL'
+                ? 'Waarde onroerend goed (excl. hoofdverblijf). FR: IFI progressief 0,5-1,5% boven €1,3M. NL: Box 3 (forfaitair). Bron: Service-public.fr, Belastingdienst.nl.'
+                : 'Waarde onroerend goed (excl. hoofdverblijf). FR: IFI progressief 0,5-1,5% boven €1,3M. BE: geen vermogensbelasting. Bron: Service-public.fr.'
+        };
+        // Salary (P1 + P2)
+        ['group-salary-1','group-salary-2'].forEach(id => {
+            swaps[id] = {
+                tip: countryCode === 'NL'
+                    ? 'Bruto jaarloon. NL: Box 1 (3 schijven, 35,75-49,5%, 2026). FR: sociale lasten 22%. Na AOW: zet toggle uit. Bron: Belastingdienst.nl, Service-public.fr.'
+                    : 'Bruto jaarloon. BE: RSZ werknemer 13,07%. FR: sociale lasten 22%. Na pensioenleeftijd: zet toggle uit. Bron: Socialsecurity.belgium.be, Service-public.fr.'
+            };
+        });
+
+        // Apply swaps
+        Object.keys(swaps).forEach(id => {
+            const el = document.getElementById(id);
+            if (!el) return;
+            const cfg = swaps[id];
+            // Find the label — either parent label or label inside the group
+            if (cfg.label) {
+                const group = el.closest('.form-group') || el.parentElement;
+                const labelEl = group?.querySelector('label');
+                if (labelEl) {
+                    const tooltip = labelEl.querySelector('.tooltip');
+                    const sliderVal = labelEl.querySelector('.slider-value');
+                    // Rebuild label text, preserving tooltip and slider-value
+                    let newHTML = cfg.label + ' ';
+                    if (tooltip) newHTML += tooltip.outerHTML;
+                    if (sliderVal) newHTML += ': ' + sliderVal.outerHTML;
+                    labelEl.innerHTML = newHTML;
+                }
+            }
+            if (cfg.tip) {
+                const group = el.closest('.form-group') || el.parentElement;
+                const tooltip = group?.querySelector('.tooltip');
+                if (tooltip) tooltip.setAttribute('data-text', cfg.tip);
+            }
+        });
     }
     function updateComparisonCountry(countryCode) {
          if (!comparisonChoice?.nl || !comparisonChoice?.be || !compareCountryLabel || !compareCountryFlag || !compareCountryResult) return;
