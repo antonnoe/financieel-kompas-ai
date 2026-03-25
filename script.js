@@ -654,74 +654,76 @@ window.getToolState = function () {
 
 // === DOSSIER FRANKIJK INTEGRATIE ===
 document.getElementById('save-dossier-btn')?.addEventListener('click', function() {
+    // Use the AI widget's export if available (includes AI conversation)
+    if (window.ccExpertWidget && typeof window.ccExpertWidget.getExportText === 'function') {
+        var conv = window.ccExpertWidget.getConversation();
+        var hasAI = conv && conv.length > 0;
+        var summary = window.ccExpertWidget.getExportText();
+        var state = typeof window.getToolState === 'function' ? window.getToolState() : null;
+        var verschil = state?.resultaten?.conclusie?.verschil || '?';
+        var land = state?.resultaten?.vergelijkingsland?.label || 'NL';
+        var hh = state?.huishoudtype || '';
+        var title = 'Financieel Kompas: ' + hh + ' | ' + land + ' vs FR | ' + verschil;
+        if (hasAI) title += ' (incl. AI-advies)';
+
+        var data = { type: 'saveToDossier', title: title, summary: summary, source: 'financieel-kompas-ai' };
+
+        if (window.parent !== window) {
+            window.parent.postMessage(data, '*');
+            var btn = document.getElementById('save-dossier-btn');
+            if (btn) { var orig = btn.textContent; btn.textContent = 'Opgeslagen!'; btn.style.background = '#28a745'; setTimeout(function() { btn.textContent = orig; btn.style.background = ''; }, 2000); }
+        } else {
+            // Standalone: copy to clipboard
+            if (navigator.clipboard) { navigator.clipboard.writeText(summary); } else {
+                var ta = document.createElement('textarea'); ta.value = summary; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta);
+            }
+            var btn = document.getElementById('save-dossier-btn');
+            if (btn) { var orig = btn.textContent; btn.textContent = 'Gekopieerd naar klembord!'; btn.style.background = '#28a745'; setTimeout(function() { btn.textContent = orig; btn.style.background = ''; }, 2000); }
+        }
+        return;
+    }
+
+    // Fallback: old behavior without AI
     var compareCountry = document.getElementById('compare-country-label')?.textContent || 'Nederland';
     var compareBruto = document.getElementById('compare-bruto')?.textContent || '€ 0';
     var compareTax = document.getElementById('compare-tax')?.textContent || '€ 0';
     var compareNetto = document.getElementById('compare-netto')?.textContent || '€ 0';
     var compareWealth = document.getElementById('wealth-tax-compare')?.textContent || '€ 0';
-    
     var frBruto = document.getElementById('fr-bruto')?.textContent || '€ 0';
     var frTax = document.getElementById('fr-tax')?.textContent || '€ 0';
     var frNetto = document.getElementById('fr-netto')?.textContent || '€ 0';
     var frWealth = document.getElementById('wealth-tax-fr')?.textContent || '€ 0';
-    
     var conclusionValue = document.getElementById('conclusion-value')?.textContent || '€ 0';
     var isPositive = document.getElementById('conclusion-value')?.classList.contains('positive');
     var conclusionText = isPositive ? 'Voordeel Frankrijk' : 'Voordeel ' + compareCountry;
-    
-    // Huishouden info
     var isSingle = document.getElementById('btn-single')?.classList.contains('active');
     var household = isSingle ? 'Alleenstaand' : 'Partners';
-    var children = document.getElementById('slider-children')?.value || '0';
-    
-    // Vermogen
-    var wealthFin = document.getElementById('value-wealth-financial')?.textContent || '€ 0';
-    var wealthProp = document.getElementById('value-wealth-property')?.textContent || '€ 0';
-    
-    // Datum
     var today = new Date().toLocaleDateString('nl-NL');
-    
-    var summary = '═══════════════════════════════════════\n' +
-        'FINANCIEEL KOMPAS - VERGELIJKING\n' +
+    var breakdown = document.getElementById('calculation-breakdown')?.textContent || '';
+
+    var summary = '\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\n' +
+        'FINANCIEEL KOMPAS \u2014 VERGELIJKING\n' +
         'Datum: ' + today + '\n' +
-        '═══════════════════════════════════════\n\n' +
-        'SITUATIE\n' +
-        '• Huishouden: ' + household + '\n' +
-        '• Kinderen: ' + children + '\n' +
-        '• Fin. vermogen: ' + wealthFin + '\n' +
-        '• Vastgoed (excl. hoofd): ' + wealthProp + '\n\n' +
-        '───────────────────────────────────────\n' +
-        compareCountry.toUpperCase() + '\n' +
-        '───────────────────────────────────────\n' +
-        '• Bruto inkomen: ' + compareBruto + '\n' +
-        '• Lasten: ' + compareTax + '\n' +
-        '• NETTO INKOMEN: ' + compareNetto + '\n' +
-        '• Vermogensbelasting: ' + compareWealth + '\n\n' +
-        '───────────────────────────────────────\n' +
-        'FRANKRIJK\n' +
-        '───────────────────────────────────────\n' +
-        '• Bruto inkomen: ' + frBruto + '\n' +
-        '• Lasten: ' + frTax + '\n' +
-        '• NETTO INKOMEN: ' + frNetto + '\n' +
-        '• Vermogensbelasting (IFI): ' + frWealth + '\n\n' +
-        '═══════════════════════════════════════\n' +
-        'CONCLUSIE: ' + conclusionValue + '\n' +
-        conclusionText + '\n' +
-        '═══════════════════════════════════════\n\n' +
-        'Let op: Dit is een indicatieve berekening.\n' +
-        'Raadpleeg een adviseur voor uw specifieke situatie.';
-    
+        '\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\n\n' +
+        (breakdown ? 'ANALYSE\n\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\n' + breakdown + '\n\n' : '') +
+        'SAMENVATTING\n' +
+        compareCountry + ': Bruto ' + compareBruto + ' | Netto ' + compareNetto + '\n' +
+        'Frankrijk: Bruto ' + frBruto + ' | Netto ' + frNetto + '\n' +
+        'Verschil: ' + conclusionValue + ' (' + conclusionText + ')\n\n' +
+        'Indicatieve berekening. Raadpleeg een adviseur.\n' +
+        'Bron: Financieel Kompas \u2014 Infofrankrijk.com';
+
     var data = {
         type: 'saveToDossier',
         title: 'Financieel Kompas: ' + household + ' | ' + compareCountry + ' vs Frankrijk | ' + conclusionValue,
         summary: summary,
         source: 'financieel-kompas'
     };
-    
+
     if (window.parent !== window) {
         window.parent.postMessage(data, '*');
     } else {
-        alert('Deze functie werkt alleen binnen InfoFrankrijk.com');
+        alert('Deze functie werkt alleen binnen Infofrankrijk.com');
     }
 });
 
