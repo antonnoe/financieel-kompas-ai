@@ -140,44 +140,81 @@
 
         <div class="faq-container">
              <details class="module"><summary>Bekijk Analyse & Uitleg <button id="copy-btn">📋 Kopieer</button></summary><div id="calculation-breakdown"><p style="text-align:center;padding:15px;">Welkom! 🧭 Vul data in.</p></div></details>
-             <details class="module"><summary>Kinderen & Belasting</summary><div class="static-content"><p><strong>NL:</strong> Geen direct effect op IB tarief/schijven. Kinderbijslag/Kindgebonden budget (niet in tool).</p><p><strong>BE:</strong> Verhoging belastingvrije som per kind (zit in tool). Groeipakket (niet in tool).</p><p><strong>FR:</strong> Quotient Familial: extra 'parts' per kind verlagen belasting per deel (zit in tool, incl. plafond). Allocations Familiales (niet in tool).</p><p><em>Verdragsregels bepalen welk land kinderbijslag betaalt (meestal woonland gezin).</em></p></div></details>
-             <details class="module"><summary>Rekenprincipes & Aannames (2025)</summary><div class="static-content">
-                <p>Educatieve simulator, geen financieel advies. Focus op directe inkomstenbelasting en sociale lasten.</p>
-                <p><strong>Pensioenpijlers (NL/BE)</strong></p>
-                <ul>
-                    <li><strong>1e pijler:</strong> Wettelijk staatspensioen. NL: AOW (universeel). BE: Wettelijk pensioen (werknemer/zelfstandige/ambtenaar, afhankelijk van loopbaan).</li>
-                    <li><strong>2e pijler:</strong> Aanvullend pensioen via werk/sector. NL: Bedrijfspensioen, ABP, etc. BE: Groepsverzekering, IBP, sectorpensioenen.</li>
-                    <li><strong>3e pijler:</strong> Individuele voorziening. NL: Lijfrente (bancair of verzekering). BE: Pensioensparen, langetermijnsparen, individuele annuïteiten (in deze tool nog beperkt gemodelleerd).</li>
-                    <li><em>Let op:</em> Begrippen en regels verschillen tussen landen. Verdragen bepalen waar pensioen belast wordt (vaak woonland voor privaat, bronland voor overheid).</li>
-                </ul>
-                <p><strong>Scenario Datum:</strong> Standaard huidige datum. Via "Optioneel: Bekijk scenario..." kunt u een toekomstige datum/leeftijd simuleren (bv. emigratie). <strong>Let op:</strong> vul dan bij pensioen/lijfrente de bruto bedragen in die op DÁT moment gelden (meestal lager bij vervroeging)!</p>
-                <p><strong>Werken na AOW</strong></p>
-                <ul>
-                    <li><strong>Toeslagen (NL):</strong> Extra inkomen (loon, winst, pensioen) verhoogt het toetsingsinkomen en kan huur-/zorgtoeslag en andere regelingen verlagen. Deze tool berekent toeslagen niet.</li>
-                    <li><strong>Pensioen:</strong> Regels verschillen per fonds. Sommige fondsen korten bij doorwerken of stellen voorwaarden. Controleer uw fonds.</li>
-                    <li><strong>Belasting (NL):</strong> Boven AOW-leeftijd vervallen AOW-premies in Box 1, waardoor het effectieve tarief lager is. Heffingskortingen blijven bestaan conform wet; ouderenkorting kan gelden afhankelijk van inkomen. Zvw-bijdrage over loon en winst kan blijven gelden.</li>
-                    <li><strong>Buiten NL:</strong>
-                        <ul>
-                            <li><strong>België:</strong> Werknemers-RSZ op loon en zelfstandigenbijdragen op winst blijven van toepassing, ongeacht leeftijd.</li>
-                            <li><strong>Frankrijk:</strong> Sociale lasten op loon/winst en micro-BIC/BNC-abattementen blijven gelden; leeftijd wijzigt vooral kortingen/onderdelen, niet het meetellen van inkomen.</li>
-                        </ul>
-                    </li>
-                </ul>
-                <p><strong>Winst uit onderneming (context NL/BE/FR)</strong></p>
-                <ul>
-                    <li><strong>NL:</strong> Ondernemingswinst wordt altijd in Box 1 meegenomen, ook na AOW; MKB-winstvrijstelling en Zvw (ondernemers) toegepast.</li>
-                    <li><strong>BE:</strong> Zelfstandige activiteit blijft bijdragen en belasting verschuldigd; werknemers-RSZ geldt alleen op loon.</li>
-                    <li><strong>FR:</strong> Zelfstandig inkomen belast met sociale lasten en IB; abattement (services/verhuur) via micro-regime kan van toepassing zijn.</li>
-                </ul>
-                <p><strong>NL:</strong> Box 3 (6,17% fictief > vrijst.). Zvw (5,26% winst/bijdr.). Vereenv. heffingskortingen.</p>
-                <p><strong>BE:</strong> RSZ (13,07%). Soc. Bijdr. Zelfst. (20,5%/14,16%). Forfait beroepskosten werknemer (30%, max €5750 pp). Fed. PB (25-50%). Vrije som (basis+kind) als korting @25%. Gem. gem.bel. (7,17% op Fed. PB). RV (30% alg / 15% spaar > €1020 vrijst pp / dividend vrijst ~€833 pp via PB). BSZB (max ~€731/gezin). Pensioenbijdr. (RIZIV 3,55%, Solid. ~1%).</p>
-                <p><strong>FR:</strong> Soc. lasten (~9.1% pensioen/lijfrente belastbaar deel, ~22% loon, ~21% winst, 17.2% PFU). IB (0-45%). Quotient Familial (parts). Abattement winst (50%/30%). PFU (12.8%+17.2%) op verm.inkomen. Lijfrente (NL): deels belast (30-70% afh. leeftijd bij start). Aftrek CAK (€4.5k vast). Aftrek BE pens.bijdr. Krediet Hulp Huis (50%). IFI (>€1.3M vastgoed).</p>
-                <p><strong>Pensioen Info:</strong> 'BE Wettelijk Pensioen' = 1e pijler (meestal belast in woonland). 'Overheidspensioen' = bv. NL ABP / BE Ambtenaren (meestal belast in werkland/bronland). 'Particulier Pensioen' = bv. NL bedrijfspensioen (meestal belast in woonland).</p>
-                <p><strong>Lijfrente (NL):</strong> Startdatum is kiesbaar binnen NL regels. Te vroege start kan NL boete opleveren. Frankrijk belast gunstig (deels vrijgesteld). Vul het bruto bedrag in dat geldt op de gekozen startleeftijd.</p>
-                <p><strong>Verdragen (Belangrijk!):</strong> Tool past basisregels toe. Raadpleeg adviseur!</p>
+
+             <details class="module"><summary>Kinderen & Belasting</summary><div class="static-content">
+                <div class="nl-specific"><p><strong>NL:</strong> Geen direct effect op IB tarief/schijven. Kinderbijslag/Kindgebonden budget (niet in tool). Bron: Belastingdienst.nl</p></div>
+                <div class="be-specific"><p><strong>BE:</strong> Verhoging belastingvrije som per kind (zit in tool). Groeipakket (niet in tool). Bron: fin.belgium.be</p></div>
+                <p><strong>FR:</strong> Quotient Familial: extra 'parts' per kind verlagen belasting per deel (zit in tool, incl. plafond €1.807). Allocations Familiales (niet in tool). Bron: Service-public.fr</p>
+                <p><em>Verdragsregels bepalen welk land kinderbijslag betaalt (meestal woonland gezin).</em></p>
              </div></details>
-             <details class="module"><summary>Wat zit er NIET in?</summary><div class="static-content"><p>Actuariële (her)berekening pensioen/lijfrente bij vervroeging, details lokale belastingen (BE opcentiemen), specifieke aftrekposten (hypotheekrente NL, dienstencheques BE, etc.), complexe inkomsten (niet-recreatieve verhuur), vermogensplanning, toeslagen/sociale uitkeringen (kinderbijslag, huur/zorgtoeslag, etc.), schenk-/erfbelasting, prognoses/inflatie.</p></div></details>
-             <details class="module"><summary>Bronnen</summary><div class="static-content"><ul><li>Belastingdienst.nl</li><li>Financien.belgium.be</li><li>Socialsecurity.belgium.be</li><li>Service-public.fr</li><li>Grensinfo.nl</li></ul></div></details>
+
+             <details class="module"><summary>Rekenprincipes & Aannames (2026)</summary><div class="static-content">
+                <p>Educatieve simulator, geen financieel advies. Focus op directe inkomstenbelasting en sociale lasten. Editie 2026.</p>
+
+                <div class="nl-specific">
+                <p><strong>Pensioenpijlers (NL)</strong></p>
+                <ul>
+                    <li><strong>1e pijler:</strong> AOW (universeel, opbouw 2%/jaar, max 50 jaar). Bron: SVB.nl</li>
+                    <li><strong>2e pijler:</strong> Bedrijfspensioen, ABP, etc. Overheidspensioen belast in NL (art. 19 verdrag). Bron: Belastingdienst.nl</li>
+                    <li><strong>3e pijler:</strong> Lijfrente (bancair of verzekering). In FR deels belast (art. 158-6 CGI). Bron: Belastingdienst.nl, Service-public.fr</li>
+                </ul>
+                </div>
+
+                <div class="be-specific">
+                <p><strong>Pensioenpijlers (BE)</strong></p>
+                <ul>
+                    <li><strong>1e pijler:</strong> Wettelijk pensioen (werknemer/zelfstandige/ambtenaar). Bron: mypension.be</li>
+                    <li><strong>2e pijler:</strong> Groepsverzekering, IBP, sectorpensioenen. Bron: Socialsecurity.belgium.be</li>
+                    <li><strong>3e pijler:</strong> Pensioensparen, langetermijnsparen (in deze tool beperkt gemodelleerd). Bron: fin.belgium.be</li>
+                </ul>
+                </div>
+
+                <p><strong>Scenario Datum:</strong> Standaard huidige datum. Via "Optioneel: Bekijk scenario..." kunt u een toekomstige datum/leeftijd simuleren. <strong>Let op:</strong> vul dan bij pensioen/lijfrente de bruto bedragen in die op DÁT moment gelden.</p>
+
+                <div class="nl-specific">
+                <p><strong>NL samenvatting (2026):</strong> Box 1: 3 schijven (35,75% / 37,56% / 49,50%). AOW+: 17,85% in schijf 1. AHK max €3.115. Arbeidskorting max €5.685. Zvw 5,26%. MKB-winstvrijstelling 12,7%. Box 3: forfaitair 6%, tarief 36%, vrijstelling €59.357 p.p. Bron: Belastingdienst.nl, Rijksoverheid.nl</p>
+                </div>
+
+                <div class="be-specific">
+                <p><strong>BE samenvatting (2026):</strong> PB: 25-50% (4 schijven). RSZ werknemer 13,07%. Zelfstandigenbijdrage 20,5%/14,16%. Forfait beroepskosten 30% (max €5.860). Belastingvrije som €11.180. Gemeentebelasting gem. 7,17%. RV 30%/15%. BSZB max €731. Bron: fin.belgium.be, Socialsecurity.belgium.be</p>
+                </div>
+
+                <p><strong>FR samenvatting (2026):</strong> Soc. lasten: 9,1% pensioen, 22% loon, 21,2% winst, 17,2% PFU. IB: barème progressif 0-45%. Quotient Familial (parts, plafond €1.807). Micro-abattement: 50% diensten / 30% verhuur. PFU 30% op vermogensinkomsten. Lijfrente deels belast (30-70%). IFI >€1,3M vastgoed. Bron: Service-public.fr, Loi de finances 2026</p>
+
+                <p><strong>Verdragen:</strong> Particulier pensioen/lijfrente → belast in woonland. Overheidspensioen → belast in bronland. Bron: NL-FR verdrag art. 18/19, BE-FR verdrag.</p>
+             </div></details>
+
+             <details class="module"><summary>Wat zit er NIET in?</summary><div class="static-content">
+                <p>Actuariële (her)berekening pensioen/lijfrente bij vervroeging, lokale belastingen (taxe foncière FR, taxe d'habitation résidence secondaire FR), specifieke aftrekposten, complexe inkomsten (niet-recreatieve verhuur), vermogensplanning, toeslagen/sociale uitkeringen (kinderbijslag, huur-/zorgtoeslag), schenk-/erfbelasting, prognoses/inflatie, Arrest de Ruyter (verlaagde soc. lasten NL-pensioen in FR).</p>
+                <div class="be-specific"><p>Belgische opcentiemen per gemeente, dienstencheques.</p></div>
+             </div></details>
+
+             <details class="module"><summary>Bronnen</summary><div class="static-content">
+                <p><strong>Frankrijk:</strong></p>
+                <ul>
+                    <li><a href="https://www.service-public.fr/particuliers/vosdroits/F1419" target="_blank">Service-public.fr</a> — barème, quotient familial, IFI</li>
+                    <li><a href="https://www.economie.gouv.fr" target="_blank">Economie.gouv.fr</a> — loi de finances 2026</li>
+                    <li><a href="https://www.info-retraite.fr" target="_blank">Info-retraite.fr</a> — retraite de base</li>
+                </ul>
+                <div class="nl-specific">
+                <p><strong>Nederland:</strong></p>
+                <ul>
+                    <li><a href="https://www.belastingdienst.nl" target="_blank">Belastingdienst.nl</a> — Box 1/3, heffingskortingen</li>
+                    <li><a href="https://www.svb.nl" target="_blank">SVB.nl</a> — AOW-leeftijd, opbouw</li>
+                    <li><a href="https://www.rijksoverheid.nl" target="_blank">Rijksoverheid.nl</a> — Belastingplan 2026</li>
+                    <li><a href="https://grensinfo.nl" target="_blank">Grensinfo.nl</a> — verdragsregels NL-FR</li>
+                </ul>
+                </div>
+                <div class="be-specific">
+                <p><strong>België:</strong></p>
+                <ul>
+                    <li><a href="https://fin.belgium.be" target="_blank">fin.belgium.be</a> — personenbelasting, schijven</li>
+                    <li><a href="https://www.socialsecurity.be" target="_blank">Socialsecurity.belgium.be</a> — RSZ, zelfstandigenbijdrage</li>
+                    <li><a href="https://www.mypension.be" target="_blank">mypension.be</a> — pensioenoverzicht</li>
+                    <li><a href="https://www.wikifin.be" target="_blank">Wikifin.be</a> — belastingvrije som</li>
+                </ul>
+                </div>
+             </div></details>
         </div>
 
         <footer>
