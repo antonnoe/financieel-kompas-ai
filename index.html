@@ -36,7 +36,7 @@
     <div class="container">
         <header>
             <h1>Financieel Kompas</h1>
-            <p>Vergelijk wonen in Frankrijk financieel met Nederland of België.</p>
+            <p>Wat levert wonen in Frankrijk u financieel op?</p>
         </header>
 
         <div class="privacy-notice">
@@ -61,8 +61,14 @@
         </section>
 
         <section id="input-panel">
-            <div class="module household-choice"><label>Vergelijk Frankrijk met:</label><div class="choice-buttons"><button id="btn-nl" class="active">Nederland 🇳🇱</button><button id="btn-be">België 🇧🇪</button></div></div>
-            <div class="module household-choice"><label>Voor wie?</label><div class="choice-buttons"><button id="btn-single" class="active">Alleenstaande</button><button id="btn-couple">Partners</button></div></div>
+            <div id="country-toggle-hidden" style="display:none"><button id="btn-nl" class="active">Nederland 🇳🇱</button><button id="btn-be">België 🇧🇪</button></div>
+            <div class="module household-choice" id="chosen-info">
+                <div style="display:flex;justify-content:space-between;align-items:center">
+                    <span><strong>Vergelijking:</strong> <span id="chosen-country-label">Nederland</span> <span id="chosen-country-flag">🇳🇱</span> vs. Frankrijk 🇫🇷 &nbsp;|&nbsp; <span id="chosen-household-label">Alleenstaande</span></span>
+                    <button id="change-choice" style="background:none;border:1px solid #800000;color:#800000;padding:4px 12px;border-radius:6px;cursor:pointer;font-size:12px;font-family:inherit">Wijzig</button>
+                </div>
+            </div>
+            <div class="module household-choice" style="display:none"><label>Voor wie?</label><div class="choice-buttons"><button id="btn-single" class="active">Alleenstaande</button><button id="btn-couple">Partners</button></div></div>
 
             <details class="module optional-setting">
                 <summary>Optioneel: Bekijk scenario voor specifieke leeftijd</summary>

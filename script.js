@@ -10,13 +10,29 @@ document.addEventListener('DOMContentLoaded', () => {
                 choice.classList.add('active');
                 const sel = choice.getAttribute('data-click-target');
                 const target = document.querySelector(sel);
-                if (target) target.click(); // leverage existing logic for NL/BE and Alleenstaande/Partners
+                if (target) target.click();
             }
             if (e.target && e.target.id === 'start-continue') {
-                overlay.remove(); // reveal the tool
+                overlay.style.display = 'none';
+                updateChosenInfo();
                 document.getElementById('input-panel')?.scrollIntoView({behavior:'smooth', block:'start'});
             }
         });
+    }
+    // "Wijzig" knop: terug naar overlay
+    document.getElementById('change-choice')?.addEventListener('click', () => {
+        if (overlay) overlay.style.display = 'grid';
+    });
+    // Update de compacte keuze-balk
+    function updateChosenInfo() {
+        const countryLabel = document.getElementById('chosen-country-label');
+        const countryFlag = document.getElementById('chosen-country-flag');
+        const hhLabel = document.getElementById('chosen-household-label');
+        const isNL = document.getElementById('btn-nl')?.classList.contains('active');
+        const isSingle = document.getElementById('btn-single')?.classList.contains('active');
+        if (countryLabel) countryLabel.textContent = isNL ? 'Nederland' : 'België';
+        if (countryFlag) countryFlag.textContent = isNL ? '🇳🇱' : '🇧🇪';
+        if (hhLabel) hhLabel.textContent = isSingle ? 'Alleenstaande' : 'Partners';
     }
 
     // --- Globale variabelen ---
@@ -126,6 +142,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (activeComparison === 'NL') { compareCountryLabel.textContent = "Nederland"; compareCountryFlag.textContent = "🇳🇱"; compareCountryResult.style.borderColor = "var(--primary-color)";}
         else if (activeComparison === 'BE') { compareCountryLabel.textContent = "België"; compareCountryFlag.textContent = "🇧🇪"; compareCountryResult.style.borderColor = "#FDDA25"; }
         toggleCountrySpecificFields(activeComparison);
+        updateChosenInfo();
         updateScenario();
     }
     function updateHouseholdType(setToCouple) {
@@ -133,6 +150,7 @@ document.addEventListener('DOMContentLoaded', () => {
         isCouple = setToCouple; householdType.single.classList.toggle('active',!isCouple); householdType.couple.classList.toggle('active',isCouple);
         partner2Section.style.display = isCouple ? 'flex' : 'none';
         if (!isCouple) { Object.keys(inputs.p2).forEach(key=>{ const el=inputs.p2[key]; if(el&&(el.matches('input[type=range]')||el.matches('input[type=checkbox]')||el.matches('select:not([id*="birth"])'))){ if(el.type==='range')el.value=0; if(el.type==='checkbox')el.checked=false; if(el.tagName==='SELECT')el.selectedIndex=0;}}); }
+        updateChosenInfo();
         updateScenario();
     }
     function getPartnerInput(partnerId) {
