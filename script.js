@@ -178,6 +178,32 @@ document.addEventListener('DOMContentLoaded', () => {
             if(outputs.breakdown){if(initialLoad){outputs.breakdown.innerHTML=`<p style="text-align: center;">Welkom! 🧭 Vul data in.</p>`; initialLoad=false;}else{outputs.breakdown.textContent=generateBreakdown(inputValues,compareResults,frResults);}}
 // Café Claude widget — resultaten beschikbaar maken
             if (!initialLoad) {
+              const simInfo = getSimulationInfo(inputValues);
+              const p1AOWInfo = getAOWDateInfo(p1Input.birthYear);
+              const p1AOWDate = new Date((p1Input.birthYear||1900)+p1AOWInfo.years,(p1Input.birthMonth||1)-1+p1AOWInfo.months);
+              const p1IsPensioner = simInfo.simulatieDatum >= p1AOWDate;
+              let p2IsPensioner = null;
+              let p2AOWInfo = null;
+              if (p2Input) {
+                p2AOWInfo = getAOWDateInfo(p2Input.birthYear);
+                const p2AOWDate = new Date((p2Input.birthYear||1900)+p2AOWInfo.years,(p2Input.birthMonth||1)-1+p2AOWInfo.months);
+                p2IsPensioner = simInfo.simulatieDatum >= p2AOWDate;
+              }
+              window._fkComputedState = {
+                simulatieDatum: simInfo.simulatieDatum.toISOString().slice(0,10),
+                partner1: {
+                  leeftijd: simInfo.simulatieLeeftijdP1,
+                  isPensionado: p1IsPensioner,
+                  aowLeeftijd: p1AOWInfo.years + ' jaar' + (p1AOWInfo.months > 0 ? ' en ' + p1AOWInfo.months + ' maanden' : ''),
+                },
+                partner2: p2Input ? {
+                  leeftijd: simInfo.simulatieLeeftijdP2,
+                  isPensionado: p2IsPensioner,
+                  aowLeeftijd: p2AOWInfo.years + ' jaar' + (p2AOWInfo.months > 0 ? ' en ' + p2AOWInfo.months + ' maanden' : ''),
+                } : null,
+                quotientFamilialParts: frResults.breakdown?.parts || null,
+                frStaatspensioen: frResults.breakdown?.frStatePension || 0,
+              };
               window.ccEmbed = {
                 getToolContext: () => ({
                   summary: `${activeComparison} netto: ${formatCurrency(compareResults.netto)} | FR netto: ${formatCurrency(frResults.netto)} | Verschil: ${formatCurrency(frResults.netto - compareResults.netto, true)} | Parts: ${frResults.breakdown?.parts || '-'} | Vermogensbelasting ${activeComparison}: ${formatCurrency(compareResults.wealthTax)} | IFI FR: ${formatCurrency(frResults.wealthTax)}`,
@@ -616,6 +642,7 @@ window.getToolState = function () {
         },
         analyse: document.getElementById('calculation-breakdown')?.textContent || '',
       },
+      berekend: window._fkComputedState || null,
     };
   } catch (e) {
     console.error('getToolState error:', e);

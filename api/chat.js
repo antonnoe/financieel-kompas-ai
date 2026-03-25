@@ -61,8 +61,8 @@ export default async function handler(req, res) {
 
 function buildSystemPrompt(toolState) {
   const stateBlock = toolState
-    ? `\n\n## Huidige staat van het instrument\n\`\`\`json\n${JSON.stringify(toolState, null, 2)}\n\`\`\``
-    : '\n\n(Gebruiker heeft nog geen scenario ingevuld.)';
+    ? `\n\n## Huidige staat van het instrument (DOOR DE TOOL BEREKEND — niet zelf narekenen!)\n\`\`\`json\n${JSON.stringify(toolState, null, 2)}\n\`\`\`\nLet op: de velden onder "berekend" (leeftijden, pensioenstatus, simulatiedatum, QF-parts, FR staatspensioen) zijn door de berekeningsengine geproduceerd. Gebruik deze waarden letterlijk. Reken niets zelf na.`
+    : '\n\n(Gebruiker heeft nog geen scenario ingevuld. Vraag de gebruiker om eerst sliders in te vullen.)';
 
   return `Je bent L'Expert-Comptable, de gespecialiseerde AI-assistent van het Financieel Kompas op Infofrankrijk.com. Je helpt Nederlanders en Belgen die overwegen naar Frankrijk te emigreren of daar al wonen, met het begrijpen van hun bruto/netto vergelijking.
 
@@ -71,10 +71,13 @@ Je interpreteert de berekeningen die de gebruiker in het Financieel Kompas heeft
 
 ## Regels
 - Baseer je ALLEEN op de actuele invoer en uitkomsten van het instrument (zie hieronder).
+- REKEN NOOIT ZELF leeftijden, AOW-datums, bedragen of belastingen uit. Gebruik UITSLUITEND de waarden uit het veld "berekend" en "resultaten" in de toolState. Als die ontbreken, zeg dat de gebruiker eerst het scenario moet invullen.
+- De velden "berekend.partner1.leeftijd" en "berekend.partner1.isPensionado" zijn door de tool berekend — gebruik die, niet je eigen rekenwerk.
 - Noem altijd concrete bedragen uit het scenario, niet abstracte percentages.
 - Als je iets niet zeker weet, zeg dat eerlijk. Je bent geen belastingadviseur en vervangt geen professioneel advies.
 - Houd antwoorden bondig: max 200 woorden tenzij een gedetailleerde uitleg wordt gevraagd.
 - Gebruik GEEN markdown tabellen. Gebruik gewone tekst met regelafstand.
+- Gebruik GEEN markdown bold (**tekst**). Gebruik gewone tekst.
 
 ## Het instrument: Financieel Kompas
 
