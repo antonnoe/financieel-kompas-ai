@@ -8,20 +8,17 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Mulish:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="wizard.css">
-    <style>
-        .be-specific { display: none; }
-        .nl-specific { display: block; }
-        .hide-for-be { display: block; }
-    </style>
+    <style>.be-specific{display:none}.nl-specific{display:block}.hide-for-be{display:block}</style>
 </head>
 <body>
 
-<!-- ====== SLIDE 0: START OVERLAY ====== -->
+<!-- ===== START OVERLAY ===== -->
 <section id="start-overlay" class="start-overlay" role="dialog" aria-modal="true">
     <div class="start-card">
         <div class="start-logo">🧭</div>
         <h2>Financieel Kompas</h2>
-        <p class="start-subtitle">Wat levert wonen in Frankrijk u financieel op?</p>
+        <p class="start-subtitle">Wat levert wonen in Frankrijk u netto op?</p>
+        <p class="start-basis">Berekeningen gebaseerd op de grondslagen die door de Franse en Nederlandse belastingdiensten vanaf januari 2026 worden gehanteerd.</p>
         <div class="start-group">
             <label>Vergelijk Frankrijk met:</label>
             <div class="choice-buttons">
@@ -41,321 +38,330 @@
     </div>
 </section>
 
-<!-- ====== HIDDEN CONTROLS (used by script.js) ====== -->
-<div id="country-toggle-hidden" style="display:none">
-    <button id="btn-nl" class="active">Nederland 🇳🇱</button>
-    <button id="btn-be">België 🇧🇪</button>
-</div>
-<div style="display:none">
-    <button id="btn-single" class="active">Alleenstaande</button>
-    <button id="btn-couple">Partners</button>
-</div>
+<!-- Hidden controls for script.js -->
+<div id="country-toggle-hidden" style="display:none"><button id="btn-nl" class="active">NL</button><button id="btn-be">BE</button></div>
+<div style="display:none"><button id="btn-single" class="active">Single</button><button id="btn-couple">Couple</button></div>
 
-<!-- ====== WIZARD ====== -->
+<!-- ===== WIZARD ===== -->
 <div id="wizard" class="wizard" style="display:none;">
-
-    <!-- Step indicator -->
     <nav id="wizard-nav" class="wizard-nav">
         <div class="wizard-nav-inner">
-            <div class="step-item active" data-step="1"><span class="step-num">1</span><span class="step-label">Welkom</span></div>
+            <div class="step-item active" data-section="1"><span class="step-num">1</span><span class="step-label">Start</span></div>
             <div class="step-connector"></div>
-            <div class="step-item" data-step="2"><span class="step-num">2</span><span class="step-label">Situatie</span></div>
+            <div class="step-item" data-section="2"><span class="step-num">2</span><span class="step-label">Situatie</span></div>
             <div class="step-connector"></div>
-            <div class="step-item" data-step="3"><span class="step-num">3</span><span class="step-label">Pensioen</span></div>
+            <div class="step-item" data-section="3"><span class="step-num">3</span><span class="step-label">Pensioen</span></div>
             <div class="step-connector"></div>
-            <div class="step-item" data-step="4"><span class="step-num">4</span><span class="step-label">Inkomen</span></div>
+            <div class="step-item" data-section="4"><span class="step-num">4</span><span class="step-label">Inkomen</span></div>
             <div class="step-connector"></div>
-            <div class="step-item" data-step="5"><span class="step-num">5</span><span class="step-label">Gîte</span></div>
+            <div class="step-item" data-section="5"><span class="step-num">5</span><span class="step-label">Gîte</span></div>
             <div class="step-connector"></div>
-            <div class="step-item" data-step="6"><span class="step-num">6</span><span class="step-label">Vermogen</span></div>
+            <div class="step-item" data-section="6"><span class="step-num">6</span><span class="step-label">Vermogen</span></div>
             <div class="step-connector"></div>
-            <div class="step-item" data-step="7"><span class="step-num">✓</span><span class="step-label">Resultaat</span></div>
+            <div class="step-item" data-section="7"><span class="step-num">✓</span><span class="step-label">Resultaat</span></div>
         </div>
     </nav>
-
-    <!-- Compact choice bar -->
     <div id="chosen-info" class="chosen-bar">
         <span><strong id="chosen-country-label">Nederland</strong> <span id="chosen-country-flag">🇳🇱</span> vs. Frankrijk 🇫🇷 · <span id="chosen-household-label">Alleenstaande</span></span>
         <button id="change-choice" class="btn-change">Wijzig</button>
     </div>
 
-    <!-- Slide viewport = #input-panel for script.js event delegation -->
+    <!-- ===== SLIDE VIEWPORT (= #input-panel for script.js) ===== -->
     <div id="input-panel" class="slide-viewport">
 
-        <!-- ====== SLIDE 1: WELKOM ====== -->
-        <div class="slide active" data-step="1">
-            <div class="slide-content slide-welcome">
+        <!-- ==================== 1. WELKOM ==================== -->
+        <div class="slide active" data-section="1" data-phase="main">
+            <div class="slide-content slide-center">
                 <h1 class="slide-title">Uw persoonlijke vergelijking</h1>
-                <p class="slide-intro">In 6 stappen berekenen we het netto verschil. Alle tarieven editie 2026.</p>
+                <p class="slide-intro">In 5 stappen vergelijken we uw netto inkomen: huidig land vs. Frankrijk.</p>
                 <div class="welcome-tiles">
-                    <div class="tile" data-goto="2"><span class="tile-icon">👤</span><span class="tile-label">Uw situatie</span><span class="tile-desc">Leeftijd, pensioenstatus</span></div>
-                    <div class="tile" data-goto="3"><span class="tile-icon">🏦</span><span class="tile-label">Pensioen</span><span class="tile-desc">AOW, pensioen, lijfrente</span></div>
-                    <div class="tile" data-goto="4"><span class="tile-icon">💼</span><span class="tile-label">Inkomen</span><span class="tile-desc">Loon &amp; winst</span></div>
-                    <div class="tile" data-goto="5"><span class="tile-icon">🏡</span><span class="tile-label">Gîte / Horeca</span><span class="tile-desc">Toerismesector</span></div>
-                    <div class="tile" data-goto="6"><span class="tile-icon">💰</span><span class="tile-label">Vermogen</span><span class="tile-desc">Spaargeld, vastgoed, gezin</span></div>
-                    <div class="tile tile-result" data-goto="7"><span class="tile-icon">📊</span><span class="tile-label">Resultaat</span><span class="tile-desc">Uw volledige vergelijking</span></div>
+                    <div class="tile" data-goto-section="2"><span class="tile-icon">👤</span><span class="tile-label">Uw situatie</span></div>
+                    <div class="tile" data-goto-section="3"><span class="tile-icon">🏦</span><span class="tile-label">Pensioen</span></div>
+                    <div class="tile" data-goto-section="4"><span class="tile-icon">💼</span><span class="tile-label">Inkomen</span></div>
+                    <div class="tile" data-goto-section="5"><span class="tile-icon">🏡</span><span class="tile-label">Gîte / Horeca</span></div>
+                    <div class="tile" data-goto-section="6"><span class="tile-icon">💰</span><span class="tile-label">Vermogen &amp; Gezin</span></div>
+                </div>
+                <div class="slide-nav"><button class="btn-primary" data-go="2-explain">Begin met stap 1 →</button></div>
+            </div>
+        </div>
+
+        <!-- ==================== 2. SITUATIE ==================== -->
+        <!-- 2: Uitleg -->
+        <div class="slide" data-section="2" data-phase="explain">
+            <div class="slide-content">
+                <h2 class="slide-title">Stap 1 · Uw situatie</h2>
+                <div class="explain-card">
+                    <p class="explain-lead">Uw leeftijd en werkverleden bepalen alles.</p>
+                    <div class="explain-points">
+                        <div class="explain-point"><span class="ep-icon">📅</span><span>Uw <strong>geboortedatum</strong> bepaalt wanneer u recht heeft op AOW (NL: 67 jaar in 2026)</span></div>
+                        <div class="explain-point"><span class="ep-icon">⏳</span><span>Het aantal <strong>opbouwjaren</strong> bepaalt de hoogte van uw AOW (2% per jaar, max 50)</span></div>
+                        <div class="explain-point"><span class="ep-icon">🇫🇷</span><span>Eventuele <strong>werkjaren in Frankrijk</strong> tellen mee voor uw Frans staatspensioen (retraite de base)</span></div>
+                    </div>
+                    <p class="explain-tip">💡 Houd bij de hand: geboortedatum(s) en een schatting van uw werkjaren in NL/BE en eventueel Frankrijk.</p>
                 </div>
                 <div class="slide-nav">
-                    <button class="btn-primary btn-next" data-next="2">Begin →</button>
+                    <button class="btn-secondary" data-go="1-main">← Terug</button>
+                    <button class="btn-primary" data-go="2-input">Begrepen, ga verder →</button>
                 </div>
             </div>
         </div>
 
-        <!-- ====== SLIDE 2: UW SITUATIE ====== -->
-        <div class="slide" data-step="2">
+        <!-- 2: Invoer -->
+        <div class="slide" data-section="2" data-phase="input">
             <div class="slide-content">
-                <h2 class="slide-title">Stap 1 · Uw situatie</h2>
-                <p class="slide-intro">Geboortedatum bepaalt uw AOW-leeftijd en pensioenstatus.</p>
+                <h2 class="slide-title">Stap 1 · Vul uw gegevens in</h2>
                 <div class="input-grid" id="income-grid">
                     <div class="partner-col" id="partner1-section">
                         <h3 class="partner-label">Partner 1 <span class="partner-sub">(of Alleenstaande)</span></h3>
-                        <div class="field">
-                            <label>Geboortedatum <span class="tooltip" data-text="Bepaalt AOW-leeftijd (NL: 67j in 2026). Bron: SVB.nl.">(?)</span></label>
-                            <div class="date-row"><select id="birth-year-1"></select><select id="birth-month-1"></select></div>
-                        </div>
-                        <div class="field nl-specific">
-                            <label>Jaren AOW-opbouw <span class="tooltip" data-text="Max 50 jaar. Per opbouwjaar 2% van volledige AOW. Bron: SVB.nl.">(?)</span>: <span class="slider-value" id="value-aow-years-1">0</span></label>
-                            <input type="range" class="slider" id="aow-years-1" min="0" max="50" step="1" value="0">
-                        </div>
-                        <div class="field be-specific">
-                            <label>Werkjaren België <span class="tooltip" data-text="Max 50 jaar. Bron: Socialsecurity.belgium.be.">(?)</span>: <span class="slider-value" id="value-be-work-years-1">0</span></label>
-                            <input type="range" class="slider" id="be-work-years-1" min="0" max="50" step="1" value="0">
-                        </div>
-                        <div class="field fr-specific">
-                            <label>Werkjaren Frankrijk <span class="tooltip" data-text="Max 50 jaar. Bron: Service-public.fr.">(?)</span>: <span class="slider-value" id="value-fr-work-years-1">0</span></label>
-                            <input type="range" class="slider" id="fr-work-years-1" min="0" max="50" step="1" value="0">
-                        </div>
+                        <div class="field"><label>Geboortedatum <span class="tooltip" data-text="Bepaalt AOW-leeftijd (NL: 67j in 2026). Bron: SVB.nl.">(?)</span></label><div class="date-row"><select id="birth-year-1"></select><select id="birth-month-1"></select></div></div>
+                        <div class="field nl-specific"><label>Jaren AOW-opbouw <span class="tooltip" data-text="Max 50 jaar. Per jaar 2% van volledige AOW. Bron: SVB.nl.">(?)</span>: <span class="slider-value" id="value-aow-years-1">0</span></label><input type="range" class="slider" id="aow-years-1" min="0" max="50" step="1" value="0"></div>
+                        <div class="field be-specific"><label>Werkjaren België <span class="tooltip" data-text="Max 50. Bron: Socialsecurity.belgium.be.">(?)</span>: <span class="slider-value" id="value-be-work-years-1">0</span></label><input type="range" class="slider" id="be-work-years-1" min="0" max="50" step="1" value="0"></div>
+                        <div class="field fr-specific"><label>Werkjaren Frankrijk <span class="tooltip" data-text="Max 50. Bron: Service-public.fr.">(?)</span>: <span class="slider-value" id="value-fr-work-years-1">0</span></label><input type="range" class="slider" id="fr-work-years-1" min="0" max="50" step="1" value="0"></div>
                     </div>
                     <div class="partner-col" id="partner2-section" style="display:none;">
                         <h3 class="partner-label">Partner 2</h3>
-                        <div class="field">
-                            <label>Geboortedatum <span class="tooltip" data-text="Bepaalt AOW-leeftijd partner. Bron: SVB.nl.">(?)</span></label>
-                            <div class="date-row"><select id="birth-year-2"></select><select id="birth-month-2"></select></div>
-                        </div>
-                        <div class="field nl-specific">
-                            <label>Jaren AOW-opbouw <span class="tooltip" data-text="Max 50 jaar. Bron: SVB.nl.">(?)</span>: <span class="slider-value" id="value-aow-years-2">0</span></label>
-                            <input type="range" class="slider" id="aow-years-2" min="0" max="50" step="1" value="0">
-                        </div>
-                        <div class="field be-specific">
-                            <label>Werkjaren België <span class="tooltip" data-text="Max 50. Bron: Socialsecurity.belgium.be.">(?)</span>: <span class="slider-value" id="value-be-work-years-2">0</span></label>
-                            <input type="range" class="slider" id="be-work-years-2" min="0" max="50" step="1" value="0">
-                        </div>
-                        <div class="field fr-specific">
-                            <label>Werkjaren Frankrijk <span class="tooltip" data-text="Max 50 jaar. Bron: Service-public.fr.">(?)</span>: <span class="slider-value" id="value-fr-work-years-2">0</span></label>
-                            <input type="range" class="slider" id="fr-work-years-2" min="0" max="50" step="1" value="0">
-                        </div>
+                        <div class="field"><label>Geboortedatum <span class="tooltip" data-text="Bepaalt AOW-leeftijd partner. Bron: SVB.nl.">(?)</span></label><div class="date-row"><select id="birth-year-2"></select><select id="birth-month-2"></select></div></div>
+                        <div class="field nl-specific"><label>Jaren AOW-opbouw <span class="tooltip" data-text="Max 50. Bron: SVB.nl.">(?)</span>: <span class="slider-value" id="value-aow-years-2">0</span></label><input type="range" class="slider" id="aow-years-2" min="0" max="50" step="1" value="0"></div>
+                        <div class="field be-specific"><label>Werkjaren België <span class="tooltip" data-text="Max 50. Bron: Socialsecurity.belgium.be.">(?)</span>: <span class="slider-value" id="value-be-work-years-2">0</span></label><input type="range" class="slider" id="be-work-years-2" min="0" max="50" step="1" value="0"></div>
+                        <div class="field fr-specific"><label>Werkjaren Frankrijk <span class="tooltip" data-text="Max 50. Bron: Service-public.fr.">(?)</span>: <span class="slider-value" id="value-fr-work-years-2">0</span></label><input type="range" class="slider" id="fr-work-years-2" min="0" max="50" step="1" value="0"></div>
                     </div>
                 </div>
                 <details class="optional-toggle">
                     <summary>⚙ Simulatiedatum &amp; instellingen</summary>
                     <div class="optional-fields">
-                        <div class="field-row">
-                            <div class="field">
-                                <label>Emigratiedatum <span class="tooltip" data-text="Leeg = huidige situatie. Bron: SVB.nl.">(?)</span></label>
-                                <div class="date-row"><select id="sim-year"><option value="">-- Jaar --</option></select><select id="sim-month"><option value="">-- Maand --</option></select></div>
-                            </div>
-                            <div class="field field-toggle">
-                                <label>Stopt loon na AOW? <span class="tooltip" data-text="Aan: loon op 0 na AOW-leeftijd. Bron: Belastingdienst.nl.">(?)</span></label>
-                                <input type="checkbox" id="stop-salary-after-aow" class="toggle-switch" checked>
-                            </div>
-                        </div>
+                        <div class="field-row"><div class="field"><label>Emigratiedatum <span class="tooltip" data-text="Leeg = huidige situatie. Bron: SVB.nl.">(?)</span></label><div class="date-row"><select id="sim-year"><option value="">-- Jaar --</option></select><select id="sim-month"><option value="">-- Maand --</option></select></div></div><div class="field field-toggle"><label>Stopt loon na AOW? <span class="tooltip" data-text="Aan: loon op 0 na AOW-leeftijd. Bron: Belastingdienst.nl.">(?)</span></label><input type="checkbox" id="stop-salary-after-aow" class="toggle-switch" checked></div></div>
                     </div>
                 </details>
-                <div class="step-summary" id="summary-2"></div>
                 <div class="slide-nav">
-                    <button class="btn-secondary btn-prev" data-prev="1">← Terug</button>
-                    <button class="btn-primary btn-confirm" data-next="3">Bevestig →</button>
+                    <button class="btn-secondary" data-go="2-explain">← Terug</button>
+                    <button class="btn-primary btn-confirm-step" data-go="2-confirm">Bevestig →</button>
                 </div>
             </div>
         </div>
 
-        <!-- ====== SLIDE 3: PENSIOEN & LIJFRENTE ====== -->
-        <div class="slide" data-step="3">
+        <!-- 2: Bevestig -->
+        <div class="slide" data-section="2" data-phase="confirm">
+            <div class="slide-content">
+                <h2 class="slide-title">Stap 1 · Controleer uw invoer</h2>
+                <div class="confirm-card" id="confirm-2"></div>
+                <div class="slide-nav">
+                    <button class="btn-secondary" data-go="2-input">← Wijzig</button>
+                    <button class="btn-primary" data-go="3-explain">Klopt, ga verder →</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== 3. PENSIOEN ==================== -->
+        <!-- 3: Uitleg -->
+        <div class="slide" data-section="3" data-phase="explain">
             <div class="slide-content">
                 <h2 class="slide-title">Stap 2 · Pensioen &amp; Lijfrente</h2>
-                <p class="slide-intro">Bruto jaarbedragen. Overheidspensioen belast in bronland.</p>
-                <div class="input-grid">
-                    <div class="partner-col">
-                        <h3 class="partner-label">Partner 1</h3>
-                        <div class="field be-specific">
-                            <label>Wettelijk pensioen BE <span class="tooltip" data-text="1e pijler. RIZIV 3,55% + solidariteit 1%. Bron: mypension.be.">(?)</span>: <span class="slider-value" id="value-be-pension-1">€ 0</span></label>
-                            <input type="range" class="slider" id="slider-be-pension-1" min="0" max="80000" step="1000" value="0">
-                        </div>
-                        <div class="field" id="group-pension-public-1">
-                            <label>Overheidspensioen <span class="tooltip" data-text="ABP e.d. Belast in bronland NL (17,85%). Bron: Belastingdienst.nl.">(?)</span>: <span class="slider-value" id="value-pension-public-1">€ 0</span></label>
-                            <input type="range" class="slider" id="slider-pension-public-1" min="0" max="150000" step="2500" value="0">
-                        </div>
-                        <div class="field" id="group-pension-private-1">
-                            <label>Particulier pensioen <span class="tooltip" data-text="Bedrijfspensioen. Belast in woonland FR (art. 18). Bron: Belastingdienst.nl.">(?)</span>: <span class="slider-value" id="value-pension-private-1">€ 0</span></label>
-                            <input type="range" class="slider" id="slider-pension-private-1" min="0" max="150000" step="2500" value="0">
-                        </div>
-                        <div class="field" id="group-lijfrente-1">
-                            <label>Lijfrente <span class="tooltip" data-text="In FR deels belast (30-70%). Bron: Service-public.fr (art. 158-6 CGI).">(?)</span>: <span class="slider-value" id="value-lijfrente-1">€ 0</span></label>
-                            <input type="range" class="slider" id="slider-lijfrente-1" min="0" max="150000" step="2500" value="0">
-                            <div class="sub-options">
-                                <select id="lijfrente-duration-1" class="compact-select"><option value="999">Levenslang</option><option value="85">Tot 85j</option><option value="80">Tot 80j</option><option value="75">Tot 75j</option></select>
-                                <select id="lijfrente-start-1" class="compact-select"><option value="aow">Vanaf AOW</option><option value="67">Vanaf 67</option><option value="65">Vanaf 65</option><option value="60">Vanaf 60</option></select>
-                            </div>
-                        </div>
+                <div class="explain-card">
+                    <p class="explain-lead">Hoe uw pensioen wordt belast, hangt af van het type.</p>
+                    <div class="explain-points">
+                        <div class="explain-point"><span class="ep-icon">🏛️</span><span><strong>Overheidspensioen</strong> (ABP e.d.) wordt altijd in het bronland belast — ook als u in FR woont (art. 19 verdrag)</span></div>
+                        <div class="explain-point"><span class="ep-icon">🏢</span><span><strong>Particulier pensioen</strong> (bedrijfspensioen 2e pijler) wordt belast in uw woonland Frankrijk</span></div>
+                        <div class="explain-point"><span class="ep-icon">📜</span><span><strong>Lijfrente</strong> (3e pijler) is in FR slechts deels belast: 30% tot 70% afhankelijk van uw startleeftijd</span></div>
                     </div>
-                    <div class="partner-col partner-col-2" style="display:none;">
-                        <h3 class="partner-label">Partner 2</h3>
-                        <div class="field be-specific">
-                            <label>Wettelijk pensioen BE: <span class="slider-value" id="value-be-pension-2">€ 0</span></label>
-                            <input type="range" class="slider" id="slider-be-pension-2" min="0" max="80000" step="1000" value="0">
-                        </div>
-                        <div class="field" id="group-pension-public-2">
-                            <label>Overheidspensioen: <span class="slider-value" id="value-pension-public-2">€ 0</span></label>
-                            <input type="range" class="slider" id="slider-pension-public-2" min="0" max="150000" step="2500" value="0">
-                        </div>
-                        <div class="field" id="group-pension-private-2">
-                            <label>Particulier pensioen: <span class="slider-value" id="value-pension-private-2">€ 0</span></label>
-                            <input type="range" class="slider" id="slider-pension-private-2" min="0" max="150000" step="2500" value="0">
-                        </div>
-                        <div class="field" id="group-lijfrente-2">
-                            <label>Lijfrente: <span class="slider-value" id="value-lijfrente-2">€ 0</span></label>
-                            <input type="range" class="slider" id="slider-lijfrente-2" min="0" max="150000" step="2500" value="0">
-                            <div class="sub-options">
-                                <select id="lijfrente-duration-2" class="compact-select"><option value="999">Levenslang</option><option value="85">Tot 85j</option><option value="80">Tot 80j</option><option value="75">Tot 75j</option></select>
-                                <select id="lijfrente-start-2" class="compact-select"><option value="aow">Vanaf AOW</option><option value="67">Vanaf 67</option><option value="65">Vanaf 65</option><option value="60">Vanaf 60</option></select>
-                            </div>
-                        </div>
-                    </div>
+                    <p class="explain-tip">💡 Houd bij de hand: uw jaaropgaven met bruto pensioenbedragen en eventueel lijfrente-uitkeringen.</p>
                 </div>
-                <div class="step-summary" id="summary-3"></div>
                 <div class="slide-nav">
-                    <button class="btn-secondary btn-prev" data-prev="2">← Terug</button>
-                    <button class="btn-primary btn-confirm" data-next="4">Bevestig →</button>
+                    <button class="btn-secondary" data-go="2-confirm">← Terug</button>
+                    <button class="btn-primary" data-go="3-input">Begrepen, ga verder →</button>
                 </div>
             </div>
         </div>
 
-        <!-- ====== SLIDE 4: ACTIEF INKOMEN ====== -->
-        <div class="slide" data-step="4">
+        <!-- 3: Invoer -->
+        <div class="slide" data-section="3" data-phase="input">
+            <div class="slide-content">
+                <h2 class="slide-title">Stap 2 · Vul uw pensioenbedragen in</h2>
+                <div class="input-grid">
+                    <div class="partner-col">
+                        <h3 class="partner-label">Partner 1</h3>
+                        <div class="field be-specific"><label>Wettelijk pensioen BE <span class="tooltip" data-text="1e pijler. RIZIV 3,55% + solidariteit 1%. Bron: mypension.be.">(?)</span>: <span class="slider-value" id="value-be-pension-1">€ 0</span></label><input type="range" class="slider" id="slider-be-pension-1" min="0" max="80000" step="1000" value="0"></div>
+                        <div class="field" id="group-pension-public-1"><label>Overheidspensioen <span class="tooltip" data-text="ABP e.d. Belast in bronland NL (17,85%). Bron: Belastingdienst.nl.">(?)</span>: <span class="slider-value" id="value-pension-public-1">€ 0</span></label><input type="range" class="slider" id="slider-pension-public-1" min="0" max="150000" step="2500" value="0"></div>
+                        <div class="field" id="group-pension-private-1"><label>Particulier pensioen <span class="tooltip" data-text="Bedrijfspensioen. Belast in woonland FR. Bron: Belastingdienst.nl.">(?)</span>: <span class="slider-value" id="value-pension-private-1">€ 0</span></label><input type="range" class="slider" id="slider-pension-private-1" min="0" max="150000" step="2500" value="0"></div>
+                        <div class="field" id="group-lijfrente-1"><label>Lijfrente <span class="tooltip" data-text="In FR deels belast (30-70%). Bron: Service-public.fr.">(?)</span>: <span class="slider-value" id="value-lijfrente-1">€ 0</span></label><input type="range" class="slider" id="slider-lijfrente-1" min="0" max="150000" step="2500" value="0"><div class="sub-options"><select id="lijfrente-duration-1" class="compact-select"><option value="999">Levenslang</option><option value="85">Tot 85j</option><option value="80">Tot 80j</option><option value="75">Tot 75j</option></select><select id="lijfrente-start-1" class="compact-select"><option value="aow">Vanaf AOW</option><option value="67">Vanaf 67</option><option value="65">Vanaf 65</option><option value="60">Vanaf 60</option></select></div></div>
+                    </div>
+                    <div class="partner-col partner-col-2" style="display:none;">
+                        <h3 class="partner-label">Partner 2</h3>
+                        <div class="field be-specific"><label>Wettelijk pensioen BE: <span class="slider-value" id="value-be-pension-2">€ 0</span></label><input type="range" class="slider" id="slider-be-pension-2" min="0" max="80000" step="1000" value="0"></div>
+                        <div class="field" id="group-pension-public-2"><label>Overheidspensioen: <span class="slider-value" id="value-pension-public-2">€ 0</span></label><input type="range" class="slider" id="slider-pension-public-2" min="0" max="150000" step="2500" value="0"></div>
+                        <div class="field" id="group-pension-private-2"><label>Particulier pensioen: <span class="slider-value" id="value-pension-private-2">€ 0</span></label><input type="range" class="slider" id="slider-pension-private-2" min="0" max="150000" step="2500" value="0"></div>
+                        <div class="field" id="group-lijfrente-2"><label>Lijfrente: <span class="slider-value" id="value-lijfrente-2">€ 0</span></label><input type="range" class="slider" id="slider-lijfrente-2" min="0" max="150000" step="2500" value="0"><div class="sub-options"><select id="lijfrente-duration-2" class="compact-select"><option value="999">Levenslang</option><option value="85">Tot 85j</option><option value="80">Tot 80j</option><option value="75">Tot 75j</option></select><select id="lijfrente-start-2" class="compact-select"><option value="aow">Vanaf AOW</option><option value="67">Vanaf 67</option><option value="65">Vanaf 65</option><option value="60">Vanaf 60</option></select></div></div>
+                    </div>
+                </div>
+                <div class="slide-nav">
+                    <button class="btn-secondary" data-go="3-explain">← Terug</button>
+                    <button class="btn-primary btn-confirm-step" data-go="3-confirm">Bevestig →</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 3: Bevestig -->
+        <div class="slide" data-section="3" data-phase="confirm">
+            <div class="slide-content">
+                <h2 class="slide-title">Stap 2 · Controleer uw invoer</h2>
+                <div class="confirm-card" id="confirm-3"></div>
+                <div class="slide-nav">
+                    <button class="btn-secondary" data-go="3-input">← Wijzig</button>
+                    <button class="btn-primary" data-go="4-explain">Klopt, ga verder →</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== 4. INKOMEN ==================== -->
+        <!-- 4: Uitleg -->
+        <div class="slide" data-section="4" data-phase="explain">
             <div class="slide-content">
                 <h2 class="slide-title">Stap 3 · Actief inkomen</h2>
-                <p class="slide-intro">Loon telt mee tot AOW-leeftijd. Ondernemingswinst telt altijd mee.</p>
+                <div class="explain-card">
+                    <p class="explain-lead">Heeft u naast pensioen nog inkomen uit loondienst of een onderneming?</p>
+                    <div class="explain-points">
+                        <div class="explain-point"><span class="ep-icon">💰</span><span><strong>Loon</strong> telt mee tot uw AOW-leeftijd (daarna automatisch op 0, tenzij uitgeschakeld)</span></div>
+                        <div class="explain-point"><span class="ep-icon">🏪</span><span><strong>Ondernemingswinst</strong> telt altijd mee, ongeacht uw leeftijd</span></div>
+                        <div class="explain-point"><span class="ep-icon">🇫🇷</span><span>In FR: sociale lasten 22% op loon, micro-abattement 50% (diensten) of 30% (verhuur) op winst</span></div>
+                    </div>
+                    <p class="explain-tip">💡 Geen actief inkomen? Sla deze stap over met de knop rechts.</p>
+                </div>
+                <div class="slide-nav">
+                    <button class="btn-secondary" data-go="3-confirm">← Terug</button>
+                    <button class="btn-primary" data-go="4-input">Invullen →</button>
+                    <button class="btn-secondary" data-go="5-explain" style="font-size:0.8em;">Overslaan →→</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 4: Invoer -->
+        <div class="slide" data-section="4" data-phase="input">
+            <div class="slide-content">
+                <h2 class="slide-title">Stap 3 · Vul uw inkomen in</h2>
                 <div class="input-grid">
                     <div class="partner-col">
                         <h3 class="partner-label">Partner 1</h3>
-                        <div class="field" id="group-salary-1">
-                            <label>Loon <span class="tooltip" data-text="Bruto jaarloon. NL: Box 1 (35,75-49,5%). FR: soc. 22%. Bron: Belastingdienst.nl.">(?)</span>: <span class="slider-value" id="value-salary-1">€ 0</span></label>
-                            <input type="range" class="slider" id="slider-salary-1" min="0" max="250000" step="5000" value="0">
-                        </div>
-                        <div class="field" id="group-business-1">
-                            <label>Winst onderneming <span class="tooltip" data-text="NL: MKB-vrijstelling 12,7%. FR: micro-abattement. Bron: Belastingdienst.nl, Service-public.fr.">(?)</span>: <span class="slider-value" id="value-business-1">€ 0</span></label>
-                            <input type="range" class="slider" id="slider-business-1" min="0" max="300000" step="5000" value="0">
-                            <select id="business-type-1" class="compact-select fr-specific hide-for-be"><option value="services">Dienst / Overig</option><option value="rental">Verhuur Gîte/B&amp;B</option></select>
-                        </div>
+                        <div class="field" id="group-salary-1"><label>Loon <span class="tooltip" data-text="Bruto jaarloon. NL: Box 1. FR: soc. 22%. Bron: Belastingdienst.nl.">(?)</span>: <span class="slider-value" id="value-salary-1">€ 0</span></label><input type="range" class="slider" id="slider-salary-1" min="0" max="250000" step="5000" value="0"></div>
+                        <div class="field" id="group-business-1"><label>Winst onderneming <span class="tooltip" data-text="NL: MKB-vrijstelling 12,7%. FR: micro-abattement. Bron: Belastingdienst.nl.">(?)</span>: <span class="slider-value" id="value-business-1">€ 0</span></label><input type="range" class="slider" id="slider-business-1" min="0" max="300000" step="5000" value="0"><select id="business-type-1" class="compact-select fr-specific hide-for-be"><option value="services">Dienst / Overig</option><option value="rental">Verhuur Gîte/B&amp;B</option></select></div>
                     </div>
                     <div class="partner-col partner-col-2" style="display:none;">
                         <h3 class="partner-label">Partner 2</h3>
-                        <div class="field" id="group-salary-2">
-                            <label>Loon: <span class="slider-value" id="value-salary-2">€ 0</span></label>
-                            <input type="range" class="slider" id="slider-salary-2" min="0" max="250000" step="5000" value="0">
-                        </div>
-                        <div class="field" id="group-business-2">
-                            <label>Winst onderneming: <span class="slider-value" id="value-business-2">€ 0</span></label>
-                            <input type="range" class="slider" id="slider-business-2" min="0" max="300000" step="5000" value="0">
-                            <select id="business-type-2" class="compact-select fr-specific hide-for-be"><option value="services">Dienst / Overig</option><option value="rental">Verhuur Gîte/B&amp;B</option></select>
-                        </div>
+                        <div class="field" id="group-salary-2"><label>Loon: <span class="slider-value" id="value-salary-2">€ 0</span></label><input type="range" class="slider" id="slider-salary-2" min="0" max="250000" step="5000" value="0"></div>
+                        <div class="field" id="group-business-2"><label>Winst onderneming: <span class="slider-value" id="value-business-2">€ 0</span></label><input type="range" class="slider" id="slider-business-2" min="0" max="300000" step="5000" value="0"><select id="business-type-2" class="compact-select fr-specific hide-for-be"><option value="services">Dienst / Overig</option><option value="rental">Verhuur Gîte/B&amp;B</option></select></div>
                     </div>
                 </div>
-                <div class="step-summary" id="summary-4"></div>
                 <div class="slide-nav">
-                    <button class="btn-secondary btn-prev" data-prev="3">← Terug</button>
-                    <button class="btn-primary btn-confirm" data-next="5">Bevestig →</button>
+                    <button class="btn-secondary" data-go="4-explain">← Terug</button>
+                    <button class="btn-primary btn-confirm-step" data-go="4-confirm">Bevestig →</button>
                 </div>
             </div>
         </div>
 
-        <!-- ====== SLIDE 5: GÎTE / HORECA ====== -->
-        <div class="slide" data-step="5">
-            <div class="slide-content slide-gite">
+        <!-- 4: Bevestig -->
+        <div class="slide" data-section="4" data-phase="confirm">
+            <div class="slide-content">
+                <h2 class="slide-title">Stap 3 · Controleer uw invoer</h2>
+                <div class="confirm-card" id="confirm-4"></div>
+                <div class="slide-nav">
+                    <button class="btn-secondary" data-go="4-input">← Wijzig</button>
+                    <button class="btn-primary" data-go="5-explain">Klopt, ga verder →</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== 5. GÎTE / HORECA ==================== -->
+        <!-- 5: Uitleg (= info-only, geen aparte invoer) -->
+        <div class="slide" data-section="5" data-phase="explain">
+            <div class="slide-content">
                 <h2 class="slide-title">Stap 4 · Gîte / Horeca / Toerisme</h2>
-                <p class="slide-intro">In Frankrijk geldt micro-BIC: abattement van 30% (verhuur) of 50% (diensten). Relevant als u een gîte, B&amp;B of camping runt.</p>
-                <div class="gite-status" id="gite-status"></div>
-                <div class="gite-info">
-                    <p>Het type onderneming (dienst/verhuur) kunt u instellen bij <strong>Stap 3: Inkomen</strong> via het keuzemenu onder "Winst onderneming".</p>
-                    <p><strong>ZFRR-zones:</strong> In bepaalde zones de France rurale gelden extra fiscale voordelen. Dit valt buiten deze simulator.</p>
+                <div class="explain-card">
+                    <p class="explain-lead">Speciaal voor ondernemers in de toerismesector.</p>
+                    <div class="explain-points">
+                        <div class="explain-point"><span class="ep-icon">🏡</span><span>Runt u een gîte, B&amp;B of camping? Dan valt u in FR onder het <strong>micro-BIC</strong> regime</span></div>
+                        <div class="explain-point"><span class="ep-icon">📊</span><span><strong>Verhuur:</strong> 30% abattement (u betaalt over 70% van de winst)</span></div>
+                        <div class="explain-point"><span class="ep-icon">🛎️</span><span><strong>Dienstverlening:</strong> 50% abattement (u betaalt over 50% van de winst)</span></div>
+                    </div>
+                    <div class="gite-status" id="gite-status"></div>
+                    <p class="explain-tip">💡 Het type onderneming (dienst/verhuur) stelt u in bij Stap 3 via het keuzemenu onder "Winst onderneming". ZFRR-zones (France rurale) vallen buiten deze simulator.</p>
                 </div>
                 <div class="slide-nav">
-                    <button class="btn-secondary btn-prev" data-prev="4">← Terug</button>
-                    <button class="btn-primary btn-next" data-next="6">Volgende →</button>
+                    <button class="btn-secondary" data-go="4-confirm">← Terug</button>
+                    <button class="btn-primary" data-go="6-explain">Verder →</button>
                 </div>
             </div>
         </div>
 
-        <!-- ====== SLIDE 6: VERMOGEN & GEZIN ====== -->
-        <div class="slide" data-step="6">
+        <!-- ==================== 6. VERMOGEN & GEZIN ==================== -->
+        <!-- 6: Uitleg -->
+        <div class="slide" data-section="6" data-phase="explain">
             <div class="slide-content">
                 <h2 class="slide-title">Stap 5 · Vermogen &amp; Gezin</h2>
-                <p class="slide-intro">Kinderen verhogen het quotient familial (FR). NL belast vermogen via Box 3.</p>
-                <div class="input-grid input-grid-flat">
-                    <div class="field">
-                        <label>Kinderen ten laste <span class="tooltip" data-text="FR: QF +0,5 part/kind (plafond €1.807). Bron: Service-public.fr.">(?)</span>: <span class="slider-value" id="value-children">0</span></label>
-                        <input type="range" class="slider" id="slider-children" min="0" max="5" step="1" value="0">
+                <div class="explain-card">
+                    <p class="explain-lead">Vermogen en kinderen worden totaal anders belast in Nederland en Frankrijk.</p>
+                    <div class="explain-points">
+                        <div class="explain-point"><span class="ep-icon">🇳🇱</span><span><strong>NL Box 3:</strong> forfaitair rendement 6%, tarief 36%, vrijstelling €59.357 p.p.</span></div>
+                        <div class="explain-point"><span class="ep-icon">🇫🇷</span><span><strong>FR:</strong> geen vermogensbelasting op financiële activa — wél IFI op vastgoed boven €1,3M</span></div>
+                        <div class="explain-point"><span class="ep-icon">👨‍👩‍👧‍👦</span><span><strong>Kinderen</strong> verlagen uw Franse belasting via het quotient familial (+0,5 part per kind)</span></div>
                     </div>
-                    <div class="field-row">
-                        <div class="field" id="group-income-wealth-1">
-                            <label>Ink. vermogen P1 <span class="tooltip" data-text="Dividend/rente. NL: Box 3 forfait. FR: PFU 30%. Bron: Belastingdienst.nl.">(?)</span>: <span class="slider-value" id="value-income-wealth-1">€ 0</span></label>
-                            <input type="range" class="slider" id="slider-income-wealth-1" min="0" max="100000" step="1000" value="0">
-                        </div>
-                        <div class="field partner-col-2" id="group-income-wealth-2" style="display:none;">
-                            <label>Ink. vermogen P2: <span class="slider-value" id="value-income-wealth-2">€ 0</span></label>
-                            <input type="range" class="slider" id="slider-income-wealth-2" min="0" max="100000" step="1000" value="0">
-                        </div>
-                    </div>
-                    <div class="field-row">
-                        <div class="field">
-                            <label>Financieel vermogen <span class="tooltip" data-text="NL: Box 3 forfait 6%, tarief 36%, vrijstelling €59.357 p.p. FR: geen. Bron: Belastingdienst.nl.">(?)</span>: <span class="slider-value" id="value-wealth-financial">€ 0</span></label>
-                            <input type="range" class="slider" id="slider-wealth-financial" min="0" max="5000000" step="50000" value="0">
-                        </div>
-                        <div class="field">
-                            <label>Vastgoed (excl. hoofd) <span class="tooltip" data-text="FR: IFI boven €1,3M. NL: Box 3. Bron: Service-public.fr.">(?)</span>: <span class="slider-value" id="value-wealth-property">€ 0</span></label>
-                            <input type="range" class="slider" id="slider-wealth-property" min="0" max="5000000" step="50000" value="0">
-                        </div>
-                    </div>
-                    <div class="field-row">
-                        <div class="field nl-specific fr-specific hide-for-be field-toggle">
-                            <label>Zvw CAK-bijdrage? <span class="tooltip" data-text="CAK €4.500/jr, in FR aftrekbaar. Bron: CAK.nl.">(?)</span></label>
-                            <input type="checkbox" id="cak-contribution" class="toggle-switch">
-                        </div>
-                        <div class="field fr-specific hide-for-be">
-                            <label>Hulp aan huis (FR) <span class="tooltip" data-text="Crédit d'impôt 50%. Bron: Service-public.fr.">(?)</span></label>
-                            <select id="home-help" class="compact-select"><option value="0">Nee</option><option value="1500">€1.5k</option><option value="3500">€3.5k</option><option value="7000">€7k</option></select>
-                        </div>
-                    </div>
+                    <p class="explain-tip">💡 Houd bij de hand: een schatting van uw spaargeld, beleggingen en eventueel vastgoed (excl. hoofdverblijf).</p>
                 </div>
-                <div class="step-summary" id="summary-6"></div>
                 <div class="slide-nav">
-                    <button class="btn-secondary btn-prev" data-prev="5">← Terug</button>
-                    <button class="btn-primary btn-confirm" data-next="7">Bekijk Resultaat →</button>
+                    <button class="btn-secondary" data-go="5-explain">← Terug</button>
+                    <button class="btn-primary" data-go="6-input">Invullen →</button>
                 </div>
             </div>
         </div>
 
-        <!-- ====== SLIDE 7: RESULTAAT ====== -->
-        <div class="slide" data-step="7">
+        <!-- 6: Invoer -->
+        <div class="slide" data-section="6" data-phase="input">
+            <div class="slide-content">
+                <h2 class="slide-title">Stap 5 · Vul vermogen &amp; gezin in</h2>
+                <div class="input-grid input-grid-flat">
+                    <div class="field"><label>Kinderen ten laste <span class="tooltip" data-text="FR: QF +0,5 part/kind (plafond €1.807). Bron: Service-public.fr.">(?)</span>: <span class="slider-value" id="value-children">0</span></label><input type="range" class="slider" id="slider-children" min="0" max="5" step="1" value="0"></div>
+                    <div class="field-row">
+                        <div class="field" id="group-income-wealth-1"><label>Ink. vermogen P1 <span class="tooltip" data-text="Dividend/rente. NL: Box 3 forfait. FR: PFU 30%.">(?)</span>: <span class="slider-value" id="value-income-wealth-1">€ 0</span></label><input type="range" class="slider" id="slider-income-wealth-1" min="0" max="100000" step="1000" value="0"></div>
+                        <div class="field partner-col-2" id="group-income-wealth-2" style="display:none;"><label>Ink. vermogen P2: <span class="slider-value" id="value-income-wealth-2">€ 0</span></label><input type="range" class="slider" id="slider-income-wealth-2" min="0" max="100000" step="1000" value="0"></div>
+                    </div>
+                    <div class="field-row">
+                        <div class="field"><label>Financieel vermogen <span class="tooltip" data-text="NL: Box 3 forfait 6%, tarief 36%, vrijstelling €59.357 p.p. FR: geen.">(?)</span>: <span class="slider-value" id="value-wealth-financial">€ 0</span></label><input type="range" class="slider" id="slider-wealth-financial" min="0" max="5000000" step="50000" value="0"></div>
+                        <div class="field"><label>Vastgoed (excl. hoofd) <span class="tooltip" data-text="FR: IFI boven €1,3M. NL: Box 3.">(?)</span>: <span class="slider-value" id="value-wealth-property">€ 0</span></label><input type="range" class="slider" id="slider-wealth-property" min="0" max="5000000" step="50000" value="0"></div>
+                    </div>
+                    <div class="field-row">
+                        <div class="field nl-specific fr-specific hide-for-be field-toggle"><label>Zvw CAK-bijdrage? <span class="tooltip" data-text="CAK €4.500/jr, in FR aftrekbaar. Bron: CAK.nl.">(?)</span></label><input type="checkbox" id="cak-contribution" class="toggle-switch"></div>
+                        <div class="field fr-specific hide-for-be"><label>Hulp aan huis (FR) <span class="tooltip" data-text="Crédit d'impôt 50%. Bron: Service-public.fr.">(?)</span></label><select id="home-help" class="compact-select"><option value="0">Nee</option><option value="1500">€1.500</option><option value="3500">€3.500</option><option value="7000">€7.000</option></select></div>
+                    </div>
+                </div>
+                <div class="slide-nav">
+                    <button class="btn-secondary" data-go="6-explain">← Terug</button>
+                    <button class="btn-primary btn-confirm-step" data-go="6-confirm">Bevestig →</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 6: Bevestig -->
+        <div class="slide" data-section="6" data-phase="confirm">
+            <div class="slide-content">
+                <h2 class="slide-title">Stap 5 · Controleer uw invoer</h2>
+                <div class="confirm-card" id="confirm-6"></div>
+                <div class="slide-nav">
+                    <button class="btn-secondary" data-go="6-input">← Wijzig</button>
+                    <button class="btn-primary" data-go="7-main">Bekijk uw resultaat →</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== 7. RESULTAAT ==================== -->
+        <div class="slide" data-section="7" data-phase="main">
             <div class="slide-content slide-result">
                 <h2 class="slide-title">Uw Resultaat</h2>
                 <section id="results-bar" class="results-bar">
                     <div class="country-result" id="compare-country-result">
                         <h3><span id="compare-country-label">Nederland</span> <span id="compare-country-flag">🇳🇱</span></h3>
-                        <div class="result-detail">
-                            <span class="detail-line">Bruto: <strong><span id="compare-bruto">€ 0</span></strong></span>
-                            <span class="detail-line">Lasten: <span id="compare-tax">€ 0</span></span>
-                            <span class="detail-line final-net">Netto: <strong><span id="compare-netto">€ 0</span></strong></span>
-                        </div>
+                        <div class="result-detail"><span class="detail-line">Bruto: <strong><span id="compare-bruto">€ 0</span></strong></span><span class="detail-line">Lasten: <span id="compare-tax">€ 0</span></span><span class="detail-line final-net">Netto: <strong><span id="compare-netto">€ 0</span></strong></span></div>
                         <div class="result-sub"><span class="sub-label">Vermogensbelasting</span> <span id="wealth-tax-compare">€ 0</span></div>
                     </div>
                     <div class="country-result result-fr" id="result-fr">
                         <h3>Frankrijk 🇫🇷</h3>
-                        <div class="result-detail">
-                            <span class="detail-line">Bruto: <strong><span id="fr-bruto">€ 0</span></strong></span>
-                            <span class="detail-line">Lasten: <span id="fr-tax">€ 0</span></span>
-                            <span class="detail-line final-net">Netto: <strong><span id="fr-netto">€ 0</span></strong></span>
-                        </div>
+                        <div class="result-detail"><span class="detail-line">Bruto: <strong><span id="fr-bruto">€ 0</span></strong></span><span class="detail-line">Lasten: <span id="fr-tax">€ 0</span></span><span class="detail-line final-net">Netto: <strong><span id="fr-netto">€ 0</span></strong></span></div>
                         <div class="result-sub"><span class="sub-label">IFI Vastgoed</span> <span id="wealth-tax-fr">€ 0</span> <span class="expl" id="wealth-tax-fr-expl"></span></div>
                     </div>
                     <div class="conclusion" id="conclusion-bar">
@@ -369,35 +375,17 @@
                     <button id="copy-btn" class="btn-secondary">📋 Kopieer</button>
                     <button id="reset-btn" class="btn-secondary">↺ Opnieuw</button>
                 </div>
-                <details class="analysis-details">
-                    <summary>Bekijk volledige analyse</summary>
-                    <div id="calculation-breakdown"><p>Welkom! 🧭 Vul data in.</p></div>
-                </details>
-                <div class="result-footer">
-                    <p>Scenario-simulator, geen financieel advies. Editie 2026. · Communities Abroad © · <a href="https://www.infofrankrijk.com" target="_blank">Infofrankrijk.com</a></p>
-                </div>
-                <div class="slide-nav">
-                    <button class="btn-secondary btn-prev" data-prev="6">← Terug naar invoer</button>
-                </div>
+                <details class="analysis-details"><summary>Bekijk volledige analyse</summary><div id="calculation-breakdown"><p>Welkom! 🧭 Vul data in.</p></div></details>
+                <div class="result-footer"><p>Berekeningen gebaseerd op de grondslagen die door de Franse en Nederlandse belastingdiensten vanaf januari 2026 worden gehanteerd. Scenario-simulator, geen financieel advies. · Communities Abroad © · <a href="https://www.infofrankrijk.com" target="_blank">Infofrankrijk.com</a></p></div>
+                <div class="slide-nav"><button class="btn-secondary" data-go="6-confirm">← Terug naar invoer</button></div>
             </div>
         </div>
 
-    </div>
-</div>
-
+    </div><!-- /input-panel/slide-viewport -->
+</div><!-- /wizard -->
 
 <script src="wizard.js"></script>
 <script src="script.js" defer></script>
-<script
-  src="/embed/cc-embed.js"
-  data-expert="fiscaal"
-  data-tool-id="financieel_kompas"
-  data-tool-name="Financieel Kompas"
-  data-expert-emoji="💡"
-  data-expert-label="AI-Toelichter"
-  data-color="#800000"
-  data-position="top-right"
-  data-api-url="/api/chat"
-></script>
+<script src="/embed/cc-embed.js" data-expert="fiscaal" data-tool-id="financieel_kompas" data-tool-name="Financieel Kompas" data-expert-emoji="💡" data-expert-label="AI-Toelichter" data-color="#800000" data-position="top-right" data-api-url="/api/chat"></script>
 </body>
 </html>
