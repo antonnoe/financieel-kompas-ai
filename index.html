@@ -33,14 +33,15 @@
                 <button class="start-choice" data-click-target="#btn-couple">Partners</button>
             </div>
         </div>
-        <button id="start-continue" class="btn-primary start-btn">Start berekening →</button>
+        <button id="start-continue" class="btn-primary start-btn" disabled>Start berekening →</button>
+        <p id="start-hint" class="start-hint">Maak beide keuzes hierboven om verder te gaan.</p>
         <p class="start-privacy">🛡️ 100% anoniem — geen data wordt opgeslagen of verzonden</p>
     </div>
 </section>
 
 <!-- Hidden controls for script.js -->
-<div id="country-toggle-hidden" style="display:none"><button id="btn-nl" class="active">NL</button><button id="btn-be">BE</button></div>
-<div style="display:none"><button id="btn-single" class="active">Single</button><button id="btn-couple">Couple</button></div>
+<div id="country-toggle-hidden" style="display:none"><button id="btn-nl">NL</button><button id="btn-be">BE</button></div>
+<div style="display:none"><button id="btn-single">Single</button><button id="btn-couple">Couple</button></div>
 
 <!-- ===== WIZARD ===== -->
 <div id="wizard" class="wizard" style="display:none;">
@@ -73,13 +74,13 @@
         <div class="slide active" data-section="1" data-phase="main">
             <div class="slide-content slide-center">
                 <h1 class="slide-title">Uw persoonlijke vergelijking</h1>
-                <p class="slide-intro">In 5 stappen vergelijken we uw netto inkomen: huidig land vs. Frankrijk.</p>
+                <p class="slide-intro">In 5 stappen vergelijken we uw netto inkomen: huidig land vs. Frankrijk. Dit is wat we doorlopen:</p>
                 <div class="welcome-tiles">
-                    <div class="tile" data-goto-section="2"><span class="tile-icon">👤</span><span class="tile-label">Uw situatie</span></div>
-                    <div class="tile" data-goto-section="3"><span class="tile-icon">🏦</span><span class="tile-label">Pensioen</span></div>
-                    <div class="tile" data-goto-section="4"><span class="tile-icon">💼</span><span class="tile-label">Inkomen</span></div>
-                    <div class="tile" data-goto-section="5"><span class="tile-icon">🏡</span><span class="tile-label">Gîte / Horeca</span></div>
-                    <div class="tile" data-goto-section="6"><span class="tile-icon">💰</span><span class="tile-label">Vermogen &amp; Gezin</span></div>
+                    <div class="tile tile-info"><span class="tile-icon">👤</span><span class="tile-label">Uw situatie</span></div>
+                    <div class="tile tile-info"><span class="tile-icon">🏦</span><span class="tile-label">Pensioen</span></div>
+                    <div class="tile tile-info"><span class="tile-icon">💼</span><span class="tile-label">Inkomen</span></div>
+                    <div class="tile tile-info"><span class="tile-icon">🏡</span><span class="tile-label">Gîte / Horeca</span></div>
+                    <div class="tile tile-info"><span class="tile-icon">💰</span><span class="tile-label">Vermogen &amp; Gezin</span></div>
                 </div>
                 <div class="slide-nav"><button class="btn-primary" data-go="2-explain">Begin met stap 1 →</button></div>
             </div>

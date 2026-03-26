@@ -42,6 +42,10 @@ h1,h2,h3{font-family:'Poppins',sans-serif;font-weight:600}
 .btn-secondary{display:inline-flex;align-items:center;gap:6px;background:transparent;color:var(--primary);border:1.5px solid var(--primary);border-radius:8px;padding:9px 18px;font-size:.9em;font-family:inherit;font-weight:600;cursor:pointer;transition:background .15s}
 .btn-secondary:hover{background:var(--primary-light)}
 .start-btn{width:100%;margin-top:16px;padding:14px;font-size:1.1em}
+.btn-primary:disabled{background:#b0a0a0;cursor:not-allowed;opacity:.6}
+.btn-primary:disabled:hover{background:#b0a0a0}
+.start-hint{font-size:.82em;color:var(--danger);margin-top:8px;text-align:center;transition:opacity .3s}
+.start-hint.hidden{opacity:0}
 .btn-change{background:none;border:1px solid var(--primary);color:var(--primary);padding:2px 10px;border-radius:4px;cursor:pointer;font-size:.85em;font-family:inherit}
 
 /* ===== WIZARD FRAME ===== */
@@ -76,6 +80,8 @@ h1,h2,h3{font-family:'Poppins',sans-serif;font-weight:600}
 .welcome-tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:16px auto;max-width:480px}
 .tile{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:12px 8px;cursor:pointer;transition:all .15s;text-align:center}
 .tile:hover{border-color:var(--primary);background:var(--primary-light);transform:translateY(-1px)}
+.tile-info{cursor:default}
+.tile-info:hover{border-color:var(--border);background:var(--card);transform:none}
 .tile-icon{display:block;font-size:1.6em;margin-bottom:4px}
 .tile-label{display:block;font-weight:700;font-size:.85em;color:var(--text)}
 

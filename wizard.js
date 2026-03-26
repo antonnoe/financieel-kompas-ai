@@ -24,10 +24,39 @@
     var slides = $$('.slide');
     var stepItems = $$('.step-item');
 
-    // --- Start overlay → wizard ---
+    // --- Start overlay: both choices required ---
     var startBtn = $('#start-continue');
+    var startHint = $('#start-hint');
+    var startGroups = $$('.start-group');
+
+    function checkStartReady() {
+      // Each .start-group must have an .active choice
+      var allChosen = startGroups.every(function (g) {
+        return g.querySelector('.start-choice.active') !== null;
+      });
+      if (startBtn) startBtn.disabled = !allChosen;
+      if (startHint) {
+        if (allChosen) startHint.classList.add('hidden');
+        else startHint.classList.remove('hidden');
+      }
+    }
+
+    // Listen for choice clicks inside overlay
+    if (overlay) {
+      overlay.addEventListener('click', function (e) {
+        var choice = e.target.closest('.start-choice');
+        if (choice) {
+          // After script.js processes the click, re-check
+          setTimeout(checkStartReady, 30);
+        }
+      });
+    }
+    // Initial state
+    setTimeout(checkStartReady, 100);
+
     if (startBtn) {
       startBtn.addEventListener('click', function () {
+        if (startBtn.disabled) return;
         setTimeout(function () {
           overlay.style.display = 'none';
           wizard.style.display = 'flex';
@@ -72,13 +101,6 @@
         return;
       }
 
-      // Welcome tile clicks
-      var tile = e.target.closest('[data-goto-section]');
-      if (tile) {
-        var sec = tile.dataset.gotoSection;
-        goTo(sec, 'explain');
-        return;
-      }
     });
 
     // --- Step indicator clicks ---
