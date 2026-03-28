@@ -544,7 +544,9 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         bI-=aC;
         let a65=0; if(iPH){const aP=P.filter(p=>{const aI=getAOWDateInfo(p.birthYear);const aMo=new Date((p.birthYear||1900)+aI.years,(p.birthMonth||1)-1+aI.months);return simulatieDatum>=aMo;}).length; const iBFA_65=tPIF_NL_BE + totalLijfrenteBruto; const d1=PARAMS.FR.INKOMSTENBELASTING.ABATTEMENT_65PLUS.DREMPEL1||Infinity; const d2=PARAMS.FR.INKOMSTENBELASTING.ABATTEMENT_65PLUS.DREMPEL2||Infinity; const af1=PARAMS.FR.INKOMSTENBELASTING.ABATTEMENT_65PLUS.AFTREK1||0; const af2=PARAMS.FR.INKOMSTENBELASTING.ABATTEMENT_65PLUS.AFTREK2||0; if(iBFA_65<=d1*aP){a65=af1*aP;}else if(iBFA_65<=d2*aP){a65=af2*aP;}} bI-=a65;
-        const parts=(vals.isCouple?2:1)+(vals.children>2?(vals.children-2)*1+1:(vals.children||0)*0.5); const belastbaarInkomenIB=Math.max(0,bI); const iPP=parts>0?belastbaarInkomenIB/parts:0;
+        const childParts=vals.children>2?(vals.children-2)*1+1:(vals.children||0)*0.5;
+        const parentIsole=(!vals.isCouple&&(vals.children||0)>0)?0.5:0; // Parent isolé: +0,5 part (Service-public.fr)
+        const parts=(vals.isCouple?2:1)+childParts+parentIsole; const belastbaarInkomenIB=Math.max(0,bI); const iPP=parts>0?belastbaarInkomenIB/parts:0;
         let bPP=0,vG=0; (PARAMS.FR.INKOMSTENBELASTING.SCHIJVEN||[]).forEach(s=>{const cG=s.grens===Infinity?Infinity:Number(s.grens); bPP+=Math.max(0,Math.min(iPP,cG)-vG)*s.tarief; vG=cG;});
         let tax = bPP * parts;
         const bP = vals.isCouple ? 2 : 1; const cP = parts - bP; let tWC = 0;
@@ -782,7 +784,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // ══════ BRONVERMELDING ══════
             html += `<h4>Berekeningsgrondslagen</h4>`;
-            html += `<p><strong>Frankrijk:</strong> Barème progressif 2026 (0-45%, 5 schijven), quotient familial`;
+            html += `<p><strong>Frankrijk:</strong> Barème progressif 2026 (0-45%, 5 schijven), quotient familial (${fr.breakdown.parts?.toFixed(1)||'?'} parts${!isCouple && (vals.children||0)>0 ? '; incl. +0,5 part parent isolé' : ''})`;
             if (cak) {
                 html += `, vrijstelling CSG/CRDS (art. L136-1, L136-6 I ter CSS; LFSS 2019 art. 26; Vo. 883/2004), prél. solidarité 7,5% (art. 235 ter CGI)`;
             } else {
@@ -812,6 +814,9 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             if (hasLijfrente && cak) {
                 html += `• De vrijstelling sociale lasten op lijfrente geldt voor rente viagère à titre onéreux bij vastgestelde verdragsgerechtigdheid. Bij een andere kwalificatie kunnen premies verschuldigd zijn.<br>`;
+            }
+            if (!isCouple && (vals.children||0) > 0) {
+                html += `• De berekening gaat uit van de status "parent isolé" (+0,5 part quotient familial). Dit vereist dat u de kinderen daadwerkelijk alleen opvoedt. Bij co-ouderschap of résidence alternée gelden andere regels (charge partagée = halve parts). Bron: Service-public.fr.<br>`;
             }
             html += `• Raadpleeg altijd een gekwalificeerd fiscaal adviseur of expert-comptable vóór u beslissingen neemt.`;
             html += `</div>`;
