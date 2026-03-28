@@ -102,7 +102,7 @@ document.addEventListener('DOMContentLoaded', () => {
             children: getEl('slider-children'), cak: getEl('cak-contribution'), homeHelp: getEl('home-help'), wealthFinancial: getEl('slider-wealth-financial'), wealthProperty: getEl('slider-wealth-property'),
             p1: { birthYear: getEl('birth-year-1'), birthMonth: getEl('birth-month-1'), aowYears: getEl('aow-years-1'), beWorkYears: getEl('be-work-years-1'), frWorkYears: getEl('fr-work-years-1'), bePension: getEl('slider-be-pension-1'), pensionPublic: getEl('slider-pension-public-1'), pensionPrivate: getEl('slider-pension-private-1'), lijfrente: getEl('slider-lijfrente-1'), lijfrenteDuration: getEl('lijfrente-duration-1'), lijfrenteStartAge: getEl('lijfrente-start-1'), incomeWealth: getEl('slider-income-wealth-1'), salary: getEl('slider-salary-1'), business: getEl('slider-business-1'), businessType: getEl('business-type-1') },
             p2: { birthYear: getEl('birth-year-2'), birthMonth: getEl('birth-month-2'), aowYears: getEl('aow-years-2'), beWorkYears: getEl('be-work-years-2'), frWorkYears: getEl('fr-work-years-2'), bePension: getEl('slider-be-pension-2'), pensionPublic: getEl('slider-pension-public-2'), pensionPrivate: getEl('slider-pension-private-2'), lijfrente: getEl('slider-lijfrente-2'), lijfrenteDuration: getEl('lijfrente-duration-2'), lijfrenteStartAge: getEl('lijfrente-start-2'), incomeWealth: getEl('slider-income-wealth-2'), salary: getEl('slider-salary-2'), business: getEl('slider-business-2'), businessType: getEl('business-type-2') },};
-        outputs = { compareBruto: getEl('compare-bruto'), compareTax: getEl('compare-tax'), compareNetto: getEl('compare-netto'), wealthTaxCompare: getEl('wealth-tax-compare'), frBruto: getEl('fr-bruto'), frTax: getEl('fr-tax'), frNetto: getEl('fr-netto'), wealthTaxFr: getEl('wealth-tax-fr'), wealthTaxFrExpl: getEl('wealth-tax-fr-expl'), conclusionBar: getEl('conclusion-bar'), conclusionValue: getEl('conclusion-value'), conclusionExpl: getEl('conclusion-expl'), estateTotalDisplay: getEl('estate-total-display'), breakdown: getEl('calculation-breakdown'),};
+        outputs = { compareBruto: getEl('compare-bruto'), compareTax: getEl('compare-tax'), compareNetto: getEl('compare-netto'), wealthTaxCompare: getEl('wealth-tax-compare'), frBruto: getEl('fr-bruto'), frTax: getEl('fr-tax'), frNetto: getEl('fr-netto'), wealthTaxFr: getEl('wealth-tax-fr'), wealthTaxFrExpl: getEl('wealth-tax-fr-expl'), conclusionBar: getEl('conclusion-bar'), conclusionValue: getEl('conclusion-value'), conclusionExpl: getEl('conclusion-expl'), estateTotalDisplay: getEl('estate-total-display'), breakdown: getEl('calculation-breakdown'), report: getEl('result-report'),};
         valueOutputs = { p1: { aowYears: getEl('value-aow-years-1'), beWorkYears: getEl('value-be-work-years-1'), frWorkYears: getEl('value-fr-work-years-1'), bePension: getEl('value-be-pension-1'), pensionPublic: getEl('value-pension-public-1'), pensionPrivate: getEl('value-pension-private-1'), lijfrente: getEl('value-lijfrente-1'), incomeWealth: getEl('value-income-wealth-1'), salary: getEl('value-salary-1'), business: getEl('value-business-1') }, p2: { aowYears: getEl('value-aow-years-2'), beWorkYears: getEl('value-be-work-years-2'), frWorkYears: getEl('value-fr-work-years-2'), bePension: getEl('value-be-pension-2'), pensionPublic: getEl('value-pension-public-2'), pensionPrivate: getEl('value-pension-private-2'), lijfrente: getEl('value-lijfrente-2'), incomeWealth: getEl('value-income-wealth-2'), salary: getEl('value-salary-2'), business: getEl('value-business-2') }, children: getEl('value-children'), wealthFinancial: getEl('value-wealth-financial'), wealthProperty: getEl('value-wealth-property'),};
         pensionLabels = document.querySelectorAll('.country-origin');
 
@@ -286,6 +286,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const frN=frResults.netto||0, compN=compareResults.netto||0, frW=frResults.wealthTax||0, compW=compareResults.wealthTax||0; const delta=(frN-compN)+(compW-frW);
             if(outputs.conclusionValue)outputs.conclusionValue.textContent=formatCurrency(delta,true); if(outputs.conclusionBar)outputs.conclusionBar.className=delta>=0?'positive':'negative'; if(outputs.conclusionExpl)outputs.conclusionExpl.textContent=delta>=0?"Positief: voordeel in Frankrijk.":"Negatief: voordeel in vergeleken land.";
             if(outputs.breakdown){if(initialLoad){outputs.breakdown.innerHTML=`<p style="text-align: center;">Welkom! 🧭 Vul data in.</p>`; initialLoad=false;}else{outputs.breakdown.textContent=generateBreakdown(inputValues,compareResults,frResults);}}
+            if(outputs.report && !initialLoad){outputs.report.innerHTML=generateReport(inputValues,compareResults,frResults);}
 // Café Claude widget — resultaten beschikbaar maken
             if (!initialLoad) {
               const simInfo = getSimulationInfo(inputValues);
@@ -562,6 +563,101 @@ document.addEventListener('DOMContentLoaded', () => {
         const totaleTaxWithNL = tSL + fB + gB + tRV + bszb + nlWithholding; // Include NL bronheffing
         const nt = tB - totaleTaxWithNL; const wT = 0;
         return { bruto:tB, tax:totaleTaxWithNL, netto:nt, wealthTax:wT, breakdown:{simulatieDatum: simulatieDatum, nettoInkomenUitNL:nINL, nlWithholdingOnGovPension:nlWithholding, socialeLasten:tSL, rszWerknemer: totalRszWerknemer, zelfstandigenbijdrage: totalZelfstandigenbijdrage, bePensionContrib: bePensionContrib, brutoBePension: brutoBePension, totalLoon: totalLoon, totalWinst: totalWinst, bszb: bszb, forfaitKosten: forfaitKosten, federaleBelasting:fB, gemeentebelasting:gB, roerendeVoorheffing:tRV }};
+    }
+
+    // --- RAPPORTAGE (leesbare toelichting) ---
+    function generateReport(vals, compare, fr) {
+        try {
+            if (!vals || !compare || !fr) return '<p>Geen data beschikbaar.</p>';
+            const frN = fr.netto || 0, compN = compare.netto || 0;
+            const frW = fr.wealthTax || 0, compW = compare.wealthTax || 0;
+            const delta = (frN - compN) + (compW - frW);
+            const isPositive = delta >= 0;
+            const compLand = activeComparison === 'NL' ? 'Nederland' : 'België';
+            const frSL = fr.breakdown.socialeLasten || 0;
+            const compSL = compare.breakdown.socialeLasten || compare.tax - (compare.netto ? compare.bruto - compare.netto - (compare.breakdown.socialeLasten||0) : 0) || 0;
+            const isCouple = vals.isCouple;
+            const hasWealth = (vals.wealthFinancial || 0) + (vals.wealthProperty || 0) > 0;
+            const wfin = vals.wealthFinancial || 0;
+            const wprop = vals.wealthProperty || 0;
+            const cak = vals.cak;
+
+            let html = '';
+
+            // --- Hoofdconclusie ---
+            html += `<h4>Wat betekent dit voor u?</h4>`;
+            if (isPositive) {
+                html += `<div class="report-highlight"><strong>U houdt in Frankrijk jaarlijks netto ${formatCurrency(delta)} meer over</strong> dan in ${compLand}${isCouple ? ' (als stel)' : ''}.</div>`;
+            } else {
+                html += `<div class="report-highlight"><strong>U houdt in ${compLand} jaarlijks netto ${formatCurrency(Math.abs(delta))} meer over</strong> dan in Frankrijk${isCouple ? ' (als stel)' : ''}.</div>`;
+            }
+
+            // --- Belangrijkste factoren ---
+            html += `<h4>Waarom dit verschil?</h4>`;
+
+            // Sociale lasten
+            if (cak) {
+                html += `<p><strong>Sociale premies:</strong> Als verdragsgerechtigde betaalt u in Frankrijk geen CSG en CRDS over uw pensioen en AOW (0%). Over eventuele vermogensinkomsten betaalt u alleen het prélèvement de solidarité van 7,5% — veel minder dan het standaardtarief van 17,2%. U betaalt uw zorgpremie in Nederland via het CAK.</p>`;
+            } else {
+                html += `<p><strong>Sociale premies:</strong> In Frankrijk betaalt u over uw pensioen 9,1% aan sociale premies (CSG, CRDS, CASA). Over vermogensinkomsten geldt een tarief van 17,2%.</p>`;
+            }
+
+            // Vermogensbelasting
+            if (hasWealth) {
+                if (wfin > 0 && activeComparison === 'NL') {
+                    const box3 = compare.wealthTax || 0;
+                    html += `<p><strong>Vermogen:</strong> In Nederland wordt uw financieel vermogen van ${formatCurrency(wfin)} belast in Box 3 (forfaitair rendement 6%, tarief 36%), wat neerkomt op ${formatCurrency(box3)} per jaar. In Frankrijk bestaat deze belasting niet — financieel vermogen wordt niet apart belast.</p>`;
+                }
+                if (wprop > 0) {
+                    if (wprop <= 1300000) {
+                        html += `<p><strong>Vastgoed:</strong> Uw Frans vastgoed (${formatCurrency(wprop)}) ligt onder de IFI-drempel van 1,3 miljoen euro. U betaalt geen vermogensbelasting op vastgoed in Frankrijk.</p>`;
+                    } else {
+                        html += `<p><strong>Vastgoed:</strong> Uw Frans vastgoed (${formatCurrency(wprop)}) overschrijdt de IFI-drempel van 1,3 miljoen euro. U betaalt ${formatCurrency(frW)} aan IFI (Impôt sur la Fortune Immobilière).</p>`;
+                    }
+                }
+            }
+
+            // Belastingkrediet hulp aan huis
+            const homeHelp = vals.homeHelp || 0;
+            if (homeHelp > 0) {
+                const krediet = homeHelp * (PARAMS.FR.HULP_AAN_HUIS_KREDIET_PERCENTAGE || 0);
+                html += `<p><strong>Hulp aan huis:</strong> Uw uitgaven van ${formatCurrency(homeHelp)} aan hulp aan huis leveren in Frankrijk een belastingkrediet op van ${formatCurrency(krediet)} (50% teruggave).</p>`;
+            }
+
+            // --- Bronvermelding en disclaimer ---
+            html += `<h4>Berekeningsgrondslagen</h4>`;
+            html += `<p>De berekening is gebaseerd op de belastingtarieven en sociale premies zoals die gelden vanaf januari 2026:</p>`;
+            html += `<p>`;
+            html += `<strong>Frankrijk:</strong> Barème progressif 2026, quotient familial, `;
+            if (cak) {
+                html += `vrijstelling CSG/CRDS voor verdragsgerechtigden (art. L136-1 en L136-6 I ter Code de la Sécurité Sociale, LFSS 2019 art. 26, EU-Verordening 883/2004), prélèvement de solidarité 7,5% (art. 235 ter CGI).`;
+            } else {
+                html += `CSG/CRDS/CASA op pensioenen (9,1%), prélèvements sociaux op vermogensinkomen (17,2%).`;
+            }
+            html += `</p>`;
+            html += `<p><strong>${compLand}:</strong> `;
+            if (activeComparison === 'NL') {
+                html += `IB-tarieven 2026 (35,75/37,56/49,5%), Box 3 (forfaitair rendement 6%, tarief 36%, vrijstelling ${formatCurrency(isCouple ? 118714 : 59357)} p.p.).`;
+            } else {
+                html += `Personenbelasting 2025 (25-50%), RSZ 13,07%, gemeentebelasting ~7%.`;
+            }
+            html += `</p>`;
+
+            html += `<div class="report-disclaimer">`;
+            html += `<strong>Let op:</strong> Dit is een scenariosimulatie en geen persoonlijk financieel of fiscaal advies. `;
+            html += `De werkelijke situatie kan afwijken door onder meer: de taxe foncière en taxe d'habitation (gemeentelijke belastingen), `;
+            html += `het belastingverdrag NL-FR (artikel 22 voor AOW), individuele aftrekposten, en veranderingen in wetgeving. `;
+            if (cak) {
+                html += `De berekening gaat ervan uit dat u verdragsgerechtigd bent (aangesloten bij het Nederlandse sociale zekerheidsstelsel via het CAK). Als u in Frankrijk werkt of op andere gronden bij het Franse stelsel bent aangesloten, gelden andere tarieven. `;
+            }
+            html += `Raadpleeg altijd een gekwalificeerd belastingadviseur voor uw persoonlijke situatie.`;
+            html += `</div>`;
+
+            return html;
+        } catch (error) {
+            console.error("Fout in generateReport:", error);
+            return `<p>Fout bij genereren toelichting: ${error.message}</p>`;
+        }
     }
 
     // --- BREAKDOWN (FIXED) ---
