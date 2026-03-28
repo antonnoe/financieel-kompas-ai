@@ -2,7 +2,7 @@
     "EDITIE": "2026",
     "BRONNEN": {
         "NL": "Belastingdienst.nl, Rijksoverheid.nl, Deloitte Belastingplan 2026, KVK.nl",
-        "FR": "Service-public.fr, Economie.gouv.fr, Loi de finances 2026 (19 feb 2026)",
+        "FR": "Service-public.fr, Economie.gouv.fr, Loi de finances 2026 (19 feb 2026), BOFiP (bofip.impots.gouv.fr), Légifrance (art. L136-1/L136-6/L136-7 CSS, art. 235 ter CGI), LFSS 2019 art. 26, Vo. 883/2004",
         "BE": "FPS Finance (fin.belgium.be), VLAIO.be, Wikifin.be, Socialsecurity.belgium.be"
     },
     "AOW_BRUTO_SINGLE": 19956,
@@ -34,7 +34,7 @@
         }
     },
     "FR": {
-        "SOCIALE_LASTEN": { "PENSIOEN": 0.091, "SALARIS": 0.22, "WINST_DIENSTEN": 0.212, "WINST_VERHUUR": 0.212, "PFU": 0.172 },
+        "SOCIALE_LASTEN": { "PENSIOEN": 0.091, "SALARIS": 0.22, "WINST_DIENSTEN": 0.212, "WINST_VERHUUR": 0.212, "PFU": 0.172, "PRELEVEMENT_SOLIDARITE": 0.075 },
         "INKOMSTENBELASTING": {
             "SCHIJVEN": [
                 { "grens": 11600, "tarief": 0.0 },

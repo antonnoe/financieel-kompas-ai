@@ -449,7 +449,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
                 const lijfrenteBelastbaarDeel = currentLijfrente * belastbareFractie;
                 totalLijfrenteBelastbaar += lijfrenteBelastbaarDeel;
-                lijfrenteSocLasten += lijfrenteBelastbaarDeel * (PARAMS.FR.SOCIALE_LASTEN.LIJFRENTE_TARIEF || 0);
+                lijfrenteSocLasten += vals.cak ? 0 : lijfrenteBelastbaarDeel * (PARAMS.FR.SOCIALE_LASTEN.LIJFRENTE_TARIEF || 0);
             }
 
             tLo+= (!vals.stopSalaryAfterAOW || isWorking) ? (p.salary||0) : 0;
@@ -465,10 +465,10 @@ document.addEventListener('DOMContentLoaded', () => {
         const frReqYears = PARAMS.FR_PENSION_YEARS_REQUIRED || 1; const frRate = PARAMS.FR_PENSION_RATE || 0; const frAvgSal = PARAMS.FR_PENSION_AVG_SALARY || 0;
         const frPensionRate = tEY >= frReqYears ? frRate : frRate * (tEY / frReqYears);
         const tFWY=(vals.p1?.frWorkYears||0)+(vals.p2?.frWorkYears||0); const fSP=frReqYears>0?(tFWY/frReqYears)*frAvgSal*frPensionRate:0; const fSPA=iPH?fSP:0;
-        const tIV=(vals.p1?.incomeWealth||0)+(vals.p2?.incomeWealth||0); const pT=tIV*(PARAMS.FR.INKOMSTENBELASTING.PFU_TARIEF||0); const pSL=tIV*(PARAMS.FR.SOCIALE_LASTEN.PFU||0);
+        const tIV=(vals.p1?.incomeWealth||0)+(vals.p2?.incomeWealth||0); const pT=tIV*(PARAMS.FR.INKOMSTENBELASTING.PFU_TARIEF||0); const pfuSocRate=vals.cak?(PARAMS.FR.SOCIALE_LASTEN.PRELEVEMENT_SOLIDARITE||0.075):(PARAMS.FR.SOCIALE_LASTEN.PFU||0); const pSL=tIV*pfuSocRate;
         const nlTR=PARAMS.NL?.BOX1?.TARIEVEN_BOVEN_AOW?.[0]||0; const nINL=bINLB*(1-nlTR);
         const tPIF_NL_BE=tA+tPP+fSPA + totalBePension;
-        const sLP=(tA+tPP+fSPA)*(PARAMS.FR.SOCIALE_LASTEN.PENSIOEN||0);
+        const sLP=vals.cak?0:(tA+tPP+fSPA)*(PARAMS.FR.SOCIALE_LASTEN.PENSIOEN||0);
         const sLS=tLo*(PARAMS.FR.SOCIALE_LASTEN.SALARIS||0); const sLW=(tBFA.services*(PARAMS.FR.SOCIALE_LASTEN.WINST_DIENSTEN||0))+(tBFA.rental*(PARAMS.FR.SOCIALE_LASTEN.WINST_VERHUUR||0));
         const tSL_excl_lijfrente = sLP + sLS + sLW;
         const wNA=(tBFA.services*(1-(PARAMS.FR.INKOMSTENBELASTING.ABATTEMENT_WINST_DIENSTEN||0)))+(tBFA.rental*(1-(PARAMS.FR.INKOMSTENBELASTING.ABATTEMENT_WINST_VERHUUR||0)));
@@ -679,9 +679,9 @@ Frankrijk 🇫🇷 ${simDatumStr}
    ↳ Inkomen belast in FR: ${formatCurrency(fr.breakdown.brutoInFR||0)} (Incl. bruto lijfrente: ${formatCurrency(fr.breakdown.lijfrenteBruto||0)})
    ↳ Inkomen belast in Herkomstland*: ${formatCurrency(fr.breakdown.brutoInkomenVoorNLBelasting||0)} (Netto: ${formatCurrency(fr.breakdown.nettoInkomenUitNL||0)})
 2. Sociale Lasten (Totaal): ${formatCurrency(fr.breakdown.socialeLasten||0)}
-   ↳ FR Soc. Lasten (Inkomen): -${formatCurrency(frSocLastenExclPFUBeLijfrente)} (~9% pens, ~22% loon, ~21% winst)
-   ↳ FR Soc. Lasten (Lijfrente belastb. deel): -${formatCurrency(lijfrenteSocLasten_fr)} (${((PARAMS.FR.SOCIALE_LASTEN.LIJFRENTE_TARIEF||0)*100).toFixed(1)}% op ${formatCurrency(fr.breakdown.lijfrenteBelastbaar||0)})
-   ↳ FR Soc. Lasten (Vermogen PFU 17.2%): -${formatCurrency(pfuSocLasten_fr)}${activeComparison==='BE'?`
+   ↳ FR Soc. Lasten (Inkomen): -${formatCurrency(frSocLastenExclPFUBeLijfrente)} (${vals.cak?'0% pens (verdragsger.)':'~9% pens'}, ~22% loon, ~21% winst)
+   ↳ FR Soc. Lasten (Lijfrente belastb. deel): -${formatCurrency(lijfrenteSocLasten_fr)} (${vals.cak?'0% (verdragsger.)':((PARAMS.FR.SOCIALE_LASTEN.LIJFRENTE_TARIEF||0)*100).toFixed(1)+'%'} op ${formatCurrency(fr.breakdown.lijfrenteBelastbaar||0)})
+   ↳ FR Soc. Lasten (Vermogen ${vals.cak?'prél. solidarité 7.5%':'PFU 17.2%'}): -${formatCurrency(pfuSocLasten_fr)}${activeComparison==='BE'?`
    ↳ BE Soc. Lasten (Pensioen RIZIV/Solid.): -${formatCurrency(beContribAftrek_fr)} (Betaald in BE)`:''}
    = Subtotaal na SZ: ${formatCurrency(fr.bruto - (fr.breakdown.socialeLasten||0))}
 3. Overige Aftrekposten FR:${overigeAftrekposten_fr}
