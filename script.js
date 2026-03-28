@@ -263,28 +263,32 @@ document.addEventListener('DOMContentLoaded', () => {
         const lijfrenteStart = p.lijfrenteStartAge ? p.lijfrenteStartAge.value : 'aow';
         return { birthYear:getN(p.birthYear), birthMonth:getN(p.birthMonth), aowYears:getN(p.aowYears), beWorkYears:getN(p.beWorkYears), frWorkYears:getN(p.frWorkYears), bePension:getN(p.bePension), pensionPublic:getN(p.pensionPublic), pensionPrivate:getN(p.pensionPrivate), lijfrente:getN(p.lijfrente), lijfrenteDuration:getN(p.lijfrenteDuration), lijfrenteStartAge: lijfrenteStart, incomeWealth:getN(p.incomeWealth), salary:getN(p.salary), business:getN(p.business), rental:getN(p.rental) };
     }
-    function adjustWorkYears(changedId) { if(!inputs?.p1||!inputs?.p2)return; const pI=changedId.includes('-1')?inputs.p1:inputs.p2; if(!pI)return; let cS,fS; if(activeComparison==='NL'){cS=pI.aowYears;fS=pI.frWorkYears;}else{cS=pI.beWorkYears;fS=pI.frWorkYears;} if(!cS||!fS)return; let cV=Number(cS.value);let fV=Number(fS.value); if(cV+fV>MAX_WORK_YEARS){if(changedId===cS.id){fV=MAX_WORK_YEARS-cV;fS.value=fV;}else{cV=MAX_WORK_YEARS-fV;cS.value=cV;}} updateValueOutputsForYears(); }
+    function adjustWorkYears(changedId) { if(!inputs?.p1||!inputs?.p2)return; const pI=changedId.includes('-1')?inputs.p1:inputs.p2; if(!pI)return; let cS,fS; if(activeComparison==='NL'){cS=pI.aowYears;fS=pI.frWorkYears;}else{cS=pI.beWorkYears;fS=pI.frWorkYears;} if(!cS||!fS)return; const maxTotal=Number(cS.max||50); let cV=Number(cS.value);let fV=Number(fS.value); if(cV+fV>maxTotal){if(changedId===cS.id){fV=maxTotal-cV;fS.value=Math.max(0,fV);}else{cV=maxTotal-fV;cS.value=Math.max(0,cV);}} updateValueOutputsForYears(); }
     // AOW-opbouw start op 17 jaar; max = min(50, leeftijd - 17)
+    // Totaal AOW/BE + FR mag ook niet meer zijn dan max
     function capYearsOnBirthYear(pInputs, pData) {
         if (!pInputs || !pData?.birthYear) return;
         const simYear = inputs.simYear?.value ? Number(inputs.simYear.value) : new Date().getFullYear();
         const birthYear = Number(pData.birthYear.value || 1960);
         const age = simYear - birthYear;
         const maxYears = Math.min(50, Math.max(0, age - 17));
-        // Cap AOW slider
-        if (pInputs.aowYears) {
-            pInputs.aowYears.max = maxYears;
-            if (Number(pInputs.aowYears.value) > maxYears) pInputs.aowYears.value = maxYears;
-        }
-        // Cap BE work years
-        if (pInputs.beWorkYears) {
-            pInputs.beWorkYears.max = maxYears;
-            if (Number(pInputs.beWorkYears.value) > maxYears) pInputs.beWorkYears.value = maxYears;
-        }
-        // Cap FR work years
-        if (pInputs.frWorkYears) {
-            pInputs.frWorkYears.max = maxYears;
-            if (Number(pInputs.frWorkYears.value) > maxYears) pInputs.frWorkYears.value = maxYears;
+        // Cap individual sliders
+        ['aowYears','beWorkYears','frWorkYears'].forEach(k => {
+            if (pInputs[k]) {
+                pInputs[k].max = maxYears;
+                if (Number(pInputs[k].value) > maxYears) pInputs[k].value = maxYears;
+            }
+        });
+        // Cap totaal: AOW/BE + FR ≤ maxYears
+        const countrySlider = activeComparison === 'NL' ? pInputs.aowYears : pInputs.beWorkYears;
+        const frSlider = pInputs.frWorkYears;
+        if (countrySlider && frSlider) {
+            const cV = Number(countrySlider.value);
+            const fV = Number(frSlider.value);
+            if (cV + fV > maxYears) {
+                // Prioriteer de laatst gewijzigde; bij cap: knip FR
+                frSlider.value = Math.max(0, maxYears - cV);
+            }
         }
     }
     function updateValueOutputsForYears() { if(!valueOutputs?.p1||!valueOutputs?.p2||!inputs?.p1||!inputs?.p2)return; const uV=(oE,iE,iC=true,iY=false)=>{if(oE&&iE){const v=iE.value||'0';oE.textContent=iY?v:(iC?formatCurrency(Number(v)):v);}else if(oE){oE.textContent=iY?'0':formatCurrency(0);}}; uV(valueOutputs.p1.aowYears,inputs.p1.aowYears,false,true); uV(valueOutputs.p1.beWorkYears,inputs.p1.beWorkYears,false,true); uV(valueOutputs.p1.frWorkYears,inputs.p1.frWorkYears,false,true); uV(valueOutputs.p1.bePension,inputs.p1.bePension); uV(valueOutputs.p1.pensionPublic,inputs.p1.pensionPublic); uV(valueOutputs.p1.pensionPrivate,inputs.p1.pensionPrivate); uV(valueOutputs.p1.lijfrente,inputs.p1.lijfrente); uV(valueOutputs.p1.incomeWealth,inputs.p1.incomeWealth); uV(valueOutputs.p1.salary,inputs.p1.salary); uV(valueOutputs.p1.business,inputs.p1.business); uV(valueOutputs.p1.rental,inputs.p1.rental); if(isCouple){ uV(valueOutputs.p2.aowYears,inputs.p2.aowYears,false,true); uV(valueOutputs.p2.beWorkYears,inputs.p2.beWorkYears,false,true); uV(valueOutputs.p2.frWorkYears,inputs.p2.frWorkYears,false,true); uV(valueOutputs.p2.bePension,inputs.p2.bePension); uV(valueOutputs.p2.pensionPublic,inputs.p2.pensionPublic); uV(valueOutputs.p2.pensionPrivate,inputs.p2.pensionPrivate); uV(valueOutputs.p2.lijfrente,inputs.p2.lijfrente); uV(valueOutputs.p2.incomeWealth,inputs.p2.incomeWealth); uV(valueOutputs.p2.salary,inputs.p2.salary); uV(valueOutputs.p2.business,inputs.p2.business); uV(valueOutputs.p2.rental,inputs.p2.rental); } }
