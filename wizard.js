@@ -262,20 +262,16 @@
     function buildConfirm4(isCouple) {
       var h = '<div class="confirm-section">' + sectionTitle('Partner 1');
       h += row('Loon', fmt(getVal('slider-salary-1')));
-      h += row('Winst onderneming', fmt(getVal('slider-business-1')));
-      var t1 = $('#business-type-1');
-      if (t1 && getVal('slider-business-1') > 0) {
-        h += row('Type', t1.value === 'rental' ? 'Verhuur Gîte/B&B' : 'Dienst / Overig');
-      }
+      if (getVal('slider-business-1') > 0) h += row('Winst diensten', fmt(getVal('slider-business-1')));
+      if (getVal('slider-rental-1') > 0) h += row('Winst verhuur (gîte/B&B)', fmt(getVal('slider-rental-1')));
+      if (getVal('slider-business-1') === 0 && getVal('slider-rental-1') === 0) h += row('Ondernemingswinst', '€ 0');
       h += '</div>';
       if (isCouple) {
         h += '<div class="confirm-section">' + sectionTitle('Partner 2');
         h += row('Loon', fmt(getVal('slider-salary-2')));
-        h += row('Winst onderneming', fmt(getVal('slider-business-2')));
-        var t2 = $('#business-type-2');
-        if (t2 && getVal('slider-business-2') > 0) {
-          h += row('Type', t2.value === 'rental' ? 'Verhuur Gîte/B&B' : 'Dienst / Overig');
-        }
+        if (getVal('slider-business-2') > 0) h += row('Winst diensten', fmt(getVal('slider-business-2')));
+        if (getVal('slider-rental-2') > 0) h += row('Winst verhuur (gîte/B&B)', fmt(getVal('slider-rental-2')));
+        if (getVal('slider-business-2') === 0 && getVal('slider-rental-2') === 0) h += row('Ondernemingswinst', '€ 0');
         h += '</div>';
       }
       return h;
@@ -286,10 +282,11 @@
       h += row('Kinderen ten laste', getVal('slider-children'));
       h += row('Ink. vermogen P1', fmt(getVal('slider-income-wealth-1')));
       if (isCouple) h += row('Ink. vermogen P2', fmt(getVal('slider-income-wealth-2')));
-      h += row('Financieel vermogen', fmt(getVal('slider-wealth-financial')));
-      h += row('Vastgoed (excl. hoofd)', fmt(getVal('slider-wealth-property')));
+      h += row('Spaargeld', fmt(getVal('slider-wealth-savings')));
+      h += row('Beleggingen', fmt(getVal('slider-wealth-investments')));
+      h += row('Vastgoed', fmt(getVal('slider-wealth-property')));
       var cak = document.getElementById('cak-contribution');
-      if (cak) h += row('CAK-bijdrage', cak.checked ? 'Ja' : 'Nee');
+      if (cak) h += row('Verdragsgerechtigd (CAK)', cak.checked ? 'Ja' : 'Nee');
       h += row('Hulp aan huis', fmt(getVal('home-help')) + '/jaar');
       return h;
     }
@@ -301,24 +298,20 @@
       var el = $('#gite-status');
       if (!el) return;
       var bus1 = getVal('slider-business-1');
+      var rent1 = getVal('slider-rental-1');
       var bus2 = getVal('slider-business-2');
-      var t1 = $('#business-type-1');
-      var t2 = $('#business-type-2');
+      var rent2 = getVal('slider-rental-2');
       var isCouple = $('#btn-couple') && $('#btn-couple').classList.contains('active');
 
-      if (bus1 === 0 && bus2 === 0) {
+      if (bus1 === 0 && rent1 === 0 && bus2 === 0 && rent2 === 0) {
         el.innerHTML = 'U heeft geen ondernemingswinst ingevuld — deze stap is niet van toepassing.';
         return;
       }
       var lines = [];
-      if (bus1 > 0) {
-        var lbl1 = (t1 && t1.value === 'rental') ? 'Verhuur (30% abattement)' : 'Dienst (50% abattement)';
-        lines.push('<strong>P1:</strong> ' + fmt(bus1) + ' — ' + lbl1);
-      }
-      if (isCouple && bus2 > 0) {
-        var lbl2 = (t2 && t2.value === 'rental') ? 'Verhuur (30% abattement)' : 'Dienst (50% abattement)';
-        lines.push('<strong>P2:</strong> ' + fmt(bus2) + ' — ' + lbl2);
-      }
+      if (bus1 > 0) lines.push('<strong>P1 diensten:</strong> ' + fmt(bus1) + ' — 50% abattement');
+      if (rent1 > 0) lines.push('<strong>P1 verhuur:</strong> ' + fmt(rent1) + ' — 30% abattement');
+      if (isCouple && bus2 > 0) lines.push('<strong>P2 diensten:</strong> ' + fmt(bus2) + ' — 50% abattement');
+      if (isCouple && rent2 > 0) lines.push('<strong>P2 verhuur:</strong> ' + fmt(rent2) + ' — 30% abattement');
       el.innerHTML = lines.join('<br>');
     }
 
