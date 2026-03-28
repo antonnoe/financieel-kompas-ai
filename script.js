@@ -609,96 +609,134 @@ document.addEventListener('DOMContentLoaded', () => {
             const hasWealth = wfin + wprop > 0;
             const hasWork = (vals.p1?.salary||0) + (vals.p2?.salary||0) + (vals.p1?.business||0) + (vals.p2?.business||0) > 0;
             const hasPensionPublic = (vals.p1?.pensionPublic||0) + (vals.p2?.pensionPublic||0) > 0;
+            const hasLijfrente = (fr.breakdown.lijfrenteBruto||0) > 0;
             const cakBedrag = fr.breakdown.aftrekCak || 0;
+            // Werkelijk beschikbaar = netto - vermogensbelasting (zelfde basis)
+            const compBeschikbaar = compN - compW;
+            const frBeschikbaar = frN - frW;
 
             let html = '';
 
-            // --- Hoofdconclusie ---
-            html += `<h4>Wat betekent dit voor u?</h4>`;
+            // ══════ HOOFDCONCLUSIE ══════
+            html += `<h4>Uw financiële vergelijking</h4>`;
+            html += `<table>
+                <tr><th></th><th>${compLand}</th><th>Frankrijk</th></tr>
+                <tr><td class="tbl-label">Bruto inkomen</td><td>${formatCurrency(compare.bruto)}</td><td>${formatCurrency(fr.bruto)}</td></tr>
+                <tr><td class="tbl-label">Sociale lasten</td><td>${formatCurrency(compare.breakdown.socialeLasten||compare.tax - compN)}</td><td>${formatCurrency(fr.breakdown.socialeLasten||0)}</td></tr>
+                <tr><td class="tbl-label">Inkomstenbelasting</td><td>${formatCurrency(compare.tax - (compare.breakdown.socialeLasten||0))}</td><td>${formatCurrency((fr.breakdown.tax||0))}</td></tr>
+                <tr><td class="tbl-label">Netto inkomen</td><td><strong>${formatCurrency(compN)}</strong></td><td><strong>${formatCurrency(frN)}</strong></td></tr>
+                <tr><td class="tbl-label">Vermogensbelasting</td><td>${formatCurrency(compW)}</td><td>${formatCurrency(frW)}</td></tr>
+                <tr style="background:rgba(128,0,0,.08);"><td class="tbl-label">Werkelijk beschikbaar</td><td><strong>${formatCurrency(compBeschikbaar)}</strong></td><td><strong>${formatCurrency(frBeschikbaar)}</strong></td></tr>
+            </table>`;
+
             if (isPositive) {
-                html += `<div class="report-highlight"><strong>U houdt in Frankrijk jaarlijks netto ${formatCurrency(delta)} meer over</strong> dan in ${compLand}${isCouple ? ' (als stel)' : ''}. Dit verschil is het resultaat van de hieronder beschreven factoren.</div>`;
+                html += `<div class="report-highlight"><strong>Verschil: ${formatCurrency(delta)} per jaar in het voordeel van Frankrijk.</strong></div>`;
             } else {
-                html += `<div class="report-highlight"><strong>U houdt in ${compLand} jaarlijks netto ${formatCurrency(Math.abs(delta))} meer over</strong> dan in Frankrijk${isCouple ? ' (als stel)' : ''}. Dit verschil is het resultaat van de hieronder beschreven factoren.</div>`;
+                html += `<div class="report-highlight"><strong>Verschil: ${formatCurrency(Math.abs(delta))} per jaar in het voordeel van ${compLand}.</strong></div>`;
+            }
+            html += `<p style="font-size:.8em;color:var(--text-light);">Deze uitkomst is gevoelig voor drie classificaties: (a) kwalificatie overheidspensioen, (b) verdragsgerechtigdheid, en (c) samenstelling vermogen.</p>`;
+
+            // ══════ TARIEVEN SOCIALE LASTEN ══════
+            if (cak) {
+                html += `<h4>Toegepaste tarieven sociale lasten</h4>`;
+                html += `<table>
+                    <tr><th>Type inkomen</th><th>Verdragsgerechtigd (CAK ✓)</th><th>Frans verzekerd</th></tr>
+                    <tr><td class="tbl-label">Pensioen / AOW</td><td>0%</td><td>9,1% (CSG 8,3 + CRDS 0,5 + CASA 0,3)</td></tr>
+                    <tr><td class="tbl-label">Lijfrente</td><td>0% *</td><td>9,1%</td></tr>
+                    <tr><td class="tbl-label">Vermogensinkomen</td><td>7,5% (prél. solidarité)</td><td>18,6% (roerend) / 17,2% (onroerend)</td></tr>
+                    <tr><td class="tbl-label">Loon in FR</td><td colspan="2">~22% (ongeacht status, via URSSAF)</td></tr>
+                    <tr><td class="tbl-label">Winst in FR</td><td colspan="2">~21,2% (ongeacht status, via URSSAF)</td></tr>
+                </table>`;
+                html += `<p style="font-size:.78em;">Wettelijke grondslag verdragsgerechtigden: art. L136-1 CSS (pensioenen), art. L136-6 I ter CSS (vermogen), art. 235 ter CGI (prél. solidarité 7,5%), LFSS 2019 art. 26, EU-Verordening 883/2004.<br>
+                * De 0% op lijfrente geldt voor een rente viagère à titre onéreux van een verdragsgerechtigde. Bij een rente viagère à titre gratuit of bij aansluiting bij het Franse stelsel gelden andere tarieven.</p>`;
             }
 
-            // --- Gevoeligheid (audit punt 10) ---
-            html += `<p style="font-size:.8em;color:var(--text-light);">Let op: uw uitkomst is gevoelig voor drie classificaties: (a) kwalificatie overheidspensioen, (b) verdragsgerechtigdheid, en (c) samenstelling vermogen. Een andere invulling kan het resultaat merkbaar verschuiven.</p>`;
-
-            // --- Belangrijkste factoren ---
+            // ══════ TOELICHTING PER ONDERDEEL ══════
             html += `<h4>Toelichting per onderdeel</h4>`;
 
-            // Sociale lasten
+            // CAK
             if (cak) {
-                html += `<p><strong>Sociale premies (verdragsgerechtigd):</strong> Op basis van uw keuze "verdragsgerechtigd (CAK)" gaat deze berekening uit van 0% Franse sociale premies op uw pensioen, AOW en lijfrente. Dit geldt als u niet ten laste komt van het verplichte Franse stelsel (art. L136-1 CSS, EU-Verordening 883/2004). Over vermogensinkomsten betaalt u 7,5% prélèvement de solidarité (art. 235 ter CGI) — dit is een uitzonderingsregime, niet de standaardregel.</p>`;
-                html += `<p>De berekende CAK-verdragsbijdrage bedraagt ${formatCurrency(cakBedrag)} per jaar (nominale Zvw €157/mnd + inkomensafhankelijke Zvw 4,85% + Wlz 9,65%, vermenigvuldigd met woonlandfactor Frankrijk 0,8304). Dit is een benadering; de werkelijke bijdrage hangt af van uw precieze pensioensplitsing per partner en het verzekerdenaantal. Bron: hetcak.nl.</p>`;
-            } else {
-                html += `<p><strong>Sociale premies:</strong> In Frankrijk betaalt u over uw pensioen 9,1% aan sociale premies (CSG 8,3% + CRDS 0,5% + CASA 0,3%). Over vermogensinkomsten (dividenden, rente) geldt sinds 2026 een tarief van 18,6% (CSG 10,6% + CRDS 0,5% + prélèvement de solidarité 7,5%).</p>`;
+                html += `<p><strong>Verdragsbijdrage (CAK):</strong> De berekende CAK-bijdrage bedraagt ${formatCurrency(cakBedrag)} per jaar (nominale Zvw €157/mnd + inkomensafhankelijke Zvw 4,85% + Wlz 9,65% over pensioeninkomen, × woonlandfactor Frankrijk 0,8304). Dit is een benadering; het werkelijke bedrag hangt af van de pensioensplitsing per partner. De CAK-bijdrage is in Frankrijk aftrekbaar van het belastbaar inkomen (art. 83 CGI; BOFiP; aangifte 2047 onder categoriegebonden beroepslasten). Bron: hetcak.nl, impots.gouv.fr.</p>`;
             }
 
             // Waarschuwing CAK + werk (audit punt 5)
             if (cak && hasWork) {
-                html += `<div class="report-highlight" style="border-left-color:#cc6600;"><strong>Aandachtspunt:</strong> U heeft zowel CAK (verdragsgerechtigd) als Frans arbeidsinkomen of winst ingevuld. Bij werk in Frankrijk kan uw sociale zekerheid verschuiven naar het Franse stelsel (Vo. 883/2004 art. 13). In dat geval gelden andere tarieven voor sociale premies. Raadpleeg een expert voor uw specifieke situatie.</div>`;
+                html += `<div class="report-highlight" style="border-left-color:#cc6600;"><strong>Kernrisico:</strong> U heeft zowel verdragsgerechtigd (CAK) als Frans arbeidsinkomen of winst ingevuld. Verordening 883/2004 bepaalt dat bij gelijktijdige werkzaamheden in meerdere lidstaten eerst de toepasselijke socialezekerheidswetgeving moet worden vastgesteld. Bij gecombineerd dienstverband en/of zelfstandige activiteit wijst art. 13 in beginsel naar het werkland. Uw Franse sociale premies op pensioen kunnen daardoor verschuiven van 0% naar 9,1%. Dit is geen klein voorbehoud maar een bepalend punt. Laat dit beoordelen door een expert vóór u beslissingen neemt.</div>`;
+            }
+
+            // Lijfrente (audit punt 4 — nuance)
+            if (hasLijfrente) {
+                html += `<p><strong>Lijfrente:</strong> Van uw bruto lijfrente van ${formatCurrency(fr.breakdown.lijfrenteBruto)} is ${formatCurrency(fr.breakdown.lijfrenteBelastbaar)} belastbaar in Frankrijk (leeftijdsafhankelijke fractie conform art. 158-6 CGI). `;
+                if (cak) {
+                    html += `Als verdragsgerechtigde is 0% Franse sociale premie berekend. Dit geldt specifiek voor een rente viagère à titre onéreux. Bij een andere kwalificatie van de lijfrente of bij wijziging van uw socialezekerheidsstatus kunnen sociale premies verschuldigd zijn.`;
+                } else {
+                    html += `Over het belastbare deel is 9,1% sociale premie berekend.`;
+                }
+                html += ` Bron: Service-public.fr, art. 158-6 CGI.</p>`;
             }
 
             // Overheidspensioen (audit punt 3)
             if (hasPensionPublic) {
-                html += `<p><strong>Overheidspensioen:</strong> Deze berekening gaat ervan uit dat het ingevoerde bedrag daadwerkelijk kwalificeert als overheidspensioen onder artikel 19 van het NL-FR belastingverdrag (belast in Nederland, 17,85%). Dit geldt alleen voor pensioenen wegens diensten aan de Staat in openbare functies. Pensioen uit geprivatiseerde instellingen kan onder artikel 18 vallen (belast in Frankrijk). De naam van het fonds is niet beslissend; de aard van de vroegere dienstbetrekking is bepalend.</p>`;
+                html += `<p><strong>Overheidspensioen:</strong> Het ingevoerde bedrag wordt belast in Nederland (17,85%, art. 19 NL-FR verdrag). Dit geldt uitsluitend voor pensioenen wegens diensten aan de Staat in openbare functies. Bij geprivatiseerde werkgevers (zorg, onderwijs na verzelfstandiging) kan art. 18 van toepassing zijn, waardoor het pensioen in Frankrijk wordt belast. De naam van het fonds is niet beslissend.</p>`;
             }
 
-            // Vermogensbelasting (audit punt 1)
+            // Vermogensbelasting
             if (hasWealth && activeComparison === 'NL') {
                 const box3 = compare.wealthTax || 0;
                 const gewRend = compare.breakdown.gewogenRendement || 0;
-                html += `<p><strong>Vermogen (NL Box 3):</strong> Uw vermogen bestaat uit ${formatCurrency(wSav)} spaargeld (forfaitair rendement 1,28%) en ${formatCurrency(wInv)} beleggingen (6,00%). Het gewogen rendement is ${(gewRend*100).toFixed(2)}%, wat leidt tot een Box 3-aanslag van ${formatCurrency(box3)}. In Frankrijk wordt financieel vermogen niet apart belast.</p>`;
+                html += `<p><strong>Vermogen (NL Box 3):</strong> ${formatCurrency(wSav)} spaargeld (rendement 1,28%) + ${formatCurrency(wInv)} beleggingen (6,00%) = gewogen rendement ${(gewRend*100).toFixed(2)}%, aanslag ${formatCurrency(box3)}. In Frankrijk wordt financieel vermogen niet apart belast.</p>`;
             }
 
             // IFI (audit punt 8)
             if (wprop > 0) {
-                if (wprop <= 1300000) {
-                    html += `<p><strong>Vastgoed (IFI):</strong> Uw opgegeven vastgoed (${formatCurrency(wprop)}) ligt onder de IFI-drempel van 1,3 miljoen euro. Let op: bij vestiging in Frankrijk wordt de IFI berekend over uw wereldwijde vastgoedportefeuille (niet alleen Frans vastgoed). Controleer of het opgegeven bedrag uw totale vastgoed dekt, exclusief uw hoofdverblijf.</p>`;
-                } else {
-                    html += `<p><strong>Vastgoed (IFI):</strong> Uw vastgoed (${formatCurrency(wprop)}) overschrijdt de IFI-drempel. U betaalt ${formatCurrency(frW)} aan IFI. Bij vestiging in Frankrijk betreft dit uw wereldwijde vastgoedportefeuille excl. hoofdverblijf.</p>`;
-                }
+                html += `<p><strong>Vastgoed (IFI):</strong> ${formatCurrency(wprop)} opgegeven. `;
+                html += wprop <= 1300000
+                    ? `Onder de IFI-drempel van €1,3M — geen vermogensbelasting. `
+                    : `Boven de IFI-drempel — aanslag ${formatCurrency(frW)}. `;
+                html += `Let op: bij vestiging in Frankrijk wordt IFI berekend over uw wereldwijde vastgoedportefeuille (excl. hoofdverblijf).</p>`;
             }
 
-            // Hulp aan huis (audit punt 7)
+            // Hulp aan huis
             const homeHelp = vals.homeHelp || 0;
             if (homeHelp > 0) {
                 const krediet = homeHelp * (PARAMS.FR.HULP_AAN_HUIS_KREDIET_PERCENTAGE || 0);
-                const plafond = PARAMS.FR.HULP_AAN_HUIS_PLAFOND || 12000;
-                html += `<p><strong>Hulp aan huis:</strong> Uw uitgaven van ${formatCurrency(homeHelp)} leveren een belastingkrediet van ${formatCurrency(krediet)} op (50%). Voorwaarden: fiscale woonplaats in Frankrijk, kwalificerende diensten, plafond van ${formatCurrency(plafond)} per jaar (met mogelijke verhogingen), verminderd met ontvangen subsidies. Bron: Service-public.fr.</p>`;
+                html += `<p><strong>Hulp aan huis:</strong> ${formatCurrency(homeHelp)} uitgaven → ${formatCurrency(krediet)} belastingkrediet (50%). Voorwaarden: fiscale woonplaats FR, kwalificerende diensten, plafond €${(PARAMS.FR.HULP_AAN_HUIS_PLAFOND||12000).toLocaleString('nl-NL')}/jaar, verminderd met subsidies.</p>`;
             }
 
-            // --- Bronvermelding ---
+            // ══════ BRONVERMELDING ══════
             html += `<h4>Berekeningsgrondslagen</h4>`;
             html += `<p><strong>Frankrijk:</strong> Barème progressif 2026 (0-45%, 5 schijven), quotient familial`;
             if (cak) {
-                html += `, vrijstelling CSG/CRDS verdragsgerechtigden (art. L136-1, L136-6 I ter CSS; LFSS 2019 art. 26; Vo. 883/2004), prélèvement de solidarité 7,5% (art. 235 ter CGI)`;
+                html += `, vrijstelling CSG/CRDS (art. L136-1, L136-6 I ter CSS; LFSS 2019 art. 26; Vo. 883/2004), prél. solidarité 7,5% (art. 235 ter CGI)`;
             } else {
-                html += `, CSG/CRDS/CASA (9,1% pensioen; 18,6% roerend vermogensinkomen 2026)`;
+                html += `, CSG/CRDS/CASA (9,1% pensioen; 18,6% roerend inkomen 2026, LFSS 2026)`;
             }
             html += `.</p>`;
             html += `<p><strong>${compLand}:</strong> `;
             if (activeComparison === 'NL') {
-                html += `IB 2026 (35,75/37,56/49,5%), Box 3 met gesplitst rendement (spaargeld 1,28%, beleggingen 6,00%, tarief 36%, vrijstelling ${formatCurrency(isCouple ? 118714 : 59357)} p.p.).`;
+                html += `IB 2026 (35,75/37,56/49,5%), Box 3 gesplitst rendement (spaargeld 1,28%, beleggingen 6,00%, tarief 36%, vrijstelling ${formatCurrency(isCouple ? 118714 : 59357)} p.p.). Bron: Belastingdienst.nl, Deloitte Belastingplan 2026.`;
             } else {
-                html += `Personenbelasting 2025 (25-50%), RSZ 13,07%, gemeentebelasting ~7%.`;
+                html += `Personenbelasting 2025 (25-50%), RSZ 13,07%, gemeentebelasting ~7%. Bron: fin.belgium.be.`;
             }
             html += `</p>`;
 
-            // --- Disclaimer (audit punt 9, 10) ---
+            // ══════ DISCLAIMER ══════
             html += `<div class="report-disclaimer">`;
             html += `<strong>Belangrijke voorbehouden:</strong><br>`;
             html += `• Dit is een scenariosimulatie, geen persoonlijk financieel of fiscaal advies.<br>`;
-            html += `• NL-tarieven zijn 2026; het Franse barème 2026 heeft betrekking op inkomsten 2025. Beide stelsels werken met deels verschillende referentiejaren.<br>`;
-            html += `• Niet meegenomen: taxe foncière, taxe d'habitation, lokale heffingen, toeslagen, aftrekposten buiten de genoemde, en eventuele wijzigingen in wetgeving na januari 2026.<br>`;
+            html += `• NL-tarieven zijn 2026; het Franse barème 2026 betreft inkomsten 2025. Beide stelsels werken met deels verschillende referentiejaren.<br>`;
+            html += `• Niet meegenomen: taxe foncière, taxe d'habitation, lokale heffingen, toeslagen, en eventuele wijzigingen in wetgeving na januari 2026.<br>`;
             if (cak) {
-                html += `• De berekening gaat uit van verdragsgerechtigdheid (CAK). Dit geldt alleen als u niet ten laste komt van een verplicht Frans sociaal zekerheidsstelsel. Bij werk in Frankrijk of andere gronden voor CPAM-aansluiting gelden andere tarieven.<br>`;
+                html += `• De berekening gaat uit van verdragsgerechtigdheid (CAK). Dit geldt alleen als u niet ten laste komt van een verplicht Frans stelsel. Bij werk in Frankrijk kan uw status wijzigen (Vo. 883/2004 art. 13).<br>`;
+                html += `• De aftrekbaarheid van de CAK-bijdrage in Frankrijk is gebaseerd op art. 83 CGI en de 2047-notice (categoriegebonden lasten). De precieze aftrekruimte kan per situatie verschillen.<br>`;
             }
             if (hasPensionPublic) {
-                html += `• De kwalificatie overheidspensioen (art. 19 NL-FR verdrag) is een juridisch oordeel. Raadpleeg een belastingadviseur als u twijfelt of uw pensioen hieronder valt.<br>`;
+                html += `• De kwalificatie overheidspensioen (art. 19 NL-FR verdrag) is een juridisch oordeel. Laat dit beoordelen als u twijfelt.<br>`;
             }
-            html += `• Raadpleeg altijd een gekwalificeerd fiscaal adviseur of expert-comptable voor uw persoonlijke situatie.`;
+            if (hasLijfrente && cak) {
+                html += `• De vrijstelling sociale lasten op lijfrente geldt voor rente viagère à titre onéreux bij vastgestelde verdragsgerechtigdheid. Bij een andere kwalificatie kunnen premies verschuldigd zijn.<br>`;
+            }
+            html += `• Raadpleeg altijd een gekwalificeerd fiscaal adviseur of expert-comptable vóór u beslissingen neemt.`;
             html += `</div>`;
 
             return html;
@@ -843,7 +881,7 @@ Frankrijk 🇫🇷 ${simDatumStr}
 6. Netto Inkomen: ${formatCurrency(fr.netto)}
 
 7. Vermogen (IFI):
-   - Vastgoed: ${formatCurrency(wp)} (> €1.3M belast, excl. hoofd)
+   - Vastgoed: ${formatCurrency(wp)} (${wp>1300000?'IFI van toepassing':'onder IFI-drempel €1,3M'}, excl. hoofd, wereldwijd bij FR-residentie)
    ↳ Aanslag: ${formatCurrency(fr.wealthTax)}
 * Ovh. pensioen wordt in herkomstland belast. Part. pensioen/lijfrente in woonland (FR).
         `;

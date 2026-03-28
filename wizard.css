@@ -188,6 +188,11 @@ input[type="range"].slider::-moz-range-thumb{width:20px;height:20px;background:v
 #result-report p{margin:4px 0}
 #result-report .report-highlight{background:rgba(128,0,0,.06);border-left:3px solid var(--primary);padding:6px 12px;margin:8px 0;border-radius:0 var(--radius) var(--radius) 0}
 #result-report .report-disclaimer{font-size:.78em;color:var(--text-light);border-top:1px solid var(--border);padding-top:8px;margin-top:12px}
+#result-report table{width:100%;border-collapse:collapse;margin:8px 0;font-size:.82em}
+#result-report th{background:var(--primary);color:#fff;padding:6px 10px;text-align:left;font-weight:600}
+#result-report td{padding:5px 10px;border-bottom:1px solid var(--border)}
+#result-report tr:nth-child(even){background:rgba(128,0,0,.03)}
+#result-report .tbl-label{font-weight:600;color:var(--primary)}
 #calculation-breakdown{padding:10px 14px;font-family:'Courier New',monospace;font-size:11px;white-space:pre-wrap;word-wrap:break-word;background:#f5f4f2;border-radius:0 0 var(--radius) var(--radius);max-height:180px;overflow-y:auto}
 .result-footer{text-align:center;font-size:.72em;color:var(--text-light);padding-top:6px;line-height:1.5}
 .result-footer a{color:var(--primary);text-decoration:none}
