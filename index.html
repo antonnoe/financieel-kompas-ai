@@ -376,7 +376,7 @@
                 </section>
                 <div class="result-actions">
                     <button id="save-dossier-btn" class="btn-primary">📁 Opslaan in Dossier</button>
-                    <button id="copy-btn" class="btn-secondary">📋 Kopieer</button>
+                    <button id="pdf-btn" class="btn-secondary">📄 Opslaan als PDF</button>
                     <button id="reset-btn" class="btn-secondary">↺ Opnieuw</button>
                 </div>
                 <details class="report-details" open><summary>Toelichting bij uw resultaat</summary><div id="result-report"><p>Vul eerst uw gegevens in.</p></div></details>
@@ -389,6 +389,7 @@
     </div><!-- /input-panel/slide-viewport -->
 </div><!-- /wizard -->
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.2/html2pdf.bundle.min.js" defer></script>
 <script src="wizard.js"></script>
 <script src="script.js" defer></script>
 <script src="/embed/cc-embed.js" data-expert="fiscaal" data-tool-id="financieel_kompas" data-tool-name="Financieel Kompas" data-expert-emoji="💡" data-expert-label="AI-Toelichter" data-color="#800000" data-position="top-right" data-api-url="/api/chat"></script>
