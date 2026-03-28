@@ -148,7 +148,7 @@ input[type="range"].slider::-moz-range-thumb{width:20px;height:20px;background:v
 
 /* ===== TOOLTIPS ===== */
 .tooltip{display:inline-block;position:relative;cursor:help;background:#e4e1de;color:var(--text-light);border-radius:50%;width:15px;height:15px;text-align:center;font-size:10px;line-height:15px;margin-left:2px;vertical-align:middle}
-.tooltip::after{content:attr(data-text);position:absolute;bottom:120%;left:50%;transform:translateX(-50%);background:#333;color:#fff;padding:8px 10px;border-radius:6px;font-size:11px;line-height:1.35;width:240px;text-align:left;opacity:0;visibility:hidden;transition:opacity .2s;z-index:200;pointer-events:none}
+.tooltip::after{content:attr(data-text);position:absolute;top:120%;left:50%;transform:translateX(-50%);background:#333;color:#fff;padding:8px 10px;border-radius:6px;font-size:11px;line-height:1.35;width:260px;max-width:70vw;text-align:left;opacity:0;visibility:hidden;transition:opacity .2s;z-index:200;pointer-events:none}
 .tooltip:hover::after{opacity:1;visibility:visible}
 
 /* ===== OPTIONAL TOGGLE ===== */
