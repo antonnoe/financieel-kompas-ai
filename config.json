@@ -30,11 +30,13 @@
             "VRIJSTELLING_SINGLE": 59357,
             "VRIJSTELLING_COUPLE": 118714,
             "TARIEF": 0.36,
-            "FORFAITAIR_RENDEMENT": 0.06
+            "RENDEMENT_SPAARGELD": 0.0128,
+            "RENDEMENT_BELEGGINGEN": 0.06,
+            "RENDEMENT_SCHULDEN": 0.027
         }
     },
     "FR": {
-        "SOCIALE_LASTEN": { "PENSIOEN": 0.091, "SALARIS": 0.22, "WINST_DIENSTEN": 0.212, "WINST_VERHUUR": 0.212, "PFU": 0.172, "PRELEVEMENT_SOLIDARITE": 0.075 },
+        "SOCIALE_LASTEN": { "PENSIOEN": 0.091, "SALARIS": 0.22, "WINST_DIENSTEN": 0.212, "WINST_VERHUUR": 0.212, "PFU_ONROEREND": 0.172, "PFU_ROEREND": 0.186, "PRELEVEMENT_SOLIDARITE": 0.075 },
         "INKOMSTENBELASTING": {
             "SCHIJVEN": [
                 { "grens": 11600, "tarief": 0.0 },
@@ -61,7 +63,14 @@
             ]
         },
         "HULP_AAN_HUIS_KREDIET_PERCENTAGE": 0.5,
-        "CAK_BIJDRAGE_GEMIDDELD": 4500
+        "HULP_AAN_HUIS_PLAFOND": 12000,
+        "CAK": {
+            "WOONLANDFACTOR_FR": 0.8304,
+            "NOMINALE_ZVW_JAAR": 1884,
+            "ZVW_PERCENTAGE": 0.0532,
+            "WLZ_PERCENTAGE": 0.0965,
+            "BIJDRAGE_GRENS": 38883
+        }
     },
     "BE": {
         "SOCIALE_LASTEN": {
