@@ -151,10 +151,10 @@ document.addEventListener('DOMContentLoaded', () => {
         ['group-pension-public-1','group-pension-public-2'].forEach(id => {
             swaps[id] = {
                 label: countryCode === 'NL'
-                    ? 'Overheidspensioen (NL, bv. ABP)'
+                    ? 'Overheidspensioen (NL)'
                     : 'Aanvullend pensioen (BE, 2e pijler)',
                 tip: countryCode === 'NL'
-                    ? 'NL overheidspensioen (bv. ABP). Belast in bronland NL (art. 19 NL-FR verdrag), tarief 17,85% (AOW+, 2026). Bron: Belastingdienst.nl, NL-FR verdrag.'
+                    ? 'Pensioen uit overheidsdienst, belast in bronland NL (art. 19 NL-FR verdrag, 17,85%). Let op: niet de naam van het fonds is beslissend, maar de aard van de vroegere dienstbetrekking. ABP-pensioen opgebouwd als ambtenaar valt hieronder; ABP-pensioen uit geprivatiseerde sector (bv. zorg, onderwijs na verzelfstandiging) kan als particulier pensioen gelden en is dan belast in Frankrijk (art. 18). PFZW en andere private fondsen horen bij Particulier Pensioen. Bron: NL-FR belastingverdrag art. 18 en 19.'
                     : 'Aanvullend pensioen werkgever/sector (groepsverzekering, IBP). Bron: Socialsecurity.belgium.be.'
             };
         });
