@@ -100,10 +100,10 @@ document.addEventListener('DOMContentLoaded', () => {
             simYear: getEl('sim-year'), simMonth: getEl('sim-month'),
             stopSalaryAfterAOW: getEl('stop-salary-after-aow'),
             children: getEl('slider-children'), cak: getEl('cak-contribution'), homeHelp: getEl('home-help'), wealthSavings: getEl('slider-wealth-savings'), wealthInvestments: getEl('slider-wealth-investments'), wealthProperty: getEl('slider-wealth-property'),
-            p1: { birthYear: getEl('birth-year-1'), birthMonth: getEl('birth-month-1'), aowYears: getEl('aow-years-1'), beWorkYears: getEl('be-work-years-1'), frWorkYears: getEl('fr-work-years-1'), bePension: getEl('slider-be-pension-1'), pensionPublic: getEl('slider-pension-public-1'), pensionPrivate: getEl('slider-pension-private-1'), lijfrente: getEl('slider-lijfrente-1'), lijfrenteDuration: getEl('lijfrente-duration-1'), lijfrenteStartAge: getEl('lijfrente-start-1'), incomeWealth: getEl('slider-income-wealth-1'), salary: getEl('slider-salary-1'), business: getEl('slider-business-1'), businessType: getEl('business-type-1') },
-            p2: { birthYear: getEl('birth-year-2'), birthMonth: getEl('birth-month-2'), aowYears: getEl('aow-years-2'), beWorkYears: getEl('be-work-years-2'), frWorkYears: getEl('fr-work-years-2'), bePension: getEl('slider-be-pension-2'), pensionPublic: getEl('slider-pension-public-2'), pensionPrivate: getEl('slider-pension-private-2'), lijfrente: getEl('slider-lijfrente-2'), lijfrenteDuration: getEl('lijfrente-duration-2'), lijfrenteStartAge: getEl('lijfrente-start-2'), incomeWealth: getEl('slider-income-wealth-2'), salary: getEl('slider-salary-2'), business: getEl('slider-business-2'), businessType: getEl('business-type-2') },};
+            p1: { birthYear: getEl('birth-year-1'), birthMonth: getEl('birth-month-1'), aowYears: getEl('aow-years-1'), beWorkYears: getEl('be-work-years-1'), frWorkYears: getEl('fr-work-years-1'), bePension: getEl('slider-be-pension-1'), pensionPublic: getEl('slider-pension-public-1'), pensionPrivate: getEl('slider-pension-private-1'), lijfrente: getEl('slider-lijfrente-1'), lijfrenteDuration: getEl('lijfrente-duration-1'), lijfrenteStartAge: getEl('lijfrente-start-1'), incomeWealth: getEl('slider-income-wealth-1'), salary: getEl('slider-salary-1'), business: getEl('slider-business-1'), rental: getEl('slider-rental-1') },
+            p2: { birthYear: getEl('birth-year-2'), birthMonth: getEl('birth-month-2'), aowYears: getEl('aow-years-2'), beWorkYears: getEl('be-work-years-2'), frWorkYears: getEl('fr-work-years-2'), bePension: getEl('slider-be-pension-2'), pensionPublic: getEl('slider-pension-public-2'), pensionPrivate: getEl('slider-pension-private-2'), lijfrente: getEl('slider-lijfrente-2'), lijfrenteDuration: getEl('lijfrente-duration-2'), lijfrenteStartAge: getEl('lijfrente-start-2'), incomeWealth: getEl('slider-income-wealth-2'), salary: getEl('slider-salary-2'), business: getEl('slider-business-2'), rental: getEl('slider-rental-2') },};
         outputs = { compareBruto: getEl('compare-bruto'), compareTax: getEl('compare-tax'), compareNetto: getEl('compare-netto'), wealthTaxCompare: getEl('wealth-tax-compare'), frBruto: getEl('fr-bruto'), frTax: getEl('fr-tax'), frNetto: getEl('fr-netto'), wealthTaxFr: getEl('wealth-tax-fr'), wealthTaxFrExpl: getEl('wealth-tax-fr-expl'), conclusionBar: getEl('conclusion-bar'), conclusionValue: getEl('conclusion-value'), conclusionExpl: getEl('conclusion-expl'), estateTotalDisplay: getEl('estate-total-display'), breakdown: getEl('calculation-breakdown'), report: getEl('result-report'),};
-        valueOutputs = { p1: { aowYears: getEl('value-aow-years-1'), beWorkYears: getEl('value-be-work-years-1'), frWorkYears: getEl('value-fr-work-years-1'), bePension: getEl('value-be-pension-1'), pensionPublic: getEl('value-pension-public-1'), pensionPrivate: getEl('value-pension-private-1'), lijfrente: getEl('value-lijfrente-1'), incomeWealth: getEl('value-income-wealth-1'), salary: getEl('value-salary-1'), business: getEl('value-business-1') }, p2: { aowYears: getEl('value-aow-years-2'), beWorkYears: getEl('value-be-work-years-2'), frWorkYears: getEl('value-fr-work-years-2'), bePension: getEl('value-be-pension-2'), pensionPublic: getEl('value-pension-public-2'), pensionPrivate: getEl('value-pension-private-2'), lijfrente: getEl('value-lijfrente-2'), incomeWealth: getEl('value-income-wealth-2'), salary: getEl('value-salary-2'), business: getEl('value-business-2') }, children: getEl('value-children'), wealthSavings: getEl('value-wealth-savings'), wealthInvestments: getEl('value-wealth-investments'), wealthProperty: getEl('value-wealth-property'),};
+        valueOutputs = { p1: { aowYears: getEl('value-aow-years-1'), beWorkYears: getEl('value-be-work-years-1'), frWorkYears: getEl('value-fr-work-years-1'), bePension: getEl('value-be-pension-1'), pensionPublic: getEl('value-pension-public-1'), pensionPrivate: getEl('value-pension-private-1'), lijfrente: getEl('value-lijfrente-1'), incomeWealth: getEl('value-income-wealth-1'), salary: getEl('value-salary-1'), business: getEl('value-business-1'), rental: getEl('value-rental-1') }, p2: { aowYears: getEl('value-aow-years-2'), beWorkYears: getEl('value-be-work-years-2'), frWorkYears: getEl('value-fr-work-years-2'), bePension: getEl('value-be-pension-2'), pensionPublic: getEl('value-pension-public-2'), pensionPrivate: getEl('value-pension-private-2'), lijfrente: getEl('value-lijfrente-2'), incomeWealth: getEl('value-income-wealth-2'), salary: getEl('value-salary-2'), business: getEl('value-business-2'), rental: getEl('value-rental-2') }, children: getEl('value-children'), wealthSavings: getEl('value-wealth-savings'), wealthInvestments: getEl('value-wealth-investments'), wealthProperty: getEl('value-wealth-property'),};
         pensionLabels = document.querySelectorAll('.country-origin');
 
         // 3. Check Selectors
@@ -154,7 +154,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     ? 'Overheidspensioen (NL)'
                     : 'Aanvullend pensioen (BE, 2e pijler)',
                 tip: countryCode === 'NL'
-                    ? 'Pensioen uit overheidsdienst, belast in bronland NL (art. 19 NL-FR verdrag, 17,85%). Let op: niet de naam van het fonds is beslissend, maar de aard van de vroegere dienstbetrekking. ABP-pensioen opgebouwd als ambtenaar valt hieronder; ABP-pensioen uit geprivatiseerde sector (bv. zorg, onderwijs na verzelfstandiging) kan als particulier pensioen gelden en is dan belast in Frankrijk (art. 18). PFZW en andere private fondsen horen bij Particulier Pensioen. Bron: NL-FR belastingverdrag art. 18 en 19.'
+                    ? 'Pensioen uit overheidsdienst. Het NL-FR verdrag wijst het heffingsrecht toe aan Nederland (art. 19); het tarief van 17,85% is het NL binnenlands tarief (schijf 1 boven AOW-leeftijd, 2026). Let op: niet de naam van het fonds is beslissend, maar de aard van de vroegere dienstbetrekking. ABP-pensioen opgebouwd als ambtenaar valt hieronder; ABP-pensioen uit geprivatiseerde sector (bv. zorg, onderwijs na verzelfstandiging) kan als particulier pensioen gelden en is dan belast in Frankrijk (art. 18). Bron: NL-FR belastingverdrag art. 18 en 19, Belastingdienst.nl.'
                     : 'Aanvullend pensioen werkgever/sector (groepsverzekering, IBP). Bron: Socialsecurity.belgium.be.'
             };
         });
@@ -170,8 +170,15 @@ document.addEventListener('DOMContentLoaded', () => {
         ['group-business-1','group-business-2'].forEach(id => {
             swaps[id] = {
                 tip: countryCode === 'NL'
-                    ? 'Winst telt altijd mee, ook na AOW. NL: MKB-vrijstelling 12,7%, Zvw 5,26%. FR: micro-abattement 50% (diensten) of 30% (verhuur), soc. lasten 21,2%. Bron: Belastingdienst.nl, Service-public.fr.'
-                    : 'Winst telt altijd mee, ook na pensioenleeftijd. BE: zelfstandigenbijdrage 20,5%/14,16%. FR: micro-abattement 50% (diensten) of 30% (verhuur), soc. lasten 21,2%. Bron: fin.belgium.be, Service-public.fr.'
+                    ? 'Advies, consultancy, freelance e.d. NL: MKB-vrijstelling 12,7%, Zvw 5,26%. FR: micro-BIC abattement 50% (diensten), soc. lasten ~21,2%. Bron: Belastingdienst.nl, Service-public.fr.'
+                    : 'Advies, consultancy, freelance. BE: zelfstandigenbijdrage 20,5%/14,16%. FR: micro-BIC abattement 50%, soc. lasten ~21,2%. Bron: fin.belgium.be, Service-public.fr.'
+            };
+        });
+        ['group-rental-1','group-rental-2'].forEach(id => {
+            swaps[id] = {
+                tip: countryCode === 'NL'
+                    ? 'Gîte, B&B, meublé de tourisme. NL: MKB-vrijstelling 12,7%. FR: micro-BIC abattement 30% (verhuur), soc. lasten ~21,2%. Bron: Belastingdienst.nl, Service-public.fr.'
+                    : 'Gîte, B&B, meublé de tourisme. BE: zelfstandigenbijdrage. FR: micro-BIC abattement 30%, soc. lasten ~21,2%. Bron: fin.belgium.be, Service-public.fr.'
             };
         });
         // Children
@@ -254,10 +261,10 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!inputs || !inputs[partnerId] || !inputs[partnerId].birthYear){ console.error(`P data missing ${partnerId}`); return null; }
         const p = inputs[partnerId]; const getN = (el) => el ? Number(el.value) : 0; const getS = (el, d) => el ? el.value : d;
         const lijfrenteStart = p.lijfrenteStartAge ? p.lijfrenteStartAge.value : 'aow';
-        return { birthYear:getN(p.birthYear), birthMonth:getN(p.birthMonth), aowYears:getN(p.aowYears), beWorkYears:getN(p.beWorkYears), frWorkYears:getN(p.frWorkYears), bePension:getN(p.bePension), pensionPublic:getN(p.pensionPublic), pensionPrivate:getN(p.pensionPrivate), lijfrente:getN(p.lijfrente), lijfrenteDuration:getN(p.lijfrenteDuration), lijfrenteStartAge: lijfrenteStart, incomeWealth:getN(p.incomeWealth), salary:getN(p.salary), business:getN(p.business), businessType:getS(p.businessType,'services') };
+        return { birthYear:getN(p.birthYear), birthMonth:getN(p.birthMonth), aowYears:getN(p.aowYears), beWorkYears:getN(p.beWorkYears), frWorkYears:getN(p.frWorkYears), bePension:getN(p.bePension), pensionPublic:getN(p.pensionPublic), pensionPrivate:getN(p.pensionPrivate), lijfrente:getN(p.lijfrente), lijfrenteDuration:getN(p.lijfrenteDuration), lijfrenteStartAge: lijfrenteStart, incomeWealth:getN(p.incomeWealth), salary:getN(p.salary), business:getN(p.business), rental:getN(p.rental) };
     }
     function adjustWorkYears(changedId) { if(!inputs?.p1||!inputs?.p2)return; const pI=changedId.includes('-1')?inputs.p1:inputs.p2; if(!pI)return; let cS,fS; if(activeComparison==='NL'){cS=pI.aowYears;fS=pI.frWorkYears;}else{cS=pI.beWorkYears;fS=pI.frWorkYears;} if(!cS||!fS)return; let cV=Number(cS.value);let fV=Number(fS.value); if(cV+fV>MAX_WORK_YEARS){if(changedId===cS.id){fV=MAX_WORK_YEARS-cV;fS.value=fV;}else{cV=MAX_WORK_YEARS-fV;cS.value=cV;}} updateValueOutputsForYears(); }
-    function updateValueOutputsForYears() { if(!valueOutputs?.p1||!valueOutputs?.p2||!inputs?.p1||!inputs?.p2)return; const uV=(oE,iE,iC=true,iY=false)=>{if(oE&&iE){const v=iE.value||'0';oE.textContent=iY?v:(iC?formatCurrency(Number(v)):v);}else if(oE){oE.textContent=iY?'0':formatCurrency(0);}}; uV(valueOutputs.p1.aowYears,inputs.p1.aowYears,false,true); uV(valueOutputs.p1.beWorkYears,inputs.p1.beWorkYears,false,true); uV(valueOutputs.p1.frWorkYears,inputs.p1.frWorkYears,false,true); uV(valueOutputs.p1.bePension,inputs.p1.bePension); uV(valueOutputs.p1.pensionPublic,inputs.p1.pensionPublic); uV(valueOutputs.p1.pensionPrivate,inputs.p1.pensionPrivate); uV(valueOutputs.p1.lijfrente,inputs.p1.lijfrente); uV(valueOutputs.p1.incomeWealth,inputs.p1.incomeWealth); uV(valueOutputs.p1.salary,inputs.p1.salary); uV(valueOutputs.p1.business,inputs.p1.business); if(isCouple){ uV(valueOutputs.p2.aowYears,inputs.p2.aowYears,false,true); uV(valueOutputs.p2.beWorkYears,inputs.p2.beWorkYears,false,true); uV(valueOutputs.p2.frWorkYears,inputs.p2.frWorkYears,false,true); uV(valueOutputs.p2.bePension,inputs.p2.bePension); uV(valueOutputs.p2.pensionPublic,inputs.p2.pensionPublic); uV(valueOutputs.p2.pensionPrivate,inputs.p2.pensionPrivate); uV(valueOutputs.p2.lijfrente,inputs.p2.lijfrente); uV(valueOutputs.p2.incomeWealth,inputs.p2.incomeWealth); uV(valueOutputs.p2.salary,inputs.p2.salary); uV(valueOutputs.p2.business,inputs.p2.business); } }
+    function updateValueOutputsForYears() { if(!valueOutputs?.p1||!valueOutputs?.p2||!inputs?.p1||!inputs?.p2)return; const uV=(oE,iE,iC=true,iY=false)=>{if(oE&&iE){const v=iE.value||'0';oE.textContent=iY?v:(iC?formatCurrency(Number(v)):v);}else if(oE){oE.textContent=iY?'0':formatCurrency(0);}}; uV(valueOutputs.p1.aowYears,inputs.p1.aowYears,false,true); uV(valueOutputs.p1.beWorkYears,inputs.p1.beWorkYears,false,true); uV(valueOutputs.p1.frWorkYears,inputs.p1.frWorkYears,false,true); uV(valueOutputs.p1.bePension,inputs.p1.bePension); uV(valueOutputs.p1.pensionPublic,inputs.p1.pensionPublic); uV(valueOutputs.p1.pensionPrivate,inputs.p1.pensionPrivate); uV(valueOutputs.p1.lijfrente,inputs.p1.lijfrente); uV(valueOutputs.p1.incomeWealth,inputs.p1.incomeWealth); uV(valueOutputs.p1.salary,inputs.p1.salary); uV(valueOutputs.p1.business,inputs.p1.business); uV(valueOutputs.p1.rental,inputs.p1.rental); if(isCouple){ uV(valueOutputs.p2.aowYears,inputs.p2.aowYears,false,true); uV(valueOutputs.p2.beWorkYears,inputs.p2.beWorkYears,false,true); uV(valueOutputs.p2.frWorkYears,inputs.p2.frWorkYears,false,true); uV(valueOutputs.p2.bePension,inputs.p2.bePension); uV(valueOutputs.p2.pensionPublic,inputs.p2.pensionPublic); uV(valueOutputs.p2.pensionPrivate,inputs.p2.pensionPrivate); uV(valueOutputs.p2.lijfrente,inputs.p2.lijfrente); uV(valueOutputs.p2.incomeWealth,inputs.p2.incomeWealth); uV(valueOutputs.p2.salary,inputs.p2.salary); uV(valueOutputs.p2.business,inputs.p2.business); uV(valueOutputs.p2.rental,inputs.p2.rental); } }
     function updateScenario() {
         if (!PARAMS || !inputs || !outputs || !valueOutputs || !checkSelectors()) { console.warn("UpdateScenario called too early."); if(outputs?.breakdown) outputs.breakdown.textContent="Laden..."; return; }
         try {
@@ -370,7 +377,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const cL = lijfrenteIsActive ? (p.lijfrente||0) : 0;
             const isWorking = simulatieDatum < aM; // Werkt tot AOW-leeftijd
             const sUsed = (!vals.stopSalaryAfterAOW || isWorking) ? (p.salary||0) : 0;
-            const r=calculateNLNetto(cAOW+cP+cL, sUsed, p.business||0, isPensioner);
+            const r=calculateNLNetto(cAOW+cP+cL, sUsed, (p.business||0)+(p.rental||0), isPensioner);
             cB+=r.bruto;cT+=r.tax;cN+=r.netto;
         });
         const wSav=vals.wealthSavings||0; const wInv=vals.wealthInvestments||0; const wTot=wSav+wInv;
@@ -467,8 +474,9 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             tLo+= (!vals.stopSalaryAfterAOW || isWorking) ? (p.salary||0) : 0;
-            tW+= (p.business||0);
-            tBFA[p.businessType||'services']+=(p.business||0);
+            tW+= (p.business||0)+(p.rental||0);
+            tBFA.services+=(p.business||0);
+            tBFA.rental+=(p.rental||0);
             const bePensionBruto = p.bePension || 0;
             if (isPensioner && bePensionBruto > 0) {
                 totalBePension += bePensionBruto;
@@ -476,21 +484,30 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
+        // Bepaal verdragsgerechtigdheid: CAK vereist lopend NL-pensioen
+        const cakActive = vals.cak && iPH;
+        let cakWarning = '';
+        if (vals.cak && !iPH) {
+            cakWarning = 'CAK (verdragsgerechtigd) is aangevinkt, maar geen partner ontvangt momenteel pensioen. CAK-verdragsgerechtigdheid vereist een lopend Nederlands pensioen of uitkering. De verdragsstatus is daarom niet toegepast.';
+            // Herbereken lijfrente SZ zonder verdragsvrijstelling
+            lijfrenteSocLasten = totalLijfrenteBelastbaar * (PARAMS.FR.SOCIALE_LASTEN.LIJFRENTE_TARIEF || 0);
+        }
+
         const frReqYears = PARAMS.FR_PENSION_YEARS_REQUIRED || 1; const frRate = PARAMS.FR_PENSION_RATE || 0; const frAvgSal = PARAMS.FR_PENSION_AVG_SALARY || 0;
         const frPensionRate = tEY >= frReqYears ? frRate : frRate * (tEY / frReqYears);
         const tFWY=(vals.p1?.frWorkYears||0)+(vals.p2?.frWorkYears||0); const fSP=frReqYears>0?(tFWY/frReqYears)*frAvgSal*frPensionRate:0; const fSPA=iPH?fSP:0;
-        const tIV=(vals.p1?.incomeWealth||0)+(vals.p2?.incomeWealth||0); const pT=tIV*(PARAMS.FR.INKOMSTENBELASTING.PFU_TARIEF||0); const pfuSocRate=vals.cak?(PARAMS.FR.SOCIALE_LASTEN.PRELEVEMENT_SOLIDARITE||0.075):(PARAMS.FR.SOCIALE_LASTEN.PFU_ROEREND||0.186); const pSL=tIV*pfuSocRate;
+        const tIV=(vals.p1?.incomeWealth||0)+(vals.p2?.incomeWealth||0); const pT=tIV*(PARAMS.FR.INKOMSTENBELASTING.PFU_TARIEF||0); const pfuSocRate=cakActive?(PARAMS.FR.SOCIALE_LASTEN.PRELEVEMENT_SOLIDARITE||0.075):(PARAMS.FR.SOCIALE_LASTEN.PFU_ROEREND||0.186); const pSL=tIV*pfuSocRate;
         const nlTR=PARAMS.NL?.BOX1?.TARIEVEN_BOVEN_AOW?.[0]||0; const nINL=bINLB*(1-nlTR);
         const tPIF_NL_BE=tA+tPP+fSPA + totalBePension;
-        const sLP=vals.cak?0:(tA+tPP+fSPA)*(PARAMS.FR.SOCIALE_LASTEN.PENSIOEN||0);
+        const sLP=cakActive?0:(tA+tPP+fSPA)*(PARAMS.FR.SOCIALE_LASTEN.PENSIOEN||0);
         const sLS=tLo*(PARAMS.FR.SOCIALE_LASTEN.SALARIS||0); const sLW=(tBFA.services*(PARAMS.FR.SOCIALE_LASTEN.WINST_DIENSTEN||0))+(tBFA.rental*(PARAMS.FR.SOCIALE_LASTEN.WINST_VERHUUR||0));
         const tSL_excl_lijfrente = sLP + sLS + sLW;
         const wNA=(tBFA.services*(1-(PARAMS.FR.INKOMSTENBELASTING.ABATTEMENT_WINST_DIENSTEN||0)))+(tBFA.rental*(1-(PARAMS.FR.INKOMSTENBELASTING.ABATTEMENT_WINST_VERHUUR||0)));
         let bI=(tPIF_NL_BE+tLo+wNA) - tSL_excl_lijfrente + totalLijfrenteBelastbaar;
         bI -= totalBePensionContributions;
-        // CAK verdragsbijdrage berekening (per persoon, vermenigvuldigd)
+        // CAK verdragsbijdrage berekening
         let aC=0;
-        if(vals.cak && PARAMS.FR.CAK){
+        if(cakActive && PARAMS.FR.CAK){
             const cakP=PARAMS.FR.CAK; const nPers=vals.isCouple?2:1;
             const pensioenTotaal=tA+tPP+bINLB+totalLijfrenteBruto;
             const inkPerPers=pensioenTotaal/nPers;
@@ -515,7 +532,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const tIF_withNL = totaleSocialeLastenFrankrijk + pT + Math.max(0,tax) + nlWithholding; // Include NL bronheffing
         const nt = br - tIF_withNL; // Netto = Bruto - Lasten
         let wT=0; const wPN=vals.wealthProperty||0; const ifiStart = PARAMS.FR.IFI.DREMPEL_START || Infinity; if(wPN>ifiStart){let tA=wPN;wT=0;let pL=800000;for(const s of (PARAMS.FR.IFI.SCHIJVEN||[])){const cG=s.grens===Infinity?Infinity:Number(s.grens);if(tA<=pL)break; const aIS=Math.max(0,Math.min(tA,cG)-pL); wT+=aIS*s.tarief; pL=cG; if(tA<=cG)break;}}
-        return {bruto:br,tax:tIF_withNL,netto:nt,wealthTax:wT, breakdown:{ simulatieDatum: simulatieDatum, socialeLasten:totaleSocialeLastenFrankrijk, nlWithholdingOnGovPension:nlWithholding, aftrekCak:aC, beContribAftrek: totalBePensionContributions, abattement65Plus: a65, belastingKrediet:bK, taxBeforeCredit: taxBeforeCredit, belastbaarInkomenIB: belastbaarInkomenIB, tax:Math.max(0,tax)+pT,calculatedTaxIB:tax,parts:parts,nettoInkomenUitNL:nINL,brutoInFR:bIF,brutoInkomenVoorNLBelasting:bINLB,frStatePension:fSPA, lijfrenteBruto: totalLijfrenteBruto, lijfrenteBelastbaar: totalLijfrenteBelastbaar, pfuTax: pT, pfuSocLasten: pSL, frSocLastenInkomen: tSL_excl_lijfrente, lijfrenteSocLasten: lijfrenteSocLasten }};
+        return {bruto:br,tax:tIF_withNL,netto:nt,wealthTax:wT, breakdown:{ simulatieDatum: simulatieDatum, socialeLasten:totaleSocialeLastenFrankrijk, nlWithholdingOnGovPension:nlWithholding, aftrekCak:aC, cakActive:cakActive, cakWarning:cakWarning, pensioenTotaal: tPIF_NL_BE + totalLijfrenteBruto, vermogensInkomen: tIV, beContribAftrek: totalBePensionContributions, abattement65Plus: a65, belastingKrediet:bK, taxBeforeCredit: taxBeforeCredit, belastbaarInkomenIB: belastbaarInkomenIB, tax:Math.max(0,tax)+pT,calculatedTaxIB:tax,parts:parts,nettoInkomenUitNL:nINL,brutoInFR:bIF,brutoInkomenVoorNLBelasting:bINLB,frStatePension:fSPA, lijfrenteBruto: totalLijfrenteBruto, lijfrenteBelastbaar: totalLijfrenteBelastbaar, pfuTax: pT, pfuSocLasten: pSL, frSocLastenInkomen: tSL_excl_lijfrente, lijfrenteSocLasten: lijfrenteSocLasten }};
     }
 
     // --- BELGIË ---
@@ -531,7 +548,7 @@ document.addEventListener('DOMContentLoaded', () => {
         P.forEach((p, index) => {
             const simulatieLeeftijd = (index === 0) ? simulatieLeeftijdP1 : simulatieLeeftijdP2;
             if (simulatieLeeftijd === null) return;
-            const s=p.salary||0, b=p.business||0; const pP=p.pensionPublic||0, pPr=p.pensionPrivate||0;
+            const s=p.salary||0, b=(p.business||0)+(p.rental||0); const pP=p.pensionPublic||0, pPr=p.pensionPrivate||0;
             const l=p.lijfrente||0, iW=p.incomeWealth||0; const aY=p.aowYears||0; const beP=p.bePension||0;
 
             const aDI=getAOWDateInfo(p.birthYear); const aM=new Date((p.birthYear||1900)+aDI.years,(p.birthMonth||1)-1+aDI.months);
@@ -605,9 +622,10 @@ document.addEventListener('DOMContentLoaded', () => {
             const wInv = vals.wealthInvestments || 0;
             const wfin = wSav + wInv;
             const wprop = vals.wealthProperty || 0;
-            const cak = vals.cak;
+            const cak = fr.breakdown.cakActive || false;
+            const cakWarningMsg = fr.breakdown.cakWarning || '';
             const hasWealth = wfin + wprop > 0;
-            const hasWork = (vals.p1?.salary||0) + (vals.p2?.salary||0) + (vals.p1?.business||0) + (vals.p2?.business||0) > 0;
+            const hasWork = (vals.p1?.salary||0) + (vals.p2?.salary||0) + (vals.p1?.business||0) + (vals.p2?.business||0) + (vals.p1?.rental||0) + (vals.p2?.rental||0) > 0;
             const hasPensionPublic = (vals.p1?.pensionPublic||0) + (vals.p2?.pensionPublic||0) > 0;
             const hasLijfrente = (fr.breakdown.lijfrenteBruto||0) > 0;
             const cakBedrag = fr.breakdown.aftrekCak || 0;
@@ -667,6 +685,11 @@ document.addEventListener('DOMContentLoaded', () => {
             // ══════ TOELICHTING PER ONDERDEEL ══════
             html += `<h4>Toelichting per onderdeel</h4>`;
 
+            // CAK waarschuwing als geen pensioen loopt
+            if (cakWarningMsg) {
+                html += `<div class="report-highlight" style="border-left-color:#cc0000;"><strong>Waarschuwing:</strong> ${cakWarningMsg}</div>`;
+            }
+
             // CAK
             if (cak) {
                 html += `<p><strong>Verdragsbijdrage (CAK):</strong> De berekende CAK-bijdrage bedraagt ${formatCurrency(cakBedrag)} per jaar (nominale Zvw €157/mnd + inkomensafhankelijke Zvw 4,85% + Wlz 9,65% over pensioeninkomen, × woonlandfactor Frankrijk 0,8304). Dit is een benadering; het werkelijke bedrag hangt af van de pensioensplitsing per partner. De CAK-bijdrage is in Frankrijk aftrekbaar van het belastbaar inkomen. Art. 83 CGI wijst premies betaald in het kader van een sociaal zekerheidsstelsel onder Vo. 883/2004 als aftrekbaar aan (aangifte 2047, categoriegebonden lasten). Mocht een inspecteur dit betwisten, dan kan het EHvJ-arrest Rüffler worden ingeroepen (gelijke behandeling aftrekbaarheid buitenlandse premies). Bron: hetcak.nl, impots.gouv.fr, VBNGB (vbngb.eu).</p>`;
@@ -674,7 +697,21 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // Waarschuwing CAK + werk (audit punt 5)
             if (cak && hasWork) {
-                html += `<div class="report-highlight" style="border-left-color:#cc6600;"><strong>Kernrisico:</strong> U heeft zowel verdragsgerechtigd (CAK) als Frans arbeidsinkomen of winst ingevuld. Verordening 883/2004 bepaalt dat bij gelijktijdige werkzaamheden in meerdere lidstaten eerst de toepasselijke socialezekerheidswetgeving moet worden vastgesteld. Bij gecombineerd dienstverband en/of zelfstandige activiteit wijst art. 13 in beginsel naar het werkland. Uw Franse sociale premies op pensioen kunnen daardoor verschuiven van 0% naar 9,1%. Dit is geen klein voorbehoud maar een bepalend punt. Laat dit beoordelen door een expert vóór u beslissingen neemt.</div>`;
+                // Kantelpunt berekening
+                const pensTot = fr.breakdown.pensioenTotaal || 0;
+                const vermInk = fr.breakdown.vermogensInkomen || 0;
+                const extraSZPens = pensTot * 0.091; // 0% → 9,1%
+                const extraSZVerm = vermInk * 0.111; // 7,5% → 18,6%
+                const drempelverlies = extraSZPens + extraSZVerm - cakBedrag;
+                const kantelpuntBruto = drempelverlies > 0 ? Math.round(drempelverlies / 0.788) : 0; // 1 - 21,2%
+
+                html += `<div class="report-highlight" style="border-left-color:#cc6600;"><strong>Kernrisico:</strong> U heeft zowel verdragsgerechtigd (CAK) als Frans arbeidsinkomen of winst ingevuld. Verordening 883/2004 bepaalt dat bij gelijktijdige werkzaamheden in meerdere lidstaten eerst de toepasselijke socialezekerheidswetgeving moet worden vastgesteld. Bij gecombineerd dienstverband en/of zelfstandige activiteit wijst art. 13 in beginsel naar het werkland. Uw Franse sociale premies op pensioen kunnen daardoor verschuiven van 0% naar 9,1%.`;
+                if (drempelverlies > 0) {
+                    html += `<br><br><strong>Kantelpunt:</strong> Het verlies van verdragsstatus kost u circa ${formatCurrency(Math.round(drempelverlies))} per jaar aan extra sociale lasten (${formatCurrency(Math.round(extraSZPens))} op pensioen + ${formatCurrency(Math.round(extraSZVerm))} op vermogensinkomen - ${formatCurrency(cakBedrag)} CAK-besparing). Uw ondernemingswinst moet minimaal circa <strong>${formatCurrency(kantelpuntBruto)} bruto</strong> bedragen om dit te compenseren. Onder dit bedrag kost ondernemen u netto geld.`;
+                } else {
+                    html += `<br><br><strong>Kantelpunt:</strong> In uw situatie is het drempelverlies negatief (${formatCurrency(Math.round(drempelverlies))}): de CAK-bijdrage is hoger dan de extra sociale lasten bij statusverlies. Ondernemen in Frankrijk is in dit geval niet per se nadelig voor uw totale lasten.`;
+                }
+                html += ` Laat dit beoordelen door een expert vóór u beslissingen neemt.</div>`;
             }
 
             // Lijfrente (audit punt 4 — nuance)
@@ -690,7 +727,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // Overheidspensioen (audit punt 3)
             if (hasPensionPublic) {
-                html += `<p><strong>Overheidspensioen:</strong> Het ingevoerde bedrag wordt belast in Nederland (17,85%, art. 19 NL-FR verdrag). Dit geldt uitsluitend voor pensioenen wegens diensten aan de Staat in openbare functies. Bij geprivatiseerde werkgevers (zorg, onderwijs na verzelfstandiging) kan art. 18 van toepassing zijn, waardoor het pensioen in Frankrijk wordt belast. De naam van het fonds is niet beslissend.</p>`;
+                html += `<p><strong>Overheidspensioen:</strong> Het ingevoerde bedrag wordt op grond van art. 19 NL-FR verdrag in Nederland belast (NL binnenlands tarief 17,85%, schijf 1 boven AOW-leeftijd 2026). Het verdrag zelf bepaalt geen tarief maar wijst het heffingsrecht toe. Dit geldt uitsluitend voor pensioenen wegens diensten aan de Staat in openbare functies. Bij geprivatiseerde werkgevers (zorg, onderwijs na verzelfstandiging) kan art. 18 van toepassing zijn, waardoor het pensioen in Frankrijk wordt belast. De naam van het fonds is niet beslissend.</p>`;
             }
 
             // Vermogensbelasting
@@ -834,6 +871,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // --- FRANSE BREAKDOWN (FIXED) ---
             const pfuSocLasten_fr = fr.breakdown.pfuSocLasten || 0;
+            const cakActive_fr = fr.breakdown.cakActive || false;
             const beContribAftrek_fr = fr.breakdown.beContribAftrek || 0;
             const lijfrenteSocLasten_fr = fr.breakdown.lijfrenteSocLasten || 0;
             const frSocLastenExclPFUBeLijfrente = fr.breakdown.frSocLastenInkomen || 0; // Dit was de fout, nu correct gelezen
@@ -876,9 +914,9 @@ Frankrijk 🇫🇷 ${simDatumStr}
    ↳ Inkomen belast in FR: ${formatCurrency(fr.breakdown.brutoInFR||0)} (Incl. bruto lijfrente: ${formatCurrency(fr.breakdown.lijfrenteBruto||0)})
    ↳ Inkomen belast in Herkomstland*: ${formatCurrency(fr.breakdown.brutoInkomenVoorNLBelasting||0)} (Netto: ${formatCurrency(fr.breakdown.nettoInkomenUitNL||0)})
 2. Sociale Lasten (Totaal): ${formatCurrency(fr.breakdown.socialeLasten||0)}
-   ↳ FR Soc. Lasten (Inkomen): -${formatCurrency(frSocLastenExclPFUBeLijfrente)} (${vals.cak?'0% pens (verdragsger.)':'~9% pens'}, ~22% loon, ~21% winst)
-   ↳ FR Soc. Lasten (Lijfrente belastb. deel): -${formatCurrency(lijfrenteSocLasten_fr)} (${vals.cak?'0% (verdragsger.)':((PARAMS.FR.SOCIALE_LASTEN.LIJFRENTE_TARIEF||0)*100).toFixed(1)+'%'} op ${formatCurrency(fr.breakdown.lijfrenteBelastbaar||0)})
-   ↳ FR Soc. Lasten (Vermogen ${vals.cak?'prél. solidarité 7.5%':'prél. sociaux 18.6%'}): -${formatCurrency(pfuSocLasten_fr)}${activeComparison==='BE'?`
+   ↳ FR Soc. Lasten (Inkomen): -${formatCurrency(frSocLastenExclPFUBeLijfrente)} (${cakActive_fr?'0% pens (verdragsger.)':'~9% pens'}, ~22% loon, ~21% winst)
+   ↳ FR Soc. Lasten (Lijfrente belastb. deel): -${formatCurrency(lijfrenteSocLasten_fr)} (${cakActive_fr?'0% (verdragsger.)':((PARAMS.FR.SOCIALE_LASTEN.LIJFRENTE_TARIEF||0)*100).toFixed(1)+'%'} op ${formatCurrency(fr.breakdown.lijfrenteBelastbaar||0)})
+   ↳ FR Soc. Lasten (Vermogen ${cakActive_fr?'prél. solidarité 7.5%':'prél. sociaux 18.6%'}): -${formatCurrency(pfuSocLasten_fr)}${activeComparison==='BE'?`
    ↳ BE Soc. Lasten (Pensioen RIZIV/Solid.): -${formatCurrency(beContribAftrek_fr)} (Betaald in BE)`:''}
    = Subtotaal na SZ: ${formatCurrency(fr.bruto - (fr.breakdown.socialeLasten||0))}
 3. Overige Aftrekposten FR:${overigeAftrekposten_fr}
@@ -932,8 +970,8 @@ window.getToolState = function () {
       lijfrenteStartleeftijd: getVal('lijfrente-start-1'),
       inkomenUitVermogen: getNum('slider-income-wealth-1'),
       loon: getNum('slider-salary-1'),
-      winstOnderneming: getNum('slider-business-1'),
-      ondernemingstype: getVal('business-type-1'),
+      winstDiensten: getNum('slider-business-1'),
+      winstVerhuur: getNum('slider-rental-1'),
     };
 
     var partner2 = null;
@@ -952,8 +990,8 @@ window.getToolState = function () {
         lijfrenteStartleeftijd: getVal('lijfrente-start-2'),
         inkomenUitVermogen: getNum('slider-income-wealth-2'),
         loon: getNum('slider-salary-2'),
-        winstOnderneming: getNum('slider-business-2'),
-        ondernemingstype: getVal('business-type-2'),
+        winstDiensten: getNum('slider-business-2'),
+        winstVerhuur: getNum('slider-rental-2'),
       };
     }
 
@@ -966,7 +1004,8 @@ window.getToolState = function () {
       kinderen: getNum('slider-children'),
       cakBijdrage: getChk('cak-contribution'),
       hulpAanHuis: getNum('home-help'),
-      financieelVermogen: getNum('slider-wealth-financial'),
+      spaargeld: getNum('slider-wealth-savings'),
+      beleggingen: getNum('slider-wealth-investments'),
       vastgoedVermogen: getNum('slider-wealth-property'),
       partner1: partner1,
       partner2: partner2,
