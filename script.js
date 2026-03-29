@@ -835,6 +835,9 @@ document.addEventListener('DOMContentLoaded', () => {
             const isFutureScenario = simYear > 2026;
             html += `<strong>Belangrijke voorbehouden:</strong><br>`;
             html += `• Dit is een scenariosimulatie, geen persoonlijk financieel of fiscaal advies.<br>`;
+            if (activeComparison === 'BE') {
+                html += `• <strong>Bèta:</strong> De Belgische vergelijking is in bètafase en niet volledig geaudit. Belgische tarieven (RSZ, federale PB, gemeentebelasting, BSZB, roerende voorheffing) zijn gebaseerd op officiële bronnen 2025/2026, maar de onderlinge interacties zijn complexer dan bij de NL-vergelijking. Gebruik deze uitkomst als indicatie, niet als basis voor beslissingen.<br>`;
+            }
             if (isFutureScenario) {
                 html += `• <strong>Let op:</strong> Dit is een scenario per ${simDate.toLocaleString('nl-NL',{month:'long',year:'numeric'})} berekend met de belastingregels van 2026 (constant-law methode). Er wordt geen rekening gehouden met toekomstige wetswijzigingen, inflatie of indexatie. De uitkomst is een indicatie op basis van huidige regels, geen prognose.<br>`;
             } else {
