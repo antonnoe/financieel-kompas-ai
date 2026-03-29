@@ -20,10 +20,8 @@ export default async function handler(req, res) {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        title: title,
-        content: summary,
-        source: source || 'financieel-kompas-ai',
-        userEmail: userEmail || null,
+        titel: title,
+        inhoud: summary,
       }),
     });
 
