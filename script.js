@@ -534,6 +534,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const sLS=tLo*(PARAMS.FR.SOCIALE_LASTEN.SALARIS||0); const sLW=(tBFA.services*(PARAMS.FR.SOCIALE_LASTEN.WINST_DIENSTEN||0))+(tBFA.rental*(PARAMS.FR.SOCIALE_LASTEN.WINST_VERHUUR||0));
         const tSL_excl_lijfrente = sLP + sLS + sLW;
         const wNA=(tBFA.services*(1-(PARAMS.FR.INKOMSTENBELASTING.ABATTEMENT_WINST_DIENSTEN||0)))+(tBFA.rental*(1-(PARAMS.FR.INKOMSTENBELASTING.ABATTEMENT_WINST_VERHUUR||0)));
+        const winstAbattement = tW - wNA;
         let bI=(tPIF_NL_BE+tLo+wNA) - tSL_excl_lijfrente + totalLijfrenteBelastbaar;
         bI -= totalBePensionContributions;
         // CAK verdragsbijdrage berekening
@@ -565,7 +566,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const tIF_withNL = totaleSocialeLastenFrankrijk + pT + Math.max(0,tax) + nlWithholding; // Include NL bronheffing
         const nt = br - tIF_withNL; // Netto = Bruto - Lasten
         let wT=0; const wPN=vals.wealthProperty||0; const ifiStart = PARAMS.FR.IFI.DREMPEL_START || Infinity; if(wPN>ifiStart){let tA=wPN;wT=0;let pL=800000;for(const s of (PARAMS.FR.IFI.SCHIJVEN||[])){const cG=s.grens===Infinity?Infinity:Number(s.grens);if(tA<=pL)break; const aIS=Math.max(0,Math.min(tA,cG)-pL); wT+=aIS*s.tarief; pL=cG; if(tA<=cG)break;}}
-        return {bruto:br,tax:tIF_withNL,netto:nt,wealthTax:wT, breakdown:{ simulatieDatum: simulatieDatum, socialeLasten:totaleSocialeLastenFrankrijk, nlWithholdingOnGovPension:nlWithholding, aftrekCak:aC, cakActive:cakActive, cakWarning:cakWarning, pensioenTotaal: tPIF_NL_BE + totalLijfrenteBruto, vermogensInkomen: tIV, beContribAftrek: totalBePensionContributions, abattement65Plus: a65, belastingKrediet:bK, taxBeforeCredit: taxBeforeCredit, belastbaarInkomenIB: belastbaarInkomenIB, tax:Math.max(0,tax)+pT,calculatedTaxIB:tax,parts:parts,nettoInkomenUitNL:nINL,brutoInFR:bIF,brutoInkomenVoorNLBelasting:bINLB,frStatePension:fSPA, lijfrenteBruto: totalLijfrenteBruto, lijfrenteBelastbaar: totalLijfrenteBelastbaar, pfuTax: pT, pfuSocLasten: pSL, frSocLastenInkomen: tSL_excl_lijfrente, lijfrenteSocLasten: lijfrenteSocLasten }};
+        return {bruto:br,tax:tIF_withNL,netto:nt,wealthTax:wT, breakdown:{ simulatieDatum: simulatieDatum, socialeLasten:totaleSocialeLastenFrankrijk, nlWithholdingOnGovPension:nlWithholding, aftrekCak:aC, cakActive:cakActive, cakWarning:cakWarning, pensioenTotaal: tPIF_NL_BE + totalLijfrenteBruto, vermogensInkomen: tIV, totalWinst: tW, winstAbattement: winstAbattement, beContribAftrek: totalBePensionContributions, abattement65Plus: a65, belastingKrediet:bK, taxBeforeCredit: taxBeforeCredit, belastbaarInkomenIB: belastbaarInkomenIB, tax:Math.max(0,tax)+pT,calculatedTaxIB:tax,parts:parts,nettoInkomenUitNL:nINL,brutoInFR:bIF,brutoInkomenVoorNLBelasting:bINLB,frStatePension:fSPA, lijfrenteBruto: totalLijfrenteBruto, lijfrenteBelastbaar: totalLijfrenteBelastbaar, pfuTax: pT, pfuSocLasten: pSL, frSocLastenInkomen: tSL_excl_lijfrente, lijfrenteSocLasten: lijfrenteSocLasten }};
     }
 
     // --- BELGIË ---
@@ -669,7 +670,13 @@ document.addEventListener('DOMContentLoaded', () => {
             let html = '';
 
             // ══════ HOOFDCONCLUSIE ══════
-            html += `<h4>Uw financiële vergelijking</h4>`;
+            const simDate2 = fr.breakdown.simulatieDatum;
+            const simLabel = simDate2 ? `per ${simDate2.toLocaleString('nl-NL',{month:'long',year:'numeric'})}` : '(huidige situatie)';
+            const isConstantLaw = simDate2 && simDate2.getFullYear() > 2026;
+            html += `<h4>Uw financiële vergelijking ${simLabel}</h4>`;
+            if (isConstantLaw) {
+                html += `<p style="font-size:.78em;color:var(--accent);font-weight:600;">⚠ Toekomstscenario berekend met belastingregels 2026 (constant-law methode)</p>`;
+            }
             html += `<table>
                 <tr><th></th><th>${compLand}</th><th>Frankrijk</th></tr>
                 <tr><td class="tbl-label">Bruto inkomen</td><td>${formatCurrency(compare.bruto)}</td><td>${formatCurrency(fr.bruto)}</td></tr>
@@ -805,9 +812,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // ══════ DISCLAIMER ══════
             html += `<div class="report-disclaimer">`;
+            const simDate = fr.breakdown.simulatieDatum;
+            const simYear = simDate ? simDate.getFullYear() : new Date().getFullYear();
+            const isFutureScenario = simYear > 2026;
             html += `<strong>Belangrijke voorbehouden:</strong><br>`;
             html += `• Dit is een scenariosimulatie, geen persoonlijk financieel of fiscaal advies.<br>`;
-            html += `• NL-tarieven zijn 2026; het Franse barème 2026 betreft inkomsten 2025. Beide stelsels werken met deels verschillende referentiejaren.<br>`;
+            if (isFutureScenario) {
+                html += `• <strong>Let op:</strong> Dit is een scenario per ${simDate.toLocaleString('nl-NL',{month:'long',year:'numeric'})} berekend met de belastingregels van 2026 (constant-law methode). Er wordt geen rekening gehouden met toekomstige wetswijzigingen, inflatie of indexatie. De uitkomst is een indicatie op basis van huidige regels, geen prognose.<br>`;
+            } else {
+                html += `• NL-tarieven zijn 2026; het Franse barème 2026 betreft inkomsten 2025. Beide stelsels werken met deels verschillende referentiejaren.<br>`;
+            }
             html += `• Niet meegenomen: taxe foncière, taxe d'habitation, lokale heffingen, toeslagen, en eventuele wijzigingen in wetgeving na januari 2026.<br>`;
             if (cak) {
                 html += `• De berekening gaat uit van verdragsgerechtigdheid (CAK). Dit geldt alleen als u niet ten laste komt van een verplicht Frans stelsel. Bij werk in Frankrijk kan uw status wijzigen (Vo. 883/2004 art. 13).<br>`;
@@ -922,6 +936,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // Build conditional FR "Overige Aftrekposten" lines
             let overigeAftrekposten_fr = '';
+            const winstAbatt_fr = fr.breakdown.winstAbattement || 0;
+            const totalWinst_fr = fr.breakdown.totalWinst || 0;
+            const vermInk_fr = fr.breakdown.vermogensInkomen || 0;
+            const lijfrenteCorr_fr = (fr.breakdown.lijfrenteBruto||0) - (fr.breakdown.lijfrenteBelastbaar||0);
+            if (lijfrenteCorr_fr > 0) {
+                overigeAftrekposten_fr += `\n   ↳ Lijfrente vrijgesteld deel: -${formatCurrency(lijfrenteCorr_fr)} (bruto ${formatCurrency(fr.breakdown.lijfrenteBruto||0)} → belastbaar ${formatCurrency(fr.breakdown.lijfrenteBelastbaar||0)})`;
+            }
+            if (winstAbatt_fr > 0) {
+                overigeAftrekposten_fr += `\n   ↳ Micro-BIC abattement winst: -${formatCurrency(winstAbatt_fr)} (van ${formatCurrency(totalWinst_fr)} bruto)`;
+            }
+            if (vermInk_fr > 0) {
+                overigeAftrekposten_fr += `\n   ↳ Vermogensinkomen (PFU, apart belast): -${formatCurrency(vermInk_fr)}`;
+            }
             if (cakAftrek_fr > 0) {
                 overigeAftrekposten_fr += `\n   ↳ Aftrek CAK-bijdrage (NL): -${formatCurrency(cakAftrek_fr)}`;
             }
@@ -957,7 +984,6 @@ Frankrijk 🇫🇷 ${simDatumStr}
    = Subtotaal na SZ: ${formatCurrency(fr.bruto - (fr.breakdown.socialeLasten||0))}
 3. Overige Aftrekposten FR:${overigeAftrekposten_fr}
    = Belastbaar Inkomen IB (na aftrekposten, excl. PFU-inkomen): ${formatCurrency(belastbaarInkomenIB_fr)}
-      (Lijfrente slechts deels belast: ${formatCurrency(fr.breakdown.lijfrenteBelastbaar||0)} van ${formatCurrency(fr.breakdown.lijfrenteBruto||0)})
 4. Belastingen FR (Totaal): ${formatCurrency(fr.breakdown.tax||0)}
    ↳ IB vóór krediet na QF (${fr.breakdown.parts?.toFixed(1)||0} parts): ${formatCurrency(fr.breakdown.taxBeforeCredit||0)}
    ↳ Krediet Hulp Huis: -${formatCurrency(belastingKrediet_fr)}
