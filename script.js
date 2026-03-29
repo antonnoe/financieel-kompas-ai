@@ -904,11 +904,11 @@ document.addEventListener('DOMContentLoaded', () => {
             <div style="font-size:11px;line-height:1.6;">
                 ${styledReport}
             </div>
-            <div style="border-top:2px solid #800000;margin-top:16px;padding-top:8px;">
+            <div style="border-top:2px solid #800000;margin-top:16px;padding-top:8px;page-break-before:auto;">
                 <h2 style="color:#800000;font-size:13px;margin:0 0 6px;">Volledige analyse</h2>
                 <div style="font-family:Courier New,monospace;font-size:8px;line-height:1.35;white-space:pre-wrap;background:#f8f7f5;padding:8px 10px;border:1px solid #e0e0e0;border-radius:3px;">${breakdownText}</div>
             </div>
-            <div style="margin-top:12px;padding-top:6px;border-top:1px solid #ddd;text-align:center;font-size:8px;color:#999;">
+            <div style="margin-top:12px;padding-top:6px;border-top:1px solid #ddd;text-align:center;font-size:8px;color:#999;page-break-inside:avoid;">
                 Financieel Kompas © Communities Abroad — Infofrankrijk.com | Scenariosimulatie, geen financieel advies.
             </div>
         `;
@@ -918,7 +918,7 @@ document.addEventListener('DOMContentLoaded', () => {
             filename: 'financieel-kompas-rapport.pdf',
             html2canvas: { scale: 2, useCORS: true },
             jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
-            pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
+            pagebreak: { mode: ['css', 'legacy'] }
         }).from(pdfContent).save().then(resetBtn).catch(e => {
             console.error('PDF error:', e);
             resetBtn();
