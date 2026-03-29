@@ -1223,77 +1223,69 @@ window.getToolState = function () {
 };
 
 // === DOSSIER FRANKIJK INTEGRATIE ===
-document.getElementById('save-dossier-btn')?.addEventListener('click', function() {
-    // Use the AI widget's export if available (includes AI conversation)
+document.getElementById('save-dossier-btn')?.addEventListener('click', async function() {
+    var btn = this;
+    var origText = btn.textContent;
+    
+    // Build summary from AI widget or fallback
+    var summary = '';
+    var title = 'Financieel Kompas';
+    
     if (window.ccExpertWidget && typeof window.ccExpertWidget.getExportText === 'function') {
-        var conv = window.ccExpertWidget.getConversation();
-        var hasAI = conv && conv.length > 0;
-        var summary = window.ccExpertWidget.getExportText();
+        summary = window.ccExpertWidget.getExportText();
         var state = typeof window.getToolState === 'function' ? window.getToolState() : null;
         var verschil = state?.resultaten?.conclusie?.verschil || '?';
         var land = state?.resultaten?.vergelijkingsland?.label || 'NL';
         var hh = state?.huishoudtype || '';
-        var title = 'Financieel Kompas: ' + hh + ' | ' + land + ' vs FR | ' + verschil;
-        if (hasAI) title += ' (incl. AI-advies)';
-
-        var data = { type: 'saveToDossier', title: title, summary: summary, source: 'financieel-kompas-ai' };
-
-        if (window.parent !== window) {
-            window.parent.postMessage(data, '*');
-            var btn = document.getElementById('save-dossier-btn');
-            if (btn) { var orig = btn.textContent; btn.textContent = 'Opgeslagen!'; btn.style.background = '#28a745'; setTimeout(function() { btn.textContent = orig; btn.style.background = ''; }, 2000); }
-        } else {
-            // Standalone: copy to clipboard
-            if (navigator.clipboard) { navigator.clipboard.writeText(summary); } else {
-                var ta = document.createElement('textarea'); ta.value = summary; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta);
-            }
-            var btn = document.getElementById('save-dossier-btn');
-            if (btn) { var orig = btn.textContent; btn.textContent = 'Gekopieerd naar klembord!'; btn.style.background = '#28a745'; setTimeout(function() { btn.textContent = orig; btn.style.background = ''; }, 2000); }
-        }
-        return;
-    }
-
-    // Fallback: old behavior without AI
-    var compareCountry = document.getElementById('compare-country-label')?.textContent || 'Nederland';
-    var compareBruto = document.getElementById('compare-bruto')?.textContent || '€ 0';
-    var compareTax = document.getElementById('compare-tax')?.textContent || '€ 0';
-    var compareNetto = document.getElementById('compare-netto')?.textContent || '€ 0';
-    var compareWealth = document.getElementById('wealth-tax-compare')?.textContent || '€ 0';
-    var frBruto = document.getElementById('fr-bruto')?.textContent || '€ 0';
-    var frTax = document.getElementById('fr-tax')?.textContent || '€ 0';
-    var frNetto = document.getElementById('fr-netto')?.textContent || '€ 0';
-    var frWealth = document.getElementById('wealth-tax-fr')?.textContent || '€ 0';
-    var conclusionValue = document.getElementById('conclusion-value')?.textContent || '€ 0';
-    var isPositive = document.getElementById('conclusion-value')?.classList.contains('positive');
-    var conclusionText = isPositive ? 'Voordeel Frankrijk' : 'Voordeel ' + compareCountry;
-    var isSingle = document.getElementById('btn-single')?.classList.contains('active');
-    var household = isSingle ? 'Alleenstaand' : 'Partners';
-    var today = new Date().toLocaleDateString('nl-NL');
-    var breakdown = document.getElementById('calculation-breakdown')?.textContent || '';
-
-    var summary = '\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\n' +
-        'FINANCIEEL KOMPAS \u2014 VERGELIJKING\n' +
-        'Datum: ' + today + '\n' +
-        '\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\n\n' +
-        (breakdown ? 'ANALYSE\n\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\n' + breakdown + '\n\n' : '') +
-        'SAMENVATTING\n' +
-        compareCountry + ': Bruto ' + compareBruto + ' | Netto ' + compareNetto + '\n' +
-        'Frankrijk: Bruto ' + frBruto + ' | Netto ' + frNetto + '\n' +
-        'Verschil: ' + conclusionValue + ' (' + conclusionText + ')\n\n' +
-        'Indicatieve berekening. Raadpleeg een adviseur.\n' +
-        'Bron: Financieel Kompas \u2014 Infofrankrijk.com';
-
-    var data = {
-        type: 'saveToDossier',
-        title: 'Financieel Kompas: ' + household + ' | ' + compareCountry + ' vs Frankrijk | ' + conclusionValue,
-        summary: summary,
-        source: 'financieel-kompas'
-    };
-
-    if (window.parent !== window) {
-        window.parent.postMessage(data, '*');
+        title = 'Financieel Kompas: ' + hh + ' | ' + land + ' vs FR | ' + verschil;
+        var conv = window.ccExpertWidget.getConversation();
+        if (conv && conv.length > 0) title += ' (incl. AI-advies)';
     } else {
-        alert('Deze functie werkt alleen binnen Infofrankrijk.com');
+        // Fallback: build from DOM
+        var breakdown = document.getElementById('calculation-breakdown');
+        summary = breakdown?.textContent || 'Geen analyse beschikbaar.';
+        var conclusionValue = document.getElementById('conclusion-value')?.textContent || '';
+        title = 'Financieel Kompas: ' + conclusionValue;
     }
+
+    btn.textContent = 'Opslaan...';
+    btn.style.opacity = '0.7';
+
+    // Try server-side proxy (no CORS issues)
+    try {
+        var response = await fetch('/api/save-to-dossier', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ title: title, summary: summary, source: 'financieel-kompas-ai' })
+        });
+        var result = await response.json();
+        if (result.success) {
+            btn.textContent = '✓ Opgeslagen in Dossier!';
+            btn.style.background = '#28a745';
+            btn.style.opacity = '1';
+            setTimeout(function() { btn.textContent = origText; btn.style.background = ''; }, 3000);
+            return;
+        }
+    } catch (e) {
+        console.warn('Dossier proxy failed:', e);
+    }
+
+    // Fallback: copy to clipboard + open DF
+    btn.style.opacity = '1';
+    try {
+        await navigator.clipboard.writeText(summary);
+        btn.textContent = '📋 Gekopieerd!';
+        btn.style.background = '#cc6600';
+    } catch (e) {
+        var ta = document.createElement('textarea');
+        ta.value = summary;
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+        btn.textContent = '📋 Gekopieerd!';
+        btn.style.background = '#cc6600';
+    }
+    setTimeout(function() { btn.textContent = origText; btn.style.background = ''; }, 4000);
 });
 
