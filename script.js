@@ -359,6 +359,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 } : null,
                 quotientFamilialParts: frResults.breakdown?.parts || null,
                 frStaatspensioen: frResults.breakdown?.frStatePension || 0,
+                cakAangevinkt: inputValues.cak || false,
+                cakActief: frResults.breakdown?.cakActive || false,
+                cakWaarschuwing: frResults.breakdown?.cakWarning || '',
+                frSocialeLasten: frResults.breakdown?.socialeLasten || 0,
+                frVermogensinkomen: frResults.breakdown?.vermogensInkomen || 0,
+                frBelastbaarInkomenIB: frResults.breakdown?.belastbaarInkomenIB || 0,
               };
               window.ccEmbed = {
                 getToolContext: () => ({
