@@ -6,10 +6,168 @@
 <title>Profielkaart NL–FR | Infofrankrijk.com</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:Mulish,system-ui,sans-serif;color:#333;line-height:1.8;background:transparent}
-.chart-wrap{max-width:720px;margin:0 auto;padding:12px 8px}
-.profile-card{display:none;margin:16px 0;padding:16px 20px;border-left:4px solid #800000;background:#faf8f6;border-radius:0 8px 8px 0;animation:fadeIn .3s ease}
-.profile-card.active{display:block}
-.profile-card h3{font-family:Poppins,sans-serif;color:#800000;font-size:16px;margin-bottom:6px}
-.profile-card p{font-size:14px;line-height:1.7;margin-bottom:8px}
-.profile-card .tag{display:inline-block;font-size:11px;padding:2px 8px;border-radius:10px;margin:0 4px 4
+body{font-family:Mulish,system-ui,sans-serif;color:#333;line-height:1.7;background:transparent}
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@500;600&family=Mulish:wght@400;600&display=swap');
+.wrap{max-width:740px;margin:0 auto;padding:8px}
+svg{display:block;width:100%}
+svg .prof{cursor:pointer;transition:opacity .15s}
+svg .prof:hover{opacity:.82}
+.cards{margin:12px 0 0}
+.card{display:none;padding:14px 18px;border-left:4px solid #800000;background:#faf8f6;border-radius:0 6px 6px 0;margin:0 0 8px;animation:fadeIn .25s ease}
+.card.active{display:block}
+.card h3{font-family:Poppins,sans-serif;color:#800000;font-size:15px;margin-bottom:4px;font-weight:600}
+.card p{font-size:13px;margin-bottom:6px}
+.card .tags{margin:6px 0 0}
+.tag{display:inline-block;font-size:11px;padding:2px 8px;border-radius:10px;margin:0 3px 4px 0;font-weight:600}
+.tag-fr{background:#e1f5ee;color:#085041}
+.tag-nl{background:#fcebeb;color:#791f1f}
+.tag-mix{background:#f1efe8;color:#444}
+.legend{display:flex;gap:16px;justify-content:center;margin:10px 0 4px;font-size:11px;color:#666}
+.legend span{display:flex;align-items:center;gap:4px}
+.legend i{display:inline-block;width:12px;height:12px;border-radius:3px}
+.cta{text-align:center;margin:16px 0 4px}
+.cta a{display:inline-block;font-family:Poppins,sans-serif;font-size:13px;font-weight:600;color:#fff;background:#800000;padding:8px 24px;border-radius:6px;text-decoration:none;transition:background .2s}
+.cta a:hover{background:#600000}
+.foot{text-align:center;font-size:10px;color:#999;margin:8px 0 0;line-height:1.5}
+@keyframes fadeIn{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:translateY(0)}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<svg viewBox="0 0 680 510" xmlns="http://www.w3.org/2000/svg">
+<defs><marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M2 2L8 5L2 8" fill="none" stroke="#999" stroke-width="1.5"/></marker></defs>
+
+<rect x="70" y="24" width="270" height="220" rx="10" fill="#e1f5ee" opacity=".25"/>
+<rect x="340" y="24" width="280" height="220" rx="10" fill="#e1f5ee" opacity=".55"/>
+<rect x="70" y="244" width="270" height="220" rx="10" fill="#fcebeb" opacity=".55"/>
+<rect x="340" y="244" width="280" height="220" rx="10" fill="#fcebeb" opacity=".25"/>
+
+<text x="480" y="42" text-anchor="middle" font-size="11" fill="#085041" opacity=".7" font-weight="600">Frankrijk vaker gunstiger</text>
+<text x="205" y="456" text-anchor="middle" font-size="11" fill="#791f1f" opacity=".7" font-weight="600">Nederland vaker gunstiger</text>
+<text x="205" y="42" text-anchor="middle" font-size="11" fill="#888" opacity=".6">Gemengd / case-by-case</text>
+<text x="480" y="456" text-anchor="middle" font-size="11" fill="#888" opacity=".6">Gemengd / case-by-case</text>
+
+<line x1="340" y1="30" x2="340" y2="458" stroke="#ccc" stroke-width=".5"/>
+<line x1="76" y1="244" x2="614" y2="244" stroke="#ccc" stroke-width=".5"/>
+
+<g class="prof" onclick="show('fr1')">
+<rect x="370" y="58" width="222" height="76" rx="8" fill="#5dcaa5" fill-opacity=".2" stroke="#0f6e56" stroke-width=".5"/>
+<text x="481" y="82" text-anchor="middle" font-family="Poppins,sans-serif" font-size="13" font-weight="600" fill="#085041">Box 3-rijk, vastgoedlicht</text>
+<text x="481" y="100" text-anchor="middle" font-size="11" fill="#0f6e56">Veel financieel vermogen</text>
+<text x="481" y="116" text-anchor="middle" font-size="11" fill="#0f6e56">Weinig vastgoed (&lt; &#8364;1,3M)</text>
+</g>
+
+<g class="prof" onclick="show('fr2')">
+<rect x="370" y="152" width="222" height="76" rx="8" fill="#5dcaa5" fill-opacity=".2" stroke="#0f6e56" stroke-width=".5"/>
+<text x="481" y="176" text-anchor="middle" font-family="Poppins,sans-serif" font-size="13" font-weight="600" fill="#085041">Gezin met parts/credits</text>
+<text x="481" y="194" text-anchor="middle" font-size="11" fill="#0f6e56">Quotient familial + kinderen</text>
+<text x="481" y="210" text-anchor="middle" font-size="11" fill="#0f6e56">Hulp aan huis (50% krediet)</text>
+</g>
+
+<g class="prof" onclick="show('fr3')">
+<rect x="100" y="58" width="210" height="76" rx="8" fill="#9fe1cb" fill-opacity=".25" stroke="#0f6e56" stroke-width=".5" stroke-dasharray="4 3"/>
+<text x="205" y="82" text-anchor="middle" font-family="Poppins,sans-serif" font-size="13" font-weight="600" fill="#085041">Micro-BIC ondernemer</text>
+<text x="205" y="100" text-anchor="middle" font-size="11" fill="#0f6e56">50% abattement diensten</text>
+<text x="205" y="116" text-anchor="middle" font-size="11" fill="#0f6e56">30% abattement verhuur</text>
+</g>
+
+<g class="prof" onclick="show('nl1')">
+<rect x="100" y="268" width="210" height="76" rx="8" fill="#f09595" fill-opacity=".25" stroke="#a32d2d" stroke-width=".5"/>
+<text x="205" y="292" text-anchor="middle" font-family="Poppins,sans-serif" font-size="13" font-weight="600" fill="#791f1f">Arbeid / ovh.pensioen</text>
+<text x="205" y="310" text-anchor="middle" font-size="11" fill="#a32d2d">Groot art. 19-pensioen</text>
+<text x="205" y="326" text-anchor="middle" font-size="11" fill="#a32d2d">Weinig Box 3-vermogen</text>
+</g>
+
+<g class="prof" onclick="show('nl2')">
+<rect x="100" y="362" width="210" height="76" rx="8" fill="#f09595" fill-opacity=".25" stroke="#a32d2d" stroke-width=".5"/>
+<text x="205" y="386" text-anchor="middle" font-family="Poppins,sans-serif" font-size="13" font-weight="600" fill="#791f1f">Vastgoedzwaar / hoog rend.</text>
+<text x="205" y="404" text-anchor="middle" font-size="11" fill="#a32d2d">IFI boven &#8364;1,3M</text>
+<text x="205" y="420" text-anchor="middle" font-size="11" fill="#a32d2d">Taxe fonci&#232;re, 2e woning</text>
+</g>
+
+<g class="prof" onclick="show('fr4')">
+<rect x="370" y="268" width="222" height="76" rx="8" fill="#9fe1cb" fill-opacity=".15" stroke="#0f6e56" stroke-width=".5" stroke-dasharray="4 3"/>
+<text x="481" y="292" text-anchor="middle" font-family="Poppins,sans-serif" font-size="13" font-weight="600" fill="#085041">Part. pensioen / lijfrente</text>
+<text x="481" y="310" text-anchor="middle" font-size="11" fill="#0f6e56">10% FR-abattement pensioen</text>
+<text x="481" y="326" text-anchor="middle" font-size="11" fill="#0f6e56">Lijfrente 30-70% vrijgesteld</text>
+</g>
+
+<line x1="70" y1="472" x2="614" y2="472" stroke="#999" stroke-width=".5" marker-end="url(#arr)"/>
+<line x1="50" y1="458" x2="50" y2="30" stroke="#999" stroke-width=".5" marker-end="url(#arr)"/>
+<text x="130" y="490" font-size="10" fill="#888">Veel vastgoed / hoog rendement</text>
+<text x="560" y="490" text-anchor="end" font-size="10" fill="#888">Veel fin. vermogen / vastgoedlicht</text>
+<text x="24" y="440" font-size="10" fill="#888" transform="rotate(-90 24 440)">Arbeid / ovh.pensioen</text>
+<text x="24" y="140" font-size="10" fill="#888" transform="rotate(-90 24 140)">Parts / credits / micro-BIC</text>
+<text x="340" y="508" text-anchor="middle" font-size="9.5" fill="#aaa">Klik op een profiel voor toelichting</text>
+</svg>
+
+<div class="legend">
+<span><i style="background:#5dcaa5"></i> Frankrijk gunstiger</span>
+<span><i style="background:#f09595"></i> Nederland gunstiger</span>
+<span><i style="background:#ddd;border:1px dashed #999"></i> Gemengd</span>
+</div>
+
+<div class="cards">
+<div class="card" id="fr1">
+<h3>Box 3-rijk, vastgoedlicht</h3>
+<p>Wie veel financieel vermogen heeft en weinig vastgoed, profiteert maximaal. Nederland heft jaarlijks via Box 3 over fictief rendement (spaargeld 1,28%, beleggingen 6,00%, tarief 36%). Frankrijk kent geen vermogensrendementsheffing op financieel kapitaal — alleen belasting op werkelijk ontvangen inkomen via de PFU (prélèvement forfaitaire unique). Bij €500.000 vermogen en 3% werkelijk rendement scheelt dat al snel €5.000–10.000 per jaar.</p>
+<p>Extra voordeel bij CAK-verdragsgerechtigdheid: 0% sociale lasten op pensioen, 7,5% op vermogensinkomen (i.p.v. 18,6%).</p>
+<div class="tags"><span class="tag tag-fr">Sterkste FR-profiel</span><span class="tag tag-fr">Typisch voordeel €12.000–25.000/jaar</span></div>
+</div>
+
+<div class="card" id="fr2">
+<h3>Gezin met parts/credits</h3>
+<p>Het Franse <em>quotient familial</em> verdeelt het belastbare inkomen over fiscale delen: 2 parts voor een gehuwd of gepacst stel, +0,5 per kind (eerste twee), +1 per kind daarna. Alleenstaande ouder: +0,5 extra (<em>parent isolé</em>). Dit verlaagt de effectieve belastingdruk bij midden- en hogere inkomens aanzienlijk.</p>
+<p>Daarnaast levert hulp aan huis (<em>emploi à domicile</em>) 50% belastingkrediet op tot max €12.000 uitgaven. Voor oudere huishoudens die structureel hulp inkopen is dit een voordeel dat in Nederland niet bestaat.</p>
+<div class="tags"><span class="tag tag-fr">Quotient familial</span><span class="tag tag-fr">Hulp aan huis krediet</span></div>
+</div>
+
+<div class="card" id="fr3">
+<h3>Micro-BIC ondernemer</h3>
+<p>De Franse micro-regimes geven vaste aftrekken: 50% voor diensten (advies, consultancy), 30% voor verhuur (gîte, B&amp;B, meublé de tourisme). Wie weinig werkelijke kosten heeft, komt fiscaal beter uit dan in een Nederlandse winst-/Box 1-structuur.</p>
+<p>Let op: ondernemerschap in Frankrijk activeert URSSAF (~21% sociale lasten op winst). Bij combinatie met CAK-verdragsgerechtigdheid bestaat een kernrisico: uw socialezekerheidsstatus kan verschuiven naar het Franse stelsel (Vo. 883/2004 art. 13).</p>
+<div class="tags"><span class="tag tag-mix">Gemengd profiel</span><span class="tag tag-fr">50%/30% abattement</span><span class="tag tag-nl">SZ-risico bij CAK</span></div>
+</div>
+
+<div class="card" id="fr4">
+<h3>Particulier pensioen / lijfrente</h3>
+<p>Onder het NL-FR verdrag wordt particulier pensioen belast in het woonland (Frankrijk). Frankrijk geeft automatisch 10% abattement op pensioenen. Bij een lijfrente (<em>rente viagère à titre onéreux</em>) is slechts 30–70% belastbaar, afhankelijk van de startleeftijd.</p>
+<p>Dit profiel wordt voordeliger naarmate het inkomen minder uit overheidspensioen (art. 19, belast in NL) en meer uit particulier pensioen of lijfrente bestaat.</p>
+<div class="tags"><span class="tag tag-mix">Gemengd profiel</span><span class="tag tag-fr">10% abattement</span><span class="tag tag-fr">Lijfrente deels vrijgesteld</span></div>
+</div>
+
+<div class="card" id="nl1">
+<h3>Arbeid / overheidspensioen-zwaar</h3>
+<p>Overheidspensioen (art. 19 NL-FR verdrag) blijft belast in Nederland — ongeacht waar u woont. Dit inkomen profiteert niet van het quotient familial, niet van lagere Franse tarieven, en niet van abattementen. U betaalt NL-tarief (17,85%, schijf 1 boven AOW-leeftijd 2026).</p>
+<p>Bij weinig Box 3-vermogen valt het grootste Franse voordeel weg. Combineer dit met actief arbeidsinkomen en de hogere Franse sociale lasten, en het voordeel van Frankrijk verdampt of keert om.</p>
+<div class="tags"><span class="tag tag-nl">NL vaak gunstiger</span><span class="tag tag-nl">Art. 19: belast in NL</span></div>
+</div>
+
+<div class="card" id="nl2">
+<h3>Vastgoedzwaar / hoog rendement</h3>
+<p>Frankrijk kent IFI (<em>Impôt sur la Fortune Immobilière</em>) boven €1,3M netto vastgoed, <em>taxe foncière</em> op gebouwd eigendom, en <em>taxe d'habitation</em> op tweede woningen. Bij meerdere panden of waardevol vastgoed lopen deze kosten snel op.</p>
+<p>Bij hoog werkelijk rendement (>6%) pakt de Franse PFU (12,8% IB + tot 18,6% sociaal = 31,4% effectief) zwaarder uit dan NL Box 3. Nederland wordt dan relatief voordeliger.</p>
+<div class="tags"><span class="tag tag-nl">NL vaak gunstiger</span><span class="tag tag-nl">IFI + taxe foncière</span><span class="tag tag-nl">Hoog rendement = PFU duurder</span></div>
+</div>
+</div>
+
+<div class="cta">
+<a href="https://www.infofrankrijk.com/financieel-kompas/" target="_top">Bereken uw eigen scenario →</a>
+</div>
+
+<div class="foot">
+Communicatieve besliskaart — geen harde omslagpunten. Exacte uitkomst hangt af van pensioenkwalificatie, socialezekerheidsstatus, vermogensmix, rendement en gezinssituatie.<br>
+© Communities Abroad — <a href="https://www.infofrankrijk.com" target="_top" style="color:#800000;text-decoration:none">Infofrankrijk.com</a>
+</div>
+
+</div>
+<script>
+function show(id){
+document.querySelectorAll('.card').forEach(function(c){c.classList.remove('active')});
+var el=document.getElementById(id);
+if(el){el.classList.add('active');el.scrollIntoView({behavior:'smooth',block:'nearest'})}
+}
+</script>
+</body>
+</html>
