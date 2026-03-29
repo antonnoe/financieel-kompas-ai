@@ -680,11 +680,19 @@ document.addEventListener('DOMContentLoaded', () => {
             html += `<table>
                 <tr><th></th><th>${compLand}</th><th>Frankrijk</th></tr>
                 <tr><td class="tbl-label">Bruto inkomen</td><td>${formatCurrency(compare.bruto)}</td><td>${formatCurrency(fr.bruto)}</td></tr>
-                <tr><td class="tbl-label">Totale lasten (IB + SZ)</td><td>${formatCurrency(compare.tax)}</td><td>${formatCurrency(fr.tax)}</td></tr>
+                <tr><td class="tbl-label">Totale lasten</td><td>${formatCurrency(compare.tax)}</td><td>${formatCurrency(fr.tax)}</td></tr>
                 <tr><td class="tbl-label">Netto inkomen</td><td><strong>${formatCurrency(compN)}</strong></td><td><strong>${formatCurrency(frN)}</strong></td></tr>
                 <tr><td class="tbl-label">Vermogensbelasting</td><td>${formatCurrency(compW)}</td><td>${formatCurrency(frW)}</td></tr>
                 <tr style="background:rgba(128,0,0,.08);"><td class="tbl-label">Werkelijk beschikbaar</td><td><strong>${formatCurrency(Math.round(compBeschikbaar))}</strong></td><td><strong>${formatCurrency(Math.round(frBeschikbaar))}</strong></td></tr>
             </table>`;
+            const fSP = fr.breakdown.frStatePension || 0;
+            const brutoDiff = Math.round(fr.bruto - compare.bruto);
+            if (Math.abs(brutoDiff) > 100) {
+                let brutoDiffExpl = `Het bruto inkomen verschilt ${formatCurrency(Math.abs(brutoDiff))} tussen beide scenario's`;
+                if (fSP > 0) brutoDiffExpl += `: in Frankrijk komt er ${formatCurrency(Math.round(fSP))} Frans staatspensioen (retraite de base) bij op grond van FR-werkjaren`;
+                brutoDiffExpl += '. De vergelijking betreft de totale inkomenspositie per scenario, niet een identieke bruto-input.';
+                html += `<p style="font-size:.8em;color:var(--text-light);">${brutoDiffExpl}</p>`;
+            }
 
             if (isPositive) {
                 html += `<div class="report-highlight"><strong>Verschil: ${formatCurrency(delta)} per jaar in het voordeel van Frankrijk.</strong></div>`;
