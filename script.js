@@ -694,7 +694,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const vermInk = fr.breakdown.vermogensInkomen || 0;
                 if (vermInk > 0 && activeComparison === 'NL') reasons.push(`${formatCurrency(vermInk)} vermogensinkomen (in NL via Box 3, in FR als PFU-inkomen)`);
                 if (reasons.length > 0) brutoDiffExpl += ': ' + reasons.join('; ');
-                brutoDiffExpl += '. De vergelijking betreft de totale inkomenspositie per scenario, niet een identieke bruto-input.';
+                brutoDiffExpl += '. De scenario\'s bevatten een verschillende inkomensmix — de tool vergelijkt de totale inkomenspositie per scenario, niet twee identieke bruto-inkomens onder twee belastingstelsels.';
                 html += `<p style="font-size:.8em;color:var(--text-light);">${brutoDiffExpl}</p>`;
             }
 
