@@ -128,7 +128,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function populateDateDropdowns() { if(!inputs?.p1?.birthYear||!inputs?.p2?.birthYear)return; const cY=new Date().getFullYear();const M=["Jan","Feb","Mrt","Apr","Mei","Jun","Jul","Aug","Sep","Okt","Nov","Dec"]; [inputs.p1,inputs.p2].forEach(p=>{if(!p||!p.birthYear||!p.birthMonth)return; const yS=p.birthYear,mS=p.birthMonth;if(yS.options.length>0)return; yS.innerHTML='';mS.innerHTML=''; for(let y=cY-18;y>=1940;y--){const o=new Option(y,y);if(y===1960)o.selected=true; yS.add(o);} M.forEach((m,i)=>mS.add(new Option(m,i+1)));}); }
     function populateSimDateDropdowns() { if (!inputs.simYear || !inputs.simMonth) return; const cY=new Date().getFullYear(); const sY=inputs.simYear,sM=inputs.simMonth; sY.innerHTML='<option value="">-- Huidig Jaar --</option>'; sM.innerHTML='<option value="">-- Huidige Maand --</option>'; for (let y=cY+20;y>=cY-10;y--){sY.add(new Option(y,y));} const M=["Jan","Feb","Mrt","Apr","Mei","Jun","Jul","Aug","Sep","Okt","Nov","Dec"]; M.forEach((m,i)=>sM.add(new Option(m,i+1))); }
     function getAOWDateInfo(birthYear) { const yr=Number(birthYear); if(!yr||yr<1940)return{years:67,months:0}; if(yr<=1957)return{years:66,months:4}; if(yr===1958)return{years:66,months:7}; if(yr===1959)return{years:66,months:10}; return{years:67,months:0}; }
-    function setupListeners() { if(!comparisonChoice||!householdType)return; if(comparisonChoice.nl)comparisonChoice.nl.addEventListener('click',()=>updateComparisonCountry('NL')); if(comparisonChoice.be)comparisonChoice.be.addEventListener('click',()=>updateComparisonCountry('BE')); if(householdType.single)householdType.single.addEventListener('click',()=>updateHouseholdType(false)); if(householdType.couple)householdType.couple.addEventListener('click',()=>updateHouseholdType(true)); const rb=getEl('reset-btn'); if(rb){rb.addEventListener('click',()=>{if(!inputs?.p1?.birthYear)return; document.querySelectorAll('input[type=range]').forEach(i=>{if(i)i.value=0;}); document.querySelectorAll('input[type=checkbox]').forEach(i=>{if(i)i.checked=false;}); document.querySelectorAll('select:not([id*="birth"])').forEach(s=>{if(s)s.selectedIndex=0;}); if(inputs.p1.birthYear)inputs.p1.birthYear.value=1960; if(inputs.p1.birthMonth)inputs.p1.birthMonth.value=1; if(inputs.p2.birthYear)inputs.p2.birthYear.value=1960; if(inputs.p2.birthMonth)inputs.p2.birthMonth.value=1; if(inputs.simYear)inputs.simYear.value=""; if(inputs.simMonth)inputs.simMonth.value=""; initialLoad=true; updateHouseholdType(false);updateComparisonCountry('NL');});} const cb=getEl('pdf-btn'); if(cb){cb.addEventListener('click',()=>{const report=getEl('result-report'); const breakdown=outputs?.breakdown; if(!report||!report.innerHTML||report.innerHTML.includes('Vul eerst')){alert('Vul eerst uw gegevens in.');return;} cb.textContent='Genereren...'; const pdfContent=document.createElement('div'); pdfContent.style.cssText='font-family:Mulish,sans-serif;font-size:12px;line-height:1.6;padding:20px;color:#333;max-width:700px;'; pdfContent.innerHTML='<h1 style="color:#800000;font-family:Poppins,sans-serif;font-size:20px;margin-bottom:4px;">Financieel Kompas — Rapportage</h1><p style="font-size:10px;color:#666;">Communities Abroad © Infofrankrijk.com | Gegenereerd: '+new Date().toLocaleDateString('nl-NL')+'</p><hr style="border-color:#800000;">'+report.innerHTML+'<hr style="border-color:#ccc;"><h2 style="color:#800000;font-family:Poppins,sans-serif;font-size:14px;">Volledige analyse</h2><pre style="font-size:9px;line-height:1.4;white-space:pre-wrap;background:#f5f5f5;padding:10px;border-radius:4px;">'+((breakdown?.textContent||'').replace(/</g,'&lt;'))+'</pre>'; if(typeof html2pdf!=='undefined'){html2pdf().set({margin:10,filename:'financieel-kompas-rapport.pdf',html2canvas:{scale:2},jsPDF:{unit:'mm',format:'a4',orientation:'portrait'}}).from(pdfContent).save().then(()=>{cb.textContent='📄 Opslaan als PDF';}).catch(e=>{console.error(e);cb.textContent='📄 Opslaan als PDF';alert('PDF generatie mislukt.');});}else{alert('PDF-bibliotheek niet geladen. Probeer de pagina opnieuw te laden.');cb.textContent='📄 Opslaan als PDF';}});} const ic=getEl('input-panel'); if(ic){ic.addEventListener('input',(e)=>{if(e.target.matches('input, select')){if(e.target.id.includes('aow-years')||e.target.id.includes('fr-work-years')||e.target.id.includes('be-work-years')){adjustWorkYears(e.target.id);}updateScenario();}});}else{console.error("#input-panel missing!");} }
+    function setupListeners() { if(!comparisonChoice||!householdType)return; if(comparisonChoice.nl)comparisonChoice.nl.addEventListener('click',()=>updateComparisonCountry('NL')); if(comparisonChoice.be)comparisonChoice.be.addEventListener('click',()=>updateComparisonCountry('BE')); if(householdType.single)householdType.single.addEventListener('click',()=>updateHouseholdType(false)); if(householdType.couple)householdType.couple.addEventListener('click',()=>updateHouseholdType(true)); const rb=getEl('reset-btn'); if(rb){rb.addEventListener('click',()=>{if(!inputs?.p1?.birthYear)return; document.querySelectorAll('input[type=range]').forEach(i=>{if(i)i.value=0;}); document.querySelectorAll('input[type=checkbox]').forEach(i=>{if(i)i.checked=false;}); document.querySelectorAll('select:not([id*="birth"])').forEach(s=>{if(s)s.selectedIndex=0;}); if(inputs.p1.birthYear)inputs.p1.birthYear.value=1960; if(inputs.p1.birthMonth)inputs.p1.birthMonth.value=1; if(inputs.p2.birthYear)inputs.p2.birthYear.value=1960; if(inputs.p2.birthMonth)inputs.p2.birthMonth.value=1; if(inputs.simYear)inputs.simYear.value=""; if(inputs.simMonth)inputs.simMonth.value=""; initialLoad=true; updateHouseholdType(false);updateComparisonCountry('NL');});} const cb=getEl('pdf-btn'); if(cb){cb.addEventListener('click',()=>{const report=getEl('result-report'); const breakdown=outputs?.breakdown; if(!report||!report.innerHTML||report.innerHTML.includes('Vul eerst')){alert('Vul eerst uw gegevens in.');return;} cb.textContent='Genereren...'; generatePDF(report, breakdown, cb);});} const ic=getEl('input-panel'); if(ic){ic.addEventListener('input',(e)=>{if(e.target.matches('input, select')){if(e.target.id.includes('aow-years')||e.target.id.includes('fr-work-years')||e.target.id.includes('be-work-years')){adjustWorkYears(e.target.id);}updateScenario();}});}else{console.error("#input-panel missing!");} }
     function toggleCountrySpecificFields(countryCode) {
         document.querySelectorAll('.nl-specific').forEach(el=>el.style.display=(countryCode==='NL'?'block':'none'));
         document.querySelectorAll('.be-specific').forEach(el=>el.style.display=(countryCode==='BE'?'block':'none'));
@@ -844,6 +844,65 @@ document.addEventListener('DOMContentLoaded', () => {
             console.error("Fout in generateReport:", error);
             return `<p>Fout bij genereren toelichting: ${error.message}</p>`;
         }
+    }
+
+    // --- PDF GENERATIE ---
+    function generatePDF(reportEl, breakdownEl, btnEl) {
+        const resetBtn = () => { if(btnEl) btnEl.textContent = '📄 Opslaan als PDF'; };
+        if (typeof html2pdf === 'undefined') { alert('PDF-bibliotheek niet geladen.'); resetBtn(); return; }
+
+        const reportHTML = reportEl.innerHTML || '';
+        const breakdownText = (breakdownEl?.textContent || '').replace(/</g, '&lt;');
+        const datum = new Date().toLocaleDateString('nl-NL', { day: 'numeric', month: 'long', year: 'numeric' });
+
+        // Stijl de report-tabellen voor PDF (inline styles vereist)
+        let styledReport = reportHTML
+            .replace(/<h4/g, '<h4 style="color:#800000;font-size:12px;margin:14px 0 4px;font-weight:700;border-bottom:1px solid #eee;padding-bottom:3px"')
+            .replace(/<table/g, '<table style="width:100%;border-collapse:collapse;margin:8px 0;font-size:11px"')
+            .replace(/<th/g, '<th style="background:#800000;color:#fff;padding:5px 8px;text-align:left;font-size:10px"')
+            .replace(/<td class="tbl-label"/g, '<td style="padding:4px 8px;border-bottom:1px solid #ddd;font-weight:600;color:#800000"')
+            .replace(/<td(?! style)/g, '<td style="padding:4px 8px;border-bottom:1px solid #ddd"')
+            .replace(/class="report-highlight"[^>]*/g, 'style="background:#faf0f0;border-left:3px solid #800000;padding:6px 12px;margin:8px 0;border-radius:0 4px 4px 0;font-size:11px"')
+            .replace(/class="report-disclaimer"/g, 'style="font-size:9px;color:#666;border-top:1px solid #ccc;padding-top:8px;margin-top:12px;line-height:1.5"')
+            .replace(/style="border-left-color:#cc6600;"/g, 'style="background:#fff8f0;border-left:3px solid #cc6600;padding:6px 12px;margin:8px 0;border-radius:0 4px 4px 0;font-size:11px"')
+            .replace(/style="border-left-color:#cc0000;"/g, 'style="background:#fff0f0;border-left:3px solid #cc0000;padding:6px 12px;margin:8px 0;border-radius:0 4px 4px 0;font-size:11px"')
+            .replace(/style="font-size:.78em;"/g, 'style="font-size:9px;color:#555;line-height:1.4;"')
+            .replace(/style="font-size:.8em;color:var\(--text-light\);"/g, 'style="font-size:9px;color:#888;"')
+            .replace(/style="font-size:.78em;color:var\(--accent\);font-weight:600;"/g, 'style="font-size:10px;color:#800000;font-weight:600;"')
+            .replace(/var\(--primary\)/g, '#800000')
+            .replace(/var\(--accent\)/g, '#800000')
+            .replace(/var\(--text-light\)/g, '#888');
+
+        const pdfContent = document.createElement('div');
+        pdfContent.style.cssText = 'font-family:Helvetica,Arial,sans-serif;font-size:11px;line-height:1.55;padding:0;color:#333;max-width:700px;';
+        pdfContent.innerHTML = `
+            <div style="border-bottom:3px solid #800000;padding-bottom:8px;margin-bottom:12px;">
+                <h1 style="color:#800000;font-size:18px;margin:0 0 2px;">Financieel Kompas — Rapportage</h1>
+                <p style="font-size:9px;color:#888;margin:0;">Communities Abroad © Infofrankrijk.com | Gegenereerd: ${datum}</p>
+            </div>
+            <div style="font-size:11px;line-height:1.6;">
+                ${styledReport}
+            </div>
+            <div style="border-top:2px solid #800000;margin-top:16px;padding-top:8px;">
+                <h2 style="color:#800000;font-size:13px;margin:0 0 6px;">Volledige analyse</h2>
+                <div style="font-family:Courier New,monospace;font-size:8px;line-height:1.35;white-space:pre-wrap;background:#f8f7f5;padding:8px 10px;border:1px solid #e0e0e0;border-radius:3px;">${breakdownText}</div>
+            </div>
+            <div style="margin-top:12px;padding-top:6px;border-top:1px solid #ddd;text-align:center;font-size:8px;color:#999;">
+                Financieel Kompas © Communities Abroad — Infofrankrijk.com | Scenariosimulatie, geen financieel advies.
+            </div>
+        `;
+
+        html2pdf().set({
+            margin: [12, 10, 12, 10],
+            filename: 'financieel-kompas-rapport.pdf',
+            html2canvas: { scale: 2, useCORS: true },
+            jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+            pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
+        }).from(pdfContent).save().then(resetBtn).catch(e => {
+            console.error('PDF error:', e);
+            resetBtn();
+            alert('PDF generatie mislukt.');
+        });
     }
 
     // --- BREAKDOWN (FIXED) ---
