@@ -167,7 +167,16 @@ function show(id){
 document.querySelectorAll('.card').forEach(function(c){c.classList.remove('active')});
 var el=document.getElementById(id);
 if(el){el.classList.add('active');el.scrollIntoView({behavior:'smooth',block:'nearest'})}
+sendHeight();
 }
+function sendHeight(){
+try{
+var h=document.querySelector('.wrap').scrollHeight+24;
+window.parent.postMessage({type:'fk-resize',height:h},'*');
+}catch(e){}
+}
+window.addEventListener('load',function(){sendHeight();});
+window.addEventListener('resize',function(){sendHeight();});
 </script>
 </body>
 </html>
