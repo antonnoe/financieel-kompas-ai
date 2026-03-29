@@ -247,6 +247,12 @@
       h += row('Overheidspensioen', fmt(getVal('slider-pension-public-1')));
       h += row('Particulier pensioen', fmt(getVal('slider-pension-private-1')));
       h += row('Lijfrente', fmt(getVal('slider-lijfrente-1')));
+      if (getVal('slider-lijfrente-1') > 0) {
+        var dur1 = $('#lijfrente-duration-1'); var start1 = $('#lijfrente-start-1');
+        var durLabel = dur1 ? (dur1.value === '999' ? 'Levenslang' : 'Tot ' + dur1.value + 'j') : '';
+        var startLabel = start1 ? (start1.value === 'aow' ? 'Vanaf AOW' : 'Vanaf ' + start1.value + 'j') : '';
+        h += row('Lijfrente looptijd', durLabel + ', ' + startLabel);
+      }
       h += '</div>';
       if (isCouple) {
         h += '<div class="confirm-section">' + sectionTitle('Partner 2');
@@ -254,6 +260,12 @@
         h += row('Overheidspensioen', fmt(getVal('slider-pension-public-2')));
         h += row('Particulier pensioen', fmt(getVal('slider-pension-private-2')));
         h += row('Lijfrente', fmt(getVal('slider-lijfrente-2')));
+        if (getVal('slider-lijfrente-2') > 0) {
+          var dur2 = $('#lijfrente-duration-2'); var start2 = $('#lijfrente-start-2');
+          var durLabel2 = dur2 ? (dur2.value === '999' ? 'Levenslang' : 'Tot ' + dur2.value + 'j') : '';
+          var startLabel2 = start2 ? (start2.value === 'aow' ? 'Vanaf AOW' : 'Vanaf ' + start2.value + 'j') : '';
+          h += row('Lijfrente looptijd', durLabel2 + ', ' + startLabel2);
+        }
         h += '</div>';
       }
       return h;

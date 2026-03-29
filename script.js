@@ -689,7 +689,11 @@ document.addEventListener('DOMContentLoaded', () => {
             const brutoDiff = Math.round(fr.bruto - compare.bruto);
             if (Math.abs(brutoDiff) > 100) {
                 let brutoDiffExpl = `Het bruto inkomen verschilt ${formatCurrency(Math.abs(brutoDiff))} tussen beide scenario's`;
-                if (fSP > 0) brutoDiffExpl += `: in Frankrijk komt er ${formatCurrency(Math.round(fSP))} Frans staatspensioen (retraite de base) bij op grond van FR-werkjaren`;
+                const reasons = [];
+                if (fSP > 0) reasons.push(`${formatCurrency(Math.round(fSP))} Frans staatspensioen (retraite de base) uit FR-werkjaren`);
+                const vermInk = fr.breakdown.vermogensInkomen || 0;
+                if (vermInk > 0 && activeComparison === 'NL') reasons.push(`${formatCurrency(vermInk)} vermogensinkomen (in NL via Box 3, in FR als PFU-inkomen)`);
+                if (reasons.length > 0) brutoDiffExpl += ': ' + reasons.join('; ');
                 brutoDiffExpl += '. De vergelijking betreft de totale inkomenspositie per scenario, niet een identieke bruto-input.';
                 html += `<p style="font-size:.8em;color:var(--text-light);">${brutoDiffExpl}</p>`;
             }
