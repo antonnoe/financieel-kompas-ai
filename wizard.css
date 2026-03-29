@@ -242,3 +242,24 @@ input[type="range"].slider::-moz-range-thumb{width:20px;height:20px;background:v
     .results-bar{gap:8px}
     .conclusion-amount{font-size:1.4em}
 }
+
+/* ============================================
+   FREEMIUM GATING
+   ============================================ */
+.fk-freemium-bar{display:none;background:rgba(128,0,0,.06);border-bottom:1px solid rgba(128,0,0,.15);padding:8px 16px;text-align:center;font-size:.82em;color:#800000;line-height:1.5}
+.fk-freemium-bar a{color:#800000;font-weight:600;text-decoration:underline}
+body.is-freemium .fk-freemium-bar{display:block}
+
+.fk-locked{position:relative;opacity:.5;pointer-events:none;user-select:none}
+.fk-locked::after{content:'🔒';position:absolute;right:12px;top:50%;transform:translateY(-50%);font-size:16px;opacity:.6;pointer-events:none}
+.fk-locked input,.fk-locked select{filter:grayscale(1)}
+.fk-locked .slider{background:#ddd !important}
+.fk-locked .slider::-webkit-slider-thumb{background:#aaa !important}
+
+.fk-upgrade-box{display:none;background:rgba(128,0,0,.05);border:1px solid rgba(128,0,0,.2);border-radius:8px;padding:16px 20px;margin:16px 0;text-align:center}
+.fk-upgrade-box h4{font-family:Poppins,sans-serif;color:#800000;font-size:1em;margin:0 0 6px}
+.fk-upgrade-box p{font-size:.88em;color:#555;margin:0 0 10px;line-height:1.6}
+.fk-upgrade-box a{display:inline-block;font-family:Poppins,sans-serif;font-size:.85em;font-weight:600;color:#fff;background:#800000;padding:8px 20px;border-radius:5px;text-decoration:none;transition:background .2s}
+.fk-upgrade-box a:hover{background:#600000}
+body.is-freemium .fk-upgrade-box{display:block}
+body.is-freemium .premium-only-btn{display:none}
