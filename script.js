@@ -1259,11 +1259,13 @@ document.getElementById('save-dossier-btn')?.addEventListener('click', async fun
             body: JSON.stringify({ title: title, summary: summary, source: 'financieel-kompas-ai' })
         });
         var result = await response.json();
-        if (result.success) {
-            btn.textContent = '✓ Opgeslagen in Dossier!';
+        if (result.success && result.data?.id) {
+            btn.textContent = '✓ Openen in Dossier...';
             btn.style.background = '#28a745';
             btn.style.opacity = '1';
-            setTimeout(function() { btn.textContent = origText; btn.style.background = ''; }, 3000);
+            // Open DF import page with the pending item ID
+            window.open('https://dossierfrankrijk.nl/importeer?id=' + result.data.id, '_blank');
+            setTimeout(function() { btn.textContent = origText; btn.style.background = ''; }, 4000);
             return;
         }
     } catch (e) {
