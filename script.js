@@ -1139,12 +1139,21 @@ document.addEventListener('DOMContentLoaded', function() {
             var fab = document.getElementById('cc-fab');
             var panel = document.getElementById('cc-panel');
             if (fab && panel) {
-                // In iframe: change panel to absolute positioning near the button
                 if (window.parent !== window) {
-                    panel.style.position = 'absolute';
-                    panel.style.top = inlineBtn.getBoundingClientRect().top + window.scrollY + 'px';
-                    panel.style.right = '12px';
+                    // Iframe mode: panel als overlay binnen de content
+                    panel.style.position = 'relative';
+                    panel.style.top = 'auto';
+                    panel.style.right = 'auto';
+                    panel.style.width = '100%';
+                    panel.style.maxWidth = '100%';
                     panel.style.height = '500px';
+                    panel.style.margin = '12px 0';
+                    panel.style.borderRadius = '12px';
+                    // Inject panel right after the button bar
+                    var resultActions = inlineBtn.closest('.result-actions');
+                    if (resultActions && resultActions.parentNode) {
+                        resultActions.parentNode.insertBefore(panel, resultActions.nextSibling);
+                    }
                 }
                 fab.click();
             }
