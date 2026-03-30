@@ -1289,3 +1289,24 @@ document.getElementById('save-dossier-btn')?.addEventListener('click', async fun
     setTimeout(function() { btn.textContent = origText; btn.style.background = ''; }, 4000);
 });
 
+
+// === IFRAME AUTO-RESIZE ===
+(function() {
+    function sendHeight() {
+        try {
+            var h = document.documentElement.scrollHeight;
+            window.parent.postMessage({ type: 'fk-resize-tool', height: h }, '*');
+        } catch(e) {}
+    }
+    if (window.parent !== window) {
+        window.addEventListener('load', sendHeight);
+        window.addEventListener('resize', sendHeight);
+        var observer = new MutationObserver(function() { setTimeout(sendHeight, 100); });
+        observer.observe(document.body, { childList: true, subtree: true, attributes: true });
+        var count = 0;
+        var interval = setInterval(function() {
+            sendHeight();
+            if (++count > 20) clearInterval(interval);
+        }, 500);
+    }
+})();
