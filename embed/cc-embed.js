@@ -117,11 +117,14 @@
   ].join('');
   document.head.appendChild(css);
 
+  var isInIframe = (window.parent !== window);
+
   /* ── DOM ── */
   var fab = document.createElement('button');
   fab.id = 'cc-fab';
   fab.innerHTML = '<span id="cc-fab-icon">' + CFG.emoji + '</span><span id="cc-fab-label">' + CFG.label + '</span>';
   fab.title = CFG.label;
+  if (isInIframe) fab.style.display = 'none';
   document.body.appendChild(fab);
 
   var panel = document.createElement('div');

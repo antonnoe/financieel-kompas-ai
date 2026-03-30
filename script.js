@@ -1130,6 +1130,28 @@ Frankrijk 🇫🇷 ${simDatumStr}
     initializeApp();
 
 }); // Einde DOMContentLoaded listener
+
+// === AI-TOELICHTER INLINE KNOP ===
+document.addEventListener('DOMContentLoaded', function() {
+    var inlineBtn = document.getElementById('ai-toelichter-inline');
+    if (inlineBtn) {
+        inlineBtn.addEventListener('click', function() {
+            var fab = document.getElementById('cc-fab');
+            var panel = document.getElementById('cc-panel');
+            if (fab && panel) {
+                // In iframe: change panel to absolute positioning near the button
+                if (window.parent !== window) {
+                    panel.style.position = 'absolute';
+                    panel.style.top = inlineBtn.getBoundingClientRect().top + window.scrollY + 'px';
+                    panel.style.right = '12px';
+                    panel.style.height = '500px';
+                }
+                fab.click();
+            }
+        });
+    }
+});
+
 // === AI ASSISTENT: TOOL STATE SERIALIZER ===
 window.getToolState = function () {
   try {
