@@ -1085,43 +1085,76 @@ Frankrijk 🇫🇷 ${simDatumStr}
     }
 
     // --- Freemium Gating ---
+    function applyFreemiumLocks() {
+        document.body.classList.add('is-freemium');
+        
+        // Vergrendel premium-only velden
+        const lockedIds = [
+            'group-lijfrente-1', 'group-lijfrente-2',
+            'group-business-1', 'group-business-2',
+            'group-rental-1', 'group-rental-2',
+            'group-income-wealth-1', 'group-income-wealth-2'
+        ];
+        lockedIds.forEach(id => {
+            const el = document.getElementById(id);
+            if (el) el.classList.add('fk-locked');
+        });
+        
+        // Vergrendel vermogen/CAK/hulp velden (geen group-id, zoek op slider-id)
+        ['slider-wealth-savings', 'slider-wealth-investments', 'slider-wealth-property', 'cak-contribution', 'home-help'].forEach(id => {
+            const el = document.getElementById(id);
+            if (el) {
+                const field = el.closest('.field') || el.closest('.field-toggle');
+                if (field) field.classList.add('fk-locked');
+            }
+        });
+        
+        // Verberg AI-toelichter embed (wacht tot script geladen)
+        setTimeout(() => {
+            ['cc-fab', 'cc-panel'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.style.display = 'none';
+            });
+        }, 2000);
+    }
+
+    function unlockPremium() {
+        window.isPremium = true;
+        document.body.classList.remove('is-freemium');
+        document.querySelectorAll('.fk-locked').forEach(el => el.classList.remove('fk-locked'));
+        ['cc-fab', 'cc-panel'].forEach(id => {
+            const el = document.getElementById(id);
+            if (el) el.style.display = '';
+        });
+    }
+
     function initFreemium() {
         const params = new URLSearchParams(window.location.search);
+        const token = params.get('token');
         const access = params.get('access');
-        // Premium als URL-parameter 'access=premium' bevat (gestuurd door IF via iframe src)
-        window.isPremium = (access === 'premium');
-        
-        if (!window.isPremium) {
-            document.body.classList.add('is-freemium');
-            
-            // Vergrendel premium-only velden
-            const lockedIds = [
-                'group-lijfrente-1', 'group-lijfrente-2',
-                'group-business-1', 'group-business-2',
-                'group-rental-1', 'group-rental-2',
-                'group-income-wealth-1', 'group-income-wealth-2'
-            ];
-            lockedIds.forEach(id => {
-                const el = document.getElementById(id);
-                if (el) el.classList.add('fk-locked');
-            });
-            
-            // Vergrendel vermogen/CAK/hulp velden (geen group-id, zoek op slider-id)
-            ['slider-wealth-savings', 'slider-wealth-investments', 'slider-wealth-property', 'cak-contribution', 'home-help'].forEach(id => {
-                const el = document.getElementById(id);
-                if (el) {
-                    const field = el.closest('.field') || el.closest('.field-toggle');
-                    if (field) field.classList.add('fk-locked');
-                }
-            });
-            
-            // Verberg AI-toelichter embed (wacht tot script geladen)
-            setTimeout(() => {
-                ['cc-fab', 'cc-panel'].forEach(id => {
-                    const el = document.getElementById(id);
-                    if (el) el.style.display = 'none';
+
+        // Fallback: ?access=premium blijft werken (overgangsperiode)
+        if (access === 'premium') {
+            window.isPremium = true;
+            return;
+        }
+
+        // Standaard: freemium totdat token geverifieerd is
+        window.isPremium = false;
+        applyFreemiumLocks();
+
+        // HMAC-token verificatie (async, ontgrendelt na bevestiging)
+        if (token) {
+            fetch('/api/verify-token?token=' + encodeURIComponent(token))
+                .then(r => r.json())
+                .then(data => {
+                    if (data.valid) {
+                        unlockPremium();
+                    }
+                })
+                .catch(() => {
+                    // Verificatie mislukt → freemium blijft
                 });
-            }, 2000);
         }
     }
     initFreemium();
